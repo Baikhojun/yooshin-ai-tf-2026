@@ -1,0 +1,40 @@
+# Node / npm
+node_modules/
+.npm/
+*.log
+npm-debug.log*
+
+# Slidev 빌드 산출물 (GitHub Actions에서 빌드되므로 커밋 안 함)
+ppt/dist/
+ppt/.slidev/
+
+# Slidev 백업
+ppt/slides.md.bak
+
+# 에디터·시스템
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 임시 / 개인 메모
+*.tmp
+*.claude-temp
+*_wip
+*_temp
+*.bak
+
+# Claude 권한 설정·작업물 (개인 작업물, 운영 자료 아님)
+.claude/
+Claude/
+
+# 1차 외부 강사 원본 자료 (저작권: isnbh0/yooshin-demo-data)
+# 본 레포에는 재배포하지 않고 README에서 *링크*로만 참조
+yooshin-demo-data-main/
+
+# 개인정보·민감 자료 (Public 레포 안전장치)
+**/private/
+**/실명*
+**/위원명단*
