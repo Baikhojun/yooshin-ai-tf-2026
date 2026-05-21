@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건설사업관리용역 사업수행능력평가 자기평가서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* 숫자 인풋 화살표 숨김 */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        
+        /* V3 고급 표 스타일 */
+        .excel-table th, .excel-table td { border: 1px solid #d1d5db; /* gray-300 */ }
+        .excel-table thead th { border-color: #1e3a8a; /* blue-900 */ }
+        
+        /* V3 입력칸 스타일링 */
+        .eval-input, .top-input {
+            width: 100%; height: 100%; padding: 0.625rem;
+            background-color: transparent;
+            border: 2px solid transparent;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        /* 빈칸 알림 (연한 노란색 배경 + 테두리) */
+        .empty-input {
+            background-color: #fffbeb !important; /* amber-50 */
+            border-color: #fde68a !important; /* amber-200 */
+        }
+        
+        /* 입력 포커스 시 (파란색 테두리) */
+        .eval-input:focus, .top-input:focus {
+            background-color: #ffffff !important;
+            border-color: #3b82f6 !important; /* blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            z-index: 10;
+            position: relative;
+        }
+
+        .pdf-mode { font-size: 11px !important; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 sm:p-8 font-sans text-gray-800 relative selection:bg-blue-200">
+
+    <!-- 알림 메시지 (Toast) -->
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded shadow-lg text-white font-bold opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-2"></div>
+
+    <div class="max-w-6xl mx-auto bg-white p-8 sm:p-10 shadow-[0_10px_40px_rgb(0,0,0,0.08)] border-t-4 border-blue-900" id="capture-area">
+        
+        <!-- 상단 헤더 및 버튼 영역 -->
+        <div class="flex flex-wrap justify-between items-center mb-10 gap-4" id="header-actions">
+            <div class="flex-1 flex items-center">
+                <!-- V3 직관적인 라디오 토글 -->
+                <div class="inline-flex bg-gray-100 p-1.5 rounded-md border border-gray-200 shadow-inner">
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="eval_type" value="local" class="peer sr-only" checked>
+                        <div class="px-6 py-2 rounded text-sm font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">지자체</div>
+                    </label>
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="eval_type" value="pps" class="peer sr-only">
+                        <div class="px-6 py-2 rounded text-sm font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">조달청</div>
+                    </label>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl font-black text-center text-blue-950 flex-none tracking-tight">자기평가서 산출</h1>
+            
+            <div class="flex-1 flex flex-col items-end">
+                <div class="flex gap-2 flex-nowrap">
+                    <input type="file" id="file_import" accept=".xlsx, .xls" class="hidden">
+                    <button type="button" id="btn_import" class="bg-gray-800 text-white px-5 py-2.5 rounded hover:bg-gray-700 font-bold text-sm transition-all whitespace-nowrap flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        불러오기
+                    </button>
+                    <button type="button" id="btn_export" class="bg-blue-700 text-white px-5 py-2.5 rounded hover:bg-blue-800 font-bold text-sm transition-all whitespace-nowrap flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        엑셀 다운
+                    </button>
+                    <button type="button" id="btn_export_pdf" class="bg-red-600 text-white px-5 py-2.5 rounded hover:bg-red-700 font-bold text-sm transition-all whitespace-nowrap flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        PDF 다운
+                    </button>
+                </div>
+                <div class="text-xs text-gray-500 font-semibold mt-3 whitespace-nowrap">만든이 : (주)멋진엔지니어링 건설사업관리2부 담당자 대리</div>
+            </div>
+        </div>
+
+        <!-- 기본 정보 입력 폼 -->
+        <div class="flex flex-col gap-4 mb-10 bg-gray-50 p-6 rounded border border-gray-200" id="basic-info-group">
+            <div class="flex items-center">
+                <label class="w-24 font-extrabold text-gray-800">용역명</label>
+                <input type="text" id="info_title" class="flex-1 border border-gray-300 bg-white rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 transition outline-none text-gray-800 font-medium" placeholder="용역명을 입력하세요">
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center flex-1">
+                    <label class="w-24 font-extrabold text-gray-800">발주처명</label>
+                    <input type="text" id="info_client" class="flex-1 border border-gray-300 bg-white rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 transition outline-none text-gray-800" placeholder="발주처명을 입력하세요">
+                </div>
+                <div class="flex items-center flex-1">
+                    <label class="w-24 font-extrabold text-gray-800 pl-4 border-l-2 border-gray-300">담당자</label>
+                    <input type="text" id="info_manager" class="flex-1 border border-gray-300 bg-white rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 transition outline-none text-gray-800" placeholder="성함을 입력하세요">
+                </div>
+                <div class="flex items-center flex-1">
+                    <label class="w-24 font-extrabold text-gray-800 pl-4 border-l-2 border-gray-300">공고일</label>
+                    <input type="date" id="info_date" class="flex-1 border border-gray-300 bg-white rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 transition outline-none text-gray-800 text-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- 회사명 및 지분율 입력 폼 -->
+        <div class="mb-10" id="top-table-container">
+            <div class="flex justify-between items-end mb-3">
+                <h2 class="text-xl font-black text-blue-950 ml-1 flex items-center gap-2">
+                    <span class="w-1.5 h-5 bg-blue-600 inline-block"></span> 공동도급협정현황
+                </h2>
+                <button type="button" id="btn_confirm_comps" class="bg-gray-200 text-gray-800 border border-gray-300 px-4 py-1.5 rounded font-bold text-sm hover:bg-gray-300 transition-colors shadow-sm whitespace-nowrap">작성 완료 (숨기기)</button>
+            </div>
+            <div class="overflow-hidden border border-blue-900 shadow-sm" id="top-table-group">
+                <table class="w-full text-center border-collapse excel-table">
+                    <thead class="bg-blue-900 text-white text-sm uppercase tracking-wide">
+                        <tr>
+                            <th class="p-3.5 w-28 font-bold border-blue-800">구분</th>
+                            <th class="p-3.5 font-bold border-blue-800" colspan="5" id="top_th_joint">공동</th>
+                            <th class="p-3.5 w-40 font-bold border-blue-800 bg-blue-950" id="top_th_bundam">분담</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm bg-white">
+                        <tr>
+                            <td class="p-2 font-bold bg-gray-100 text-gray-700">면허</td>
+                            <td class="p-0" colspan="5" id="top_td_license"><input type="text" class="text-center top-input placeholder-gray-400 font-medium text-gray-800" placeholder="공동도급 면허 입력"></td>
+                            <td class="p-0 bg-gray-50" id="top_td_license_bundam"><input type="text" class="text-center top-input placeholder-gray-400 font-medium text-gray-800" placeholder="분담 면허"></td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 font-bold bg-gray-100 text-gray-700">회사명</td>
+                            <td class="p-0" id="top_td_name_A"><input type="text" id="name_A" class="text-center trigger-calc top-input placeholder-gray-400 font-black text-blue-900 text-base" placeholder="A사"></td>
+                            <td class="p-0" id="top_td_name_B"><input type="text" id="name_B" class="text-center trigger-calc top-input placeholder-gray-400 font-black text-blue-900 text-base" placeholder="B사"></td>
+                            <td class="p-0" id="top_td_name_C"><input type="text" id="name_C" class="text-center trigger-calc top-input placeholder-gray-400 font-black text-blue-900 text-base" placeholder="C사"></td>
+                            <td class="p-0" id="top_td_name_D"><input type="text" id="name_D" class="text-center trigger-calc top-input placeholder-gray-400 font-black text-blue-900 text-base" placeholder="D사"></td>
+                            <td class="p-0" id="top_td_name_E"><input type="text" id="name_E" class="text-center trigger-calc top-input placeholder-gray-400 font-black text-blue-900 text-base" placeholder="E사"></td>
+                            <td class="p-0 bg-gray-50" id="top_td_name_bundam"><input type="text" id="name_bundam" class="text-center top-input placeholder-gray-400 font-black text-gray-700 text-base" placeholder="F사"></td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 font-bold bg-gray-100 text-gray-700">지분율</td>
+                            <td class="p-0" id="top_td_share_A"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" id="share_A" class="text-center font-bold trigger-calc top-input text-blue-700" placeholder="0"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                            <td class="p-0" id="top_td_share_B"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" id="share_B" class="text-center font-bold trigger-calc top-input text-blue-700" placeholder="0"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                            <td class="p-0" id="top_td_share_C"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" id="share_C" class="text-center font-bold trigger-calc top-input text-blue-700" placeholder="0"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                            <td class="p-0" id="top_td_share_D"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" id="share_D" class="text-center font-bold trigger-calc top-input text-blue-700" placeholder="0"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                            <td class="p-0" id="top_td_share_E"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" id="share_E" class="text-center font-bold trigger-calc top-input text-blue-700" placeholder="0"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                            <td class="p-0 bg-gray-50" id="top_td_share_bundam"><div class="flex items-center justify-center px-2"><input type="number" step="0.1" class="text-center font-bold top-input text-gray-700" placeholder="-"><span class="text-gray-400 font-bold text-sm">%</span></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 평가 항목 산출 표 -->
+        <div class="flex justify-between items-end mb-3">
+            <h2 class="text-xl font-black text-blue-950 ml-1 flex items-center gap-2">
+                <span class="w-1.5 h-5 bg-blue-600 inline-block"></span> 평가 항목 산출
+            </h2>
+            <div class="flex items-center gap-2 bg-blue-900 px-3 py-1.5 rounded shadow-sm">
+                <span class="text-sm font-bold text-white tracking-wide">면접 점수</span>
+                <input type="number" step="0.01" id="score_interview" class="w-20 text-center text-blue-900 font-black bg-white rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-400 transition-all shadow-inner" placeholder="입력">
+            </div>
+        </div>
+        <div class="overflow-hidden border border-blue-900 shadow-sm relative bg-white">
+            <table class="w-full text-center border-collapse excel-table text-sm">
+                <thead class="bg-blue-900 text-white tracking-wide">
+                    <tr>
+                        <th class="p-3 w-40 font-bold border-blue-800">구분</th> 
+                        <th class="p-3 w-40 font-bold border-blue-800">이름 / 회사</th> 
+                        <th class="p-3 w-64 font-bold border-blue-800">메모 (자유형식)</th> 
+                        <th class="p-3 w-32 font-bold border-blue-800">근거 및 실적</th> 
+                        <th class="p-3 w-24 font-bold border-blue-800">지분율</th>
+                        <th class="p-3 w-28 font-extrabold border-blue-800 bg-blue-950">산출 점수</th>
+                    </tr>
+                </thead>
+                <tbody id="eval-body" class="text-gray-800">
+                    
+                    <!-- 책임 -->
+                    <tr class="calc-row-personnel chaegim-row hover:bg-blue-50 transition-colors border-b border-gray-200">
+                        <td class="p-2 font-bold bg-gray-50 text-sm leading-tight text-gray-700">책임<br>건설사업관리기술인</td>
+                        <td class="p-0"><input type="text" class="text-center eval-input font-bold text-gray-900" placeholder="성함"></td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base-chaegim trigger-calc eval-input font-medium" placeholder="자격(기사 등)"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    
+                    <!-- 분야 -->
+                    <tr class="calc-row-personnel bunya-row hover:bg-blue-50 transition-colors group border-b border-gray-200">
+                        <td rowspan="2" class="p-2 font-bold bg-gray-50 text-sm leading-tight text-gray-700 relative" id="cat_td_bunya">
+                            분야별<br>건설사업관리기술인
+                            <button type="button" id="btn_add_bunya" class="absolute bottom-2 right-2 bg-blue-600 text-white rounded w-6 h-6 flex items-center justify-center text-lg font-bold hover:bg-blue-700 transition-colors shadow" title="인원 추가">+</button>
+                        </td>
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-personnel bunya-row hover:bg-blue-50 transition-colors group border-b border-gray-200">
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                            <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-red-500 font-bold hover:text-red-700 text-xl btn-remove-bunya opacity-0 group-hover:opacity-100 transition-opacity" title="삭제">×</button>
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+
+                    <!-- 기술지원 -->
+                    <tr class="calc-row-personnel gisul-row first-gisul-row hover:bg-blue-50 transition-colors border-b border-gray-200">
+                        <td rowspan="4" class="p-2 font-bold bg-gray-50 text-sm leading-tight text-gray-700 relative group" id="cat_td_gisul">
+                            기술지원<br>건설사업관리기술인
+                            <button type="button" id="btn_add_gisul" class="absolute bottom-2 right-2 bg-blue-600 text-white rounded w-6 h-6 flex items-center justify-center text-lg font-bold hover:bg-blue-700 transition-colors shadow" title="인원 추가">+</button>
+                        </td>
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base-chaegim trigger-calc eval-input font-medium" placeholder="자격(기사 등)"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-personnel gisul-row hover:bg-blue-50 transition-colors group border-b border-gray-200">
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                            <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-red-500 font-bold hover:text-red-700 text-xl btn-remove-gisul opacity-0 group-hover:opacity-100 transition-opacity" title="삭제">×</button>
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-personnel gisul-row hover:bg-blue-50 transition-colors group border-b border-gray-200">
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                            <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-red-500 font-bold hover:text-red-700 text-xl btn-remove-gisul opacity-0 group-hover:opacity-100 transition-opacity" title="삭제">×</button>
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-personnel gisul-row hover:bg-blue-50 transition-colors group border-b border-gray-200">
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                            <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-red-500 font-bold hover:text-red-700 text-xl btn-remove-gisul opacity-0 group-hover:opacity-100 transition-opacity" title="삭제">×</button>
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    </tr>
+                    
+                    <!-- 기술인 소계 -->
+                    <tr class="bg-blue-100 border-l-4 border-l-blue-600" id="row_total_personnel">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-blue-900">기술인 자격 소계 (점)</td>
+                        <td class="py-1 font-mono text-right font-black text-blue-900 text-lg" id="total_score_personnel">0.00</td>
+                    </tr>
+                    <tr class="bg-red-50 border-l-4 border-l-red-500 border-b border-gray-300" id="row_missing_personnel">
+                        <td colspan="5" class="py-1 text-right pr-6">
+                            <div class="flex items-center justify-end gap-1.5 text-sm font-bold text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                기술인 평가 부족한 점수 (Gap)
+                            </div>
+                        </td>
+                        <td class="py-1 font-mono text-right font-bold text-red-600 text-base" id="missing_score_personnel">1.00</td>
+                    </tr>
+
+                    <!-- ================ 회사별 영역 시작 ================ -->
+                    
+                    <!-- 유사용역 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yusa" data-comp="A">
+                        <td id="cat_td_yusa" class="p-2 font-bold bg-gray-50 text-gray-700">유사용역</td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A">A</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="억"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yusa" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B">B</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="억"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yusa" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C">C</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="억"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yusa" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D">D</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="억"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors border-b border-gray-300" data-cat="yusa" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E">E</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="억"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+
+                    <!-- 용역수행성과 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yongyeok" data-comp="A">
+                        <td id="cat_td_yongyeok" class="p-2 font-bold bg-gray-50 text-gray-700">용역수행성과<br><span class="text-xs text-gray-500 font-normal">(만점: <span id="max_yongyeok_text" class="font-bold">2</span>)</span></td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A">A</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yongyeok" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B">B</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yongyeok" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C">C</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yongyeok" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D">D</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="yongyeok" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E">E</td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="참고사항 기재"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="bg-blue-100 border-l-4 border-l-blue-600" id="row_total_yongyeok">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-blue-900">용역수행성과 소계 (점)</td>
+                        <td class="py-1 font-mono text-right font-black text-blue-900 text-lg" id="total_score_yongyeok">0.00</td>
+                    </tr>
+                    <tr class="bg-red-50 border-l-4 border-l-red-500 border-b border-gray-300" id="row_missing_yongyeok">
+                        <td colspan="5" class="py-1 text-right pr-6">
+                            <div class="flex items-center justify-end gap-1.5 text-sm font-bold text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                용역수행성과 부족한 점수 (Gap)
+                            </div>
+                        </td>
+                        <td class="py-1 font-mono text-right font-bold text-red-600 text-base" id="missing_score_yongyeok">2.00</td>
+                    </tr>
+
+                    <!-- 건실도 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="geonsil" data-comp="A">
+                        <td id="cat_td_geonsil" class="p-2 font-bold bg-gray-50 text-gray-700">건실도<br><span class="text-xs text-gray-500 font-normal">(만점: <span id="max_geonsil_text" class="font-bold">3</span>)</span></td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A" colspan="2">A</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800 uppercase" placeholder="신용등급"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="geonsil" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B" colspan="2">B</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800 uppercase" placeholder="신용등급"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="geonsil" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C" colspan="2">C</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800 uppercase" placeholder="신용등급"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="geonsil" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D" colspan="2">D</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800 uppercase" placeholder="신용등급"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="geonsil" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E" colspan="2">E</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800 uppercase" placeholder="신용등급"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="bg-blue-100 border-l-4 border-l-blue-600" id="row_total_geonsil">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-blue-900">건실도 소계 (점)</td>
+                        <td class="py-1 font-mono text-right font-black text-blue-900 text-lg" id="total_score_geonsil">0.00</td>
+                    </tr>
+                    <tr class="bg-red-50 border-l-4 border-l-red-500 border-b border-gray-300" id="row_missing_geonsil">
+                        <td colspan="5" class="py-1 text-right pr-6">
+                            <div class="flex items-center justify-end gap-1.5 text-sm font-bold text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                건실도 부족한 점수 (Gap)
+                            </div>
+                        </td>
+                        <td class="py-1 font-mono text-right font-bold text-red-600 text-base" id="missing_score_geonsil">3.00</td>
+                    </tr>
+
+                    <!-- 개발실적 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="A" data-sub="개발">
+                        <td id="cat_td_gaebal" class="p-2 font-bold bg-gray-50 text-gray-700">개발실적<br><span class="text-xs text-gray-500 font-normal">(만점: <span id="max_gaebal_text" class="font-bold">3</span>)</span></td>
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="A" colspan="2">A (개발)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="A" data-sub="활용">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="A" colspan="2">A (활용)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="A" data-sub="특허">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="A" colspan="2">A (특허)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="B" data-sub="개발">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="B" colspan="2">B (개발)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="B" data-sub="활용">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="B" colspan="2">B (활용)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="B" data-sub="특허">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="B" colspan="2">B (특허)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="C" data-sub="개발">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="C" colspan="2">C (개발)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="C" data-sub="활용">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="C" colspan="2">C (활용)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="C" data-sub="특허">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="C" colspan="2">C (특허)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="D" data-sub="개발">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="D" colspan="2">D (개발)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="D" data-sub="활용">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="D" colspan="2">D (활용)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="D" data-sub="특허">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="D" colspan="2">D (특허)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="E" data-sub="개발">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="E" colspan="2">E (개발)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gaebal" data-comp="E" data-sub="활용">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="E" colspan="2">E (활용)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors border-b-2 border-gray-300" data-cat="gaebal" data-comp="E" data-sub="특허">
+                        <td class="p-2 font-bold text-gray-600 name-display" data-comp="E" colspan="2">E (특허)</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="점수"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="bg-blue-100 border-l-4 border-l-blue-600" id="row_total_gaebal">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-blue-900">개발실적 소계 (점)</td>
+                        <td class="py-1 font-mono text-right font-black text-blue-900 text-lg" id="total_score_gaebal">0.00</td>
+                    </tr>
+                    <tr class="bg-red-50 border-l-4 border-l-red-500 border-b border-gray-300" id="row_missing_gaebal">
+                        <td colspan="5" class="py-1 text-right pr-6">
+                            <div class="flex items-center justify-end gap-1.5 text-sm font-bold text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                개발실적 부족한 점수 (Gap)
+                            </div>
+                        </td>
+                        <td class="py-1 font-mono text-right font-bold text-red-600 text-base" id="missing_score_gaebal">3.00</td>
+                    </tr>
+
+                    <!-- 투자실적 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="tuja" data-comp="A">
+                        <td id="cat_td_tuja" class="p-2 font-bold bg-gray-50 text-gray-700">투자실적<br><span class="text-xs text-gray-500 font-normal">(만점: <span class="font-bold">7</span>)</span></td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A" colspan="2">A</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="tuja" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B" colspan="2">B</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="tuja" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C" colspan="2">C</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="tuja" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D" colspan="2">D</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors border-b border-gray-300" data-cat="tuja" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E" colspan="2">E</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-bold calc-score text-blue-700">0.00</td>
+                    </tr>
+                    <tr class="bg-blue-100 border-l-4 border-l-blue-600 border-b border-gray-300" id="row_total_tuja">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-blue-900">투자실적 소계 (%)</td>
+                        <td class="py-1 font-mono text-right font-black text-blue-900 text-lg" id="total_score_tuja">0.00</td>
+                    </tr>
+
+                    <!-- 교체빈도율 -->
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gyoche" data-comp="A">
+                        <td id="cat_td_gyoche" class="p-2 font-bold bg-gray-50 text-gray-700">교체빈도율</td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A" colspan="2">A</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50"></td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gyoche" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B" colspan="2">B</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50"></td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gyoche" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C" colspan="2">C</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50"></td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors" data-cat="gyoche" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D" colspan="2">D</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50"></td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-blue-50 transition-colors border-b border-gray-300" data-cat="gyoche" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E" colspan="2">E</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-blue-800" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50"></td>
+                    </tr>
+
+                    <!-- 최종 부족 합계 -->
+                    <tr class="bg-red-600 text-white shadow-inner" id="row_total_missing">
+                        <td colspan="5" class="py-1 pl-4 pr-6">
+                            <div class="flex items-center justify-end gap-1.5 tracking-wide font-black text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                최종 부족한 점수 (Gap)
+                            </div>
+                        </td>
+                        <td class="py-1 px-4 font-mono text-right text-lg font-black" id="total_missing_score">0.00</td>
+                    </tr>
+
+                    <!-- 가점 항목 구분선 -->
+                    <tr class="bg-gray-100 border-y-[3px] border-gray-400 shadow-sm">
+                        <td colspan="6" class="p-2 text-center text-sm font-black text-gray-600 tracking-widest">
+                            ▼ 이하 가점 항목 ▼
+                        </td>
+                    </tr>
+
+                    <!-- 공사비절감 -->
+                    <tr class="calc-row-personnel gongsabi-row hover:bg-emerald-50 transition-colors">
+                        <td rowspan="2" class="p-2 font-bold bg-gray-50 text-sm leading-tight text-gray-700 border-l-4 border-emerald-500" id="cat_td_gongsabi">공사비절감</td>
+                        <td class="p-0"><input type="text" class="text-center eval-input font-bold text-gray-900" placeholder="성함"></td>
+                        <td class="p-0" colspan="2"><input type="text" class="pl-4 text-left calc-input-base-gongsabi trigger-calc eval-input font-medium placeholder-emerald-600/50" placeholder="절감 근거 작성 시 +0.1점 부여"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-personnel gongsabi-row hover:bg-emerald-50 transition-colors border-b border-gray-300">
+                        <td class="p-0"><input type="text" class="text-center eval-input font-bold text-gray-900" placeholder="성함"></td>
+                        <td class="p-0" colspan="2"><input type="text" class="pl-4 text-left calc-input-base-gongsabi trigger-calc eval-input font-medium placeholder-emerald-600/50" placeholder="절감 근거 작성 시 +0.1점 부여"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="bg-emerald-50 border-l-4 border-l-emerald-600 border-b border-gray-300" id="row_total_gongsabi">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-emerald-800">공사비절감 소계(점)</td>
+                        <td class="py-1 font-mono text-right font-black text-emerald-800 text-lg" id="total_score_gongsabi">0.00</td>
+                    </tr>
+
+                    <!-- 신규고용 -->
+                    <tr class="calc-row-company hover:bg-emerald-50 transition-colors" data-cat="singyu" data-comp="A">
+                        <td id="cat_td_singyu" class="p-2 font-bold bg-gray-50 text-gray-700 border-l-4 border-emerald-500">신규고용</td>
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="A" colspan="2">A</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-emerald-800 placeholder-emerald-600/50" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="A">50%</td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-emerald-50 transition-colors" data-cat="singyu" data-comp="B">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="B" colspan="2">B</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-emerald-800 placeholder-emerald-600/50" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="B">20%</td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-emerald-50 transition-colors" data-cat="singyu" data-comp="C">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="C" colspan="2">C</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-emerald-800 placeholder-emerald-600/50" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="C">10%</td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-emerald-50 transition-colors" data-cat="singyu" data-comp="D">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="D" colspan="2">D</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-emerald-800 placeholder-emerald-600/50" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="D">10%</td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="calc-row-company hover:bg-emerald-50 transition-colors border-b border-gray-300" data-cat="singyu" data-comp="E">
+                        <td class="p-2 font-bold text-gray-900 name-display" data-comp="E" colspan="2">E</td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium text-emerald-800 placeholder-emerald-600/50" placeholder="%"></td>
+                        <td class="p-2 bg-gray-100 font-mono text-sm font-bold text-gray-500 share-display" data-comp="E">10%</td>
+                        <td class="p-2 bg-emerald-50 font-mono text-right font-bold calc-score text-emerald-700 text-base">0.00</td>
+                    </tr>
+                    <tr class="bg-emerald-50 border-l-4 border-l-emerald-600 border-b border-gray-300" id="row_total_singyu">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-emerald-800">신규고용 소계(점)</td>
+                        <td class="py-1 font-mono text-right font-black text-emerald-800 text-lg" id="total_score_singyu">0.00</td>
+                    </tr>
+
+                    <!-- 가점 항목 합계 -->
+                    <tr class="bg-emerald-100 border-l-4 border-l-emerald-700 border-b border-gray-400" id="row_total_bonus">
+                        <td colspan="5" class="py-1 text-right pr-6 text-sm font-black text-emerald-950">가점 항목 합계 (점)</td>
+                        <td class="py-1 font-mono text-right font-black text-emerald-950 text-lg" id="total_bonus_score">0.00</td>
+                    </tr>
+
+                    <!-- 전체 점수 -->
+                    <tr class="bg-blue-900 text-white shadow-lg" id="row_final_total">
+                        <td colspan="5" class="py-2.5 pl-4 pr-6">
+                            <div class="flex items-center justify-end gap-2 tracking-[0.2em] font-black text-base uppercase">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                전체 점수 (점)
+                            </div>
+                        </td>
+                        <td class="py-2.5 px-4 font-mono text-right text-2xl font-black" id="final_total_score">100.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const comps = ['A', 'B', 'C', 'D', 'E'];
+            let isCompsConfirmed = false;
+
+            // Toast UI 
+            const showToast = (message, isError = false) => {
+                const toast = document.getElementById('toast');
+                toast.innerHTML = isError 
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> ${message}`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ${message}`;
+                toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded shadow-lg text-white font-bold transition-all duration-300 z-50 flex items-center gap-2 ${isError ? 'bg-red-600' : 'bg-emerald-600'}`;
+                toast.style.opacity = '1';
+                toast.style.transform = 'translate(-50%, 10px)';
+                setTimeout(() => { 
+                    toast.style.opacity = '0'; 
+                    toast.style.transform = 'translate(-50%, -10px)';
+                }, 3000);
+            };
+
+            const calculateAll = () => {
+                const shares = {};
+                const activeComps = [];
+                const evalTypeNode = document.querySelector('input[name="eval_type"]:checked');
+                const evalType = evalTypeNode ? evalTypeNode.value : 'local';
+
+                let maxScore = { yongyeok: 2, geonsil: 3, gaebal: 3 };
+                if (evalType === 'pps') { maxScore.yongyeok = 2; maxScore.geonsil = 3; maxScore.gaebal = 3; }
+
+                document.getElementById('max_yongyeok_text').textContent = maxScore.yongyeok;
+                document.getElementById('max_geonsil_text').textContent = maxScore.geonsil;
+                document.getElementById('max_gaebal_text').textContent = maxScore.gaebal;
+
+                let isInitialEmptyState = comps.every(comp => document.getElementById(`name_${comp}`).value.trim() === '');
+                comps.forEach(comp => {
+                    const nameVal = document.getElementById(`name_${comp}`).value.trim();
+                    shares[comp] = parseFloat(document.getElementById(`share_${comp}`).value) || 0;
+                    if (nameVal !== '' || isInitialEmptyState) activeComps.push(comp);
+                });
+
+                document.querySelectorAll('.name-display').forEach(el => {
+                    const comp = el.getAttribute('data-comp');
+                    const placeholderVal = document.getElementById(`name_${comp}`).getAttribute('placeholder') || comp;
+                    const nameVal = document.getElementById(`name_${comp}`).value.trim() || placeholderVal;
+                    const row = el.closest('tr');
+                    el.textContent = row.dataset.cat === 'gaebal' ? `${nameVal} (${row.dataset.sub})` : nameVal;
+                });
+
+                const applyInputStyle = (el, isEmpty) => {
+                    el.classList.toggle('empty-input', isEmpty);
+                };
+
+                let personnelPositiveTotal = 0;
+                let personnelNegativeTotal = 0;
+                
+                document.querySelectorAll('.calc-input-base-chaegim').forEach(inputEl => {
+                    const row = inputEl.closest('tr');
+                    const text = inputEl.value || "";
+                    let res = 0;
+                    if(text.includes('기술사')) res = 0.5; else if(text.includes('기사')) res = 0.3; else if(text.includes('산업기사')) res = 0.1;
+                    
+                    const scoreEl = row.querySelector('.calc-score');
+                    if (scoreEl) {
+                        scoreEl.textContent = res.toFixed(2);
+                        if(row.style.display !== 'none') {
+                            if (res >= 0) personnelPositiveTotal += res;
+                            else personnelNegativeTotal += Math.abs(res);
+                        }
+                    }
+                    if (inputEl) applyInputStyle(inputEl, text.trim() === '');
+                });
+
+                document.querySelectorAll('.calc-row-personnel:not(.chaegim-row):not(.gongsabi-row):not(.first-gisul-row)').forEach(row => {
+                    const inputEl = row.querySelector('.calc-input-base');
+                    const val = parseFloat(inputEl ? inputEl.value : "") || 0;
+                    
+                    const scoreEl = row.querySelector('.calc-score');
+                    if (scoreEl) {
+                        scoreEl.textContent = val.toFixed(2);
+                        if(row.style.display !== 'none') {
+                            if (val >= 0) personnelPositiveTotal += val;
+                            else personnelNegativeTotal += Math.abs(val);
+                        }
+                    }
+                    if (inputEl) applyInputStyle(inputEl, inputEl.value.trim() === '');
+                });
+
+                const totalPersonnelEl = document.getElementById('total_score_personnel');
+                if (totalPersonnelEl) totalPersonnelEl.textContent = personnelPositiveTotal.toFixed(2);
+
+                let personnelGap = Math.max(0, 1.0 - personnelPositiveTotal) + personnelNegativeTotal;
+                const missingScorePersonnelEl = document.getElementById('missing_score_personnel');
+                if (missingScorePersonnelEl) missingScorePersonnelEl.textContent = personnelGap.toFixed(2);
+
+                let gongsabiScore = 0;
+                document.querySelectorAll('.gongsabi-row').forEach(row => {
+                    const inputEl = row.querySelector('.calc-input-base-gongsabi');
+                    const res = (inputEl && inputEl.value.trim() !== '') ? 0.1 : 0;
+                    const scoreEl = row.querySelector('.calc-score');
+                    if (scoreEl) scoreEl.textContent = res.toFixed(2);
+                    gongsabiScore += res;
+                    if (inputEl) applyInputStyle(inputEl, inputEl.value.trim() === '');
+                });
+                
+                const totalScoreGongsabiEl = document.getElementById('total_score_gongsabi');
+                if (totalScoreGongsabiEl) totalScoreGongsabiEl.textContent = gongsabiScore.toFixed(2);
+
+                let singyuScore = 0;
+                let totalMissing = 0;
+                
+                const categories = ['yusa', 'yongyeok', 'geonsil', 'gaebal', 'tuja', 'gyoche', 'singyu'];
+                
+                if (evalType === 'pps') {
+                    document.querySelectorAll('.calc-row-company[data-cat="yongyeok"]').forEach(r => r.style.display = 'none');
+                    const rowTotalYong = document.getElementById('row_total_yongyeok');
+                    const rowMissingYong = document.getElementById('row_missing_yongyeok');
+                    const catTdYong = document.getElementById('cat_td_yongyeok');
+                    if (rowTotalYong) rowTotalYong.style.display = 'none';
+                    if (rowMissingYong) rowMissingYong.style.display = 'none';
+                    if (catTdYong) catTdYong.style.display = 'none';
+                } else {
+                    const catTdYong = document.getElementById('cat_td_yongyeok');
+                    if (catTdYong) catTdYong.style.display = '';
+                }
+
+                categories.forEach(cat => {
+                    if (evalType === 'pps' && cat === 'yongyeok') return;
+                    const catTd = document.getElementById(`cat_td_${cat}`);
+                    let firstRow = null, count = 0, catTotal = 0;
+
+                    comps.forEach(comp => {
+                        const rows = document.querySelectorAll(`.calc-row-company[data-cat="${cat}"][data-comp="${comp}"]`);
+                        const isVisible = activeComps.includes(comp);
+                        
+                        rows.forEach(row => {
+                            if (isVisible) {
+                                row.style.display = ''; 
+                                if(!firstRow) firstRow = row; 
+                                count++;
+                                
+                                const shareDisplay = row.querySelector('.share-display');
+                                if(shareDisplay) shareDisplay.textContent = shares[comp] + '%';
+                                
+                                const inputEl = row.querySelector('.calc-input-base');
+                                let itemScore = 0;
+                                
+                                if (inputEl) {
+                                    if (cat === 'geonsil') {
+                                        const raw = inputEl.value.trim().toUpperCase();
+                                        let mapped = 0;
+                                        if (/^(AAA|AA\+|AA0?|AA-|A\+|A0?|A-|BBB\+|BBB0?|BBB-)$/.test(raw)) mapped = maxScore.geonsil;
+                                        else if (/^(BB\+|BB0?|BB-|B\+|B0?|B-)$/.test(raw)) mapped = 2.8;
+                                        else if (raw !== '') mapped = 2.1;
+                                        itemScore = mapped * (shares[comp]/100);
+                                    } else if (cat === 'singyu') {
+                                        const val = parseFloat(inputEl.value) || 0;
+                                        let mapped = 0;
+                                        if (evalType === 'pps') {
+                                            if (val >= 4) mapped = 0.4; else if (val >= 3) mapped = 0.3; else if (val >= 2) mapped = 0.2; else if (val >= 1) mapped = 0.1;
+                                        } else {
+                                            if (val >= 3) mapped = 0.3; else if (val >= 2) mapped = 0.2; else if (val >= 1) mapped = 0.1;
+                                        }
+                                        itemScore = mapped * (shares[comp]/100);
+                                    } else {
+                                        itemScore = (parseFloat(inputEl.value) || 0) * (shares[comp]/100);
+                                    }
+                                    applyInputStyle(inputEl, inputEl.value.trim() === '');
+                                }
+                                const calcScoreEl = row.querySelector('.calc-score');
+                                if (calcScoreEl) {
+                                    if (cat === 'singyu') {
+                                        calcScoreEl.textContent = itemScore.toFixed(3);
+                                    } else {
+                                        calcScoreEl.textContent = itemScore.toFixed(2);
+                                    }
+                                }
+                                catTotal += itemScore;
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+                    });
+
+                    if (firstRow && catTd) { 
+                        firstRow.insertBefore(catTd, firstRow.firstChild); 
+                        catTd.rowSpan = count; 
+                        catTd.style.display = ''; 
+                    } else if (catTd) {
+                        catTd.style.display = 'none';
+                    }
+
+                    const totalScoreCat = document.getElementById(`total_score_${cat}`);
+                    if (cat === 'singyu') {
+                        // 신규고용 소계는 소수점 3번째 자리에서 반올림하여 2번째 자리까지 표시
+                        const roundedSingyuVal = Math.round((catTotal + Number.EPSILON) * 100) / 100;
+                        if (totalScoreCat) totalScoreCat.textContent = roundedSingyuVal.toFixed(2);
+                        singyuScore = roundedSingyuVal; // 전체 합계에도 반올림된 소계 반영
+                    } else {
+                        if (totalScoreCat) totalScoreCat.textContent = catTotal.toFixed(2);
+                    }
+                    
+                    if (['yongyeok', 'geonsil', 'gaebal'].includes(cat)) {
+                        const gap = Math.max(0, maxScore[cat] - catTotal);
+                        const missingScoreCat = document.getElementById(`missing_score_${cat}`);
+                        const rowMissingCat = document.getElementById(`row_missing_${cat}`);
+                        if (missingScoreCat) missingScoreCat.textContent = gap.toFixed(2);
+                        if (rowMissingCat) rowMissingCat.style.display = count === 0 ? 'none' : '';
+                        if (count > 0) totalMissing += gap;
+                    }
+                });
+
+                // 최종 부족한 점수 (Gap) - 가점 제외
+                let finalGap = totalMissing + personnelGap;
+                finalGap = Math.max(0, finalGap);
+                document.getElementById('total_missing_score').textContent = finalGap.toFixed(2);
+
+                // 가점 항목 합계
+                const totalBonus = gongsabiScore + singyuScore;
+                document.getElementById('total_bonus_score').textContent = totalBonus.toFixed(2);
+
+                // 전체 점수 계산
+                const interviewScore = parseFloat(document.getElementById('score_interview').value) || 0;
+                const finalTotal = 100 - interviewScore - finalGap + totalBonus;
+                document.getElementById('final_total_score').textContent = finalTotal.toFixed(2);
+                
+                const rowTotalMissingEl = document.getElementById('row_total_missing');
+                if (rowTotalMissingEl) rowTotalMissingEl.style.display = activeComps.length === 0 ? 'none' : '';
+            };
+
+            const btnConfirm = document.getElementById('btn_confirm_comps');
+            if (btnConfirm) {
+                btnConfirm.addEventListener('click', function() {
+                    isCompsConfirmed = !isCompsConfirmed;
+                    this.innerHTML = isCompsConfirmed 
+                        ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mb-0.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> 수정하기 (보이기)` 
+                        : `작성 완료 (숨기기)`;
+                    
+                    let count = 0;
+                    comps.forEach(comp => {
+                        const isVisible = !(isCompsConfirmed && document.getElementById(`name_${comp}`).value.trim() === '');
+                        const nameTd = document.getElementById(`top_td_name_${comp}`);
+                        const shareTd = document.getElementById(`top_td_share_${comp}`);
+                        if (nameTd) nameTd.style.display = isVisible ? '' : 'none';
+                        if (shareTd) shareTd.style.display = isVisible ? '' : 'none';
+                        if (isVisible) count++;
+                    });
+
+                    const bundamVisible = !(isCompsConfirmed && document.getElementById('name_bundam').value.trim() === '');
+                    const thBundam = document.getElementById('top_th_bundam');
+                    const tdLicenseBundam = document.getElementById('top_td_license_bundam');
+                    const tdNameBundam = document.getElementById('top_td_name_bundam');
+                    const tdShareBundam = document.getElementById('top_td_share_bundam');
+                    
+                    if (thBundam) thBundam.style.display = bundamVisible ? '' : 'none';
+                    if (tdLicenseBundam) tdLicenseBundam.style.display = bundamVisible ? '' : 'none';
+                    if (tdNameBundam) tdNameBundam.style.display = bundamVisible ? '' : 'none';
+                    if (tdShareBundam) tdShareBundam.style.display = bundamVisible ? '' : 'none';
+
+                    const thJoint = document.getElementById('top_th_joint');
+                    const tdLicense = document.getElementById('top_td_license');
+                    if (thJoint) thJoint.colSpan = count || 1;
+                    if (tdLicense) tdLicense.colSpan = count || 1;
+                });
+            }
+
+            document.addEventListener('input', (e) => { if (e.target.tagName === 'INPUT') calculateAll(); });
+            document.querySelectorAll('input[name="eval_type"]').forEach(r => r.addEventListener('change', calculateAll));
+
+            function setupAddPersonnelRow(btnId, rowClass, tdId, removeClass) {
+                const btn = document.getElementById(btnId);
+                if(!btn) return;
+                
+                btn.addEventListener('click', () => {
+                    const catTd = document.getElementById(tdId);
+                    if (catTd) catTd.rowSpan = catTd.rowSpan + 1;
+
+                    const newRow = document.createElement('tr');
+                    newRow.className = `calc-row-personnel ${rowClass} hover:bg-blue-50 transition-colors group border-b border-gray-200`;
+                    
+                    newRow.innerHTML = `
+                        <td class="p-0 relative">
+                            <input type="text" class="text-center eval-input font-bold text-gray-900 pr-8" placeholder="성함">
+                            <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-red-500 font-bold hover:text-red-700 text-xl ${removeClass} opacity-0 group-hover:opacity-100 transition-opacity" title="삭제">×</button>
+                        </td>
+                        <td class="p-0"><input type="text" class="text-left eval-input text-gray-600" placeholder="직급, 담당업무 등"></td>
+                        <td class="p-0"><input type="text" class="text-center calc-input-base trigger-calc eval-input font-medium" placeholder="입력"></td>
+                        <td class="p-0 bg-gray-100"></td>
+                        <td class="p-2 bg-blue-50 font-mono text-right font-black calc-score text-blue-700 text-base">0.00</td>
+                    `;
+                    
+                    const rows = document.querySelectorAll(`.${rowClass}`);
+                    if (rows.length > 0) {
+                        const lastRow = rows[rows.length - 1];
+                        lastRow.parentNode.insertBefore(newRow, lastRow.nextSibling);
+                    }
+                    calculateAll();
+                });
+            }
+
+            setupAddPersonnelRow('btn_add_bunya', 'bunya-row', 'cat_td_bunya', 'btn-remove-bunya');
+            setupAddPersonnelRow('btn_add_gisul', 'gisul-row', 'cat_td_gisul', 'btn-remove-gisul');
+
+            document.getElementById('eval-body').addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-remove-bunya')) {
+                    const row = e.target.closest('tr');
+                    const catTd = document.getElementById('cat_td_bunya');
+                    if (catTd && catTd.rowSpan > 1) {
+                        catTd.rowSpan = catTd.rowSpan - 1;
+                        row.remove();
+                        calculateAll();
+                    }
+                }
+                if (e.target.classList.contains('btn-remove-gisul')) {
+                    const row = e.target.closest('tr');
+                    const catTd = document.getElementById('cat_td_gisul');
+                    if (catTd && catTd.rowSpan > 1) {
+                        catTd.rowSpan = catTd.rowSpan - 1;
+                        row.remove();
+                        calculateAll();
+                    }
+                }
+            });
+
+            // PDF 저장
+            document.getElementById('btn_export_pdf').addEventListener('click', () => {
+                if (typeof html2pdf === 'undefined') { showToast('PDF 라이브러리를 로드하지 못했습니다.', true); return; }
+                document.querySelectorAll('input').forEach(input => input.setAttribute('value', input.value));
+                const element = document.getElementById('capture-area');
+                const headerActions = document.getElementById('header-actions');
+                const originalDisplay = headerActions.style.display;
+                headerActions.style.display = 'none';
+                
+                const evalTypeNode = document.querySelector('input[name="eval_type"]:checked');
+                const type = evalTypeNode && evalTypeNode.value === 'pps' ? '조달청' : '지자체';
+                const tempTitle = document.createElement('h1');
+                tempTitle.className = 'text-2xl font-black text-center mb-8 text-blue-950 tracking-tight';
+                tempTitle.textContent = `자기평가서 산출 (${type})`;
+                element.insertBefore(tempTitle, element.firstChild);
+
+                const opt = {
+                    margin: [15, 10, 15, 10],
+                    filename: `${document.getElementById('info_title').value || '자기평가서'}_산출결과.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, logging: false },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: 'avoid-all' }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    headerActions.style.display = originalDisplay;
+                    element.removeChild(tempTitle);
+                    showToast('PDF 파일이 성공적으로 저장되었습니다!');
+                }).catch(() => {
+                    headerActions.style.display = originalDisplay;
+                    element.removeChild(tempTitle);
+                    showToast('PDF 저장 중 오류가 발생했습니다.', true);
+                });
+            });
+
+            // 엑셀 저장
+            document.getElementById('btn_export').addEventListener('click', () => {
+                if (typeof XLSX === 'undefined') { showToast('엑셀 라이브러리를 로드하지 못했습니다.', true); return; }
+                const evalTypeNode = document.querySelector('input[name="eval_type"]:checked');
+                const typeStr = evalTypeNode && evalTypeNode.value === 'pps' ? '(조달청용)' : '(지자체용)';
+                const aoa = [
+                    [`사업수행능력평가서 자기평가서 산출 결과 ${typeStr}`],
+                    [],
+                    ["용역명", document.getElementById('info_title').value, "", "발주처명", document.getElementById('info_client').value, "담당자", document.getElementById('info_manager').value, "공고일", document.getElementById('info_date').value],
+                    [],
+                ];
+                const topInputs = Array.from(document.querySelectorAll('.top-input')).map(inp => inp.value);
+                let visibleCompsCount = 0;
+                const activeIndices = [];
+                comps.forEach((comp, idx) => {
+                    if (document.getElementById(`top_td_name_${comp}`).style.display !== 'none') {
+                        visibleCompsCount++;
+                        activeIndices.push(idx);
+                    }
+                });
+                const isBundamVisible = document.getElementById('top_td_name_bundam').style.display !== 'none';
+                let jointHeaderRow = ["구분"];
+                activeIndices.forEach(idx => jointHeaderRow.push(comps[idx]));
+                if (isBundamVisible) jointHeaderRow.push("분담");
+                
+                let licenseRow = ["면허", topInputs[0]];
+                for(let i=1; i<visibleCompsCount; i++) licenseRow.push("");
+                if (isBundamVisible) licenseRow.push(topInputs[1]);
+                
+                let nameRow = ["회사명"];
+                activeIndices.forEach(idx => nameRow.push(topInputs[2 + idx]));
+                if (isBundamVisible) nameRow.push(topInputs[7]);
+                
+                let shareRow = ["지분율(%)"];
+                activeIndices.forEach(idx => shareRow.push(topInputs[8 + idx]));
+                if (isBundamVisible) shareRow.push(topInputs[13]);
+                
+                aoa.push(["[공동도급협정현황]"]);
+                aoa.push(jointHeaderRow);
+                aoa.push(licenseRow);
+                aoa.push(nameRow);
+                aoa.push(shareRow);
+                aoa.push([]);
+                
+                aoa.push(["[평가 항목 산출 결과]", "", "", "", "면접 점수", document.getElementById('score_interview').value]);
+                aoa.push(["구분", "이름/회사", "메모", "근거", "지분율", "점수"]);
+                
+                const rows = document.querySelectorAll('#eval-body tr');
+                rows.forEach(row => {
+                    if(row.style.display === 'none') return; 
+                    const rowData = [];
+                    const cells = row.children;
+                    let cellIdx = 0;
+                    if (cells[0].hasAttribute('rowspan') || cells[0].classList.contains('font-bold')) {
+                        rowData.push(cells[0].innerText.replace(/\n/g, ' '));
+                        cellIdx++;
+                    } else { rowData.push(""); }
+                    for(let i=cellIdx; i<cells.length; i++) {
+                        const cell = cells[i];
+                        const input = cell.querySelector('input');
+                        if (input) rowData.push(input.value);
+                        else rowData.push(cell.innerText.replace(/\n/g, ' ').trim());
+                        if (cell.colSpan && cell.colSpan > 1) {
+                            for(let s = 1; s < cell.colSpan; s++) rowData.push(""); 
+                        }
+                    }
+                    aoa.push(rowData);
+                });
+                
+                const systemState = {
+                    eval_type: evalTypeNode ? evalTypeNode.value : 'local',
+                    info_title: document.getElementById('info_title').value,
+                    info_client: document.getElementById('info_client').value,
+                    info_manager: document.getElementById('info_manager').value,
+                    info_date: document.getElementById('info_date').value,
+                    score_interview: document.getElementById('score_interview').value,
+                    top_inputs: topInputs,
+                    bunya_count: document.querySelectorAll('.bunya-row').length,
+                    gisul_count: document.querySelectorAll('.gisul-row').length,
+                    eval_inputs: Array.from(document.querySelectorAll('.eval-input')).map(inp => inp.value)
+                };
+                
+                const wb = XLSX.utils.book_new();
+                const wsReport = XLSX.utils.aoa_to_sheet(aoa);
+                XLSX.utils.book_append_sheet(wb, wsReport, "자기평가서_리포트");
+                const wsSystem = XLSX.utils.aoa_to_sheet([[JSON.stringify(systemState)]]);
+                XLSX.utils.book_append_sheet(wb, wsSystem, "SystemData");
+                XLSX.writeFile(wb, `${document.getElementById('info_title').value || '자기평가서'}_산출결과.xlsx`);
+                showToast('엑셀 파일이 성공적으로 저장되었습니다!');
+            });
+
+            document.getElementById('btn_import').addEventListener('click', () => document.getElementById('file_import').click());
+            document.getElementById('file_import').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        if (!workbook.Sheets["SystemData"]) { showToast('복구 데이터가 없는 파일입니다.', true); return; }
+                        const wsSystem = workbook.Sheets["SystemData"];
+                        const jsonStr = wsSystem['A1'] ? wsSystem['A1'].v : null;
+                        if (!jsonStr) throw new Error("데이터 파싱 실패");
+                        const state = JSON.parse(jsonStr);
+                        if (state.eval_type === 'pps') document.querySelector('input[name="eval_type"][value="pps"]').checked = true;
+                        else document.querySelector('input[name="eval_type"][value="local"]').checked = true;
+                        isCompsConfirmed = false;
+                        document.getElementById('info_title').value = state.info_title || '';
+                        document.getElementById('info_client').value = state.info_client || '';
+                        document.getElementById('info_manager').value = state.info_manager || '';
+                        document.getElementById('info_date').value = state.info_date || '';
+                        if (document.getElementById('score_interview')) document.getElementById('score_interview').value = state.score_interview || '';
+                        const topInputEls = document.querySelectorAll('.top-input');
+                        if (state.top_inputs) topInputEls.forEach((el, idx) => { el.value = state.top_inputs[idx]; });
+                        calculateAll();
+                        showToast('데이터를 성공적으로 불러왔습니다!');
+                    } catch (error) { showToast('파일을 읽는 중 오류가 발생했습니다.', true); }
+                };
+                reader.readAsArrayBuffer(file);
+            });
+            calculateAll();
+        });
+    </script>
+</body>
+</html>

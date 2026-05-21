@@ -1,0 +1,1236 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(주)멋진엔지니어링 건설사업관리부 통합 연락처</title>
+    
+    <!-- 폰트: Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 스타일: Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans KR"', 'sans-serif'] },
+                    colors: {
+                        yushin: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 400: '#38bdf8',
+                            500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+        // 초기 다크모드 설정 체크
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- 아이콘: Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- CSV 파싱 라이브러리: PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <!-- 엑셀 파싱 및 내보내기 라이브러리: SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-track { background: #374151; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        .table-container { max-height: 50vh; overflow-y: auto; overflow-x: auto; }
+        .table-container thead th { position: sticky; top: 0; z-index: 10; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 antialiased min-h-screen flex flex-col">
+
+    <div class="max-w-7xl mx-auto px-4 pt-8 flex-1 w-full">
+        
+        <!-- 헤더 영역 -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 mb-6 border-t-4 border-yushin-600 transition-colors">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-yushin-50 dark:bg-yushin-900/30 text-yushin-600 dark:text-yushin-400 rounded-xl">
+                        <i data-lucide="building-2" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">(주)멋진엔지니어링 건설사업관리부 통합 연락처</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">발주처 및 공동사 담당자 연락처 공유 시스템 (오프라인 모드 작동 중)</p>
+                    </div>
+                </div>
+
+                <!-- 상단 액션 버튼 영역 -->
+                <div class="relative flex flex-wrap justify-end gap-2">
+                    <button onclick="toggleDarkMode()" class="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 w-10 h-10 rounded-lg transition-colors border border-gray-200 dark:border-gray-600" title="다크모드 전환">
+                        <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                    </button>
+                    <button onclick="openCompanyModal()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg transition-colors font-medium text-sm shadow-sm" title="업체 리스트 확인 및 일괄 수정">
+                        <i data-lucide="building" class="w-4 h-4"></i> 업체 관리
+                    </button>
+                    <button onclick="exportToExcel()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg transition-colors font-medium text-sm shadow-sm" title="엑셀로 백업 다운로드">
+                        <i data-lucide="download" class="w-4 h-4"></i> 엑셀 백업
+                    </button>
+                    <button onclick="openModal()" class="flex items-center gap-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 px-4 py-2.5 rounded-lg transition-colors font-medium text-sm shadow-sm">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> 단건 추가
+                    </button>
+                    <button onclick="openBulkModal()" class="flex items-center gap-2 bg-yushin-600 hover:bg-yushin-700 text-white px-4 py-2.5 rounded-lg transition-colors font-medium text-sm shadow-sm">
+                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> 대량 등록
+                    </button>
+                </div>
+            </div>
+
+            <!-- 검색 및 필터 영역 -->
+            <div class="mt-8 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-100 dark:border-gray-600/50">
+                <div class="flex flex-col md:flex-row gap-3">
+                    <!-- 텍스트 검색 -->
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-5 h-5 text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <input type="text" id="searchInput" 
+                            class="block w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yushin-500 focus:border-yushin-500 text-md transition-all shadow-sm" 
+                            placeholder="업체명, 성명, 현장명 등 검색어 입력..."
+                            onkeyup="filterResults()">
+                    </div>
+                    
+                    <!-- 구분 필터 -->
+                    <div class="w-full md:w-48 relative">
+                        <select id="categoryFilter" onchange="filterResults()" class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-yushin-500 focus:border-yushin-500 sm:text-sm rounded-xl border shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white cursor-pointer appearance-none">
+                            <option value="all">모든 구분</option>
+                            <option value="발주처">발주처</option>
+                            <option value="공동사">공동사</option>
+                            <option value="기타">기타</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 px-2 flex items-center text-gray-500">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- 지역 필터 -->
+                    <div class="w-full md:w-48 relative">
+                        <select id="regionFilter" onchange="filterResults()" class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-yushin-500 focus:border-yushin-500 sm:text-sm rounded-xl border shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white cursor-pointer appearance-none">
+                            <option value="all">모든 지역 (전국)</option>
+                            <option value="서울">서울</option>
+                            <option value="경기/인천">경기/인천</option>
+                            <option value="강원">강원</option>
+                            <option value="충청">충청</option>
+                            <option value="전라">전라</option>
+                            <option value="경상">경상</option>
+                            <option value="제주">제주</option>
+                            <option value="기타">해외/기타</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 px-2 flex items-center text-gray-500">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                <span id="dataStatus" class="flex items-center gap-2">
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-yushin-500"></i> 시스템 로딩 중...
+                </span>
+                <span id="resultCount" class="font-medium">준비 중</span>
+            </div>
+        </div>
+
+        <!-- 첫 화면 인사말 (초기 클린 모드) -->
+        <div id="welcomeState" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-12 text-center mt-6 border border-gray-100 dark:border-gray-700">
+            <div class="mx-auto w-20 h-20 bg-yushin-50 dark:bg-yushin-900/30 rounded-full flex items-center justify-center mb-6">
+                <i data-lucide="book-user" class="w-10 h-10 text-yushin-600 dark:text-yushin-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">통합 연락처 시스템에 오신 것을 환영합니다!</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-lg mx-auto">
+                상단의 검색창에 이름이나 회사명을 입력하시면 즉시 검색됩니다.<br>전체 목록을 확인하시려면 아래 버튼을 눌러주세요.
+            </p>
+            <div class="flex justify-center flex-wrap gap-4">
+                <button onclick="viewAllList()" class="px-6 py-3 bg-yushin-600 text-white rounded-xl hover:bg-yushin-700 transition-colors shadow-sm font-bold flex items-center gap-2">
+                    <i data-lucide="list" class="w-5 h-5"></i> 전체 리스트 불러오기
+                </button>
+                <button onclick="openCompanyModal()" class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-bold shadow-sm flex items-center gap-2">
+                    <i data-lucide="building" class="w-5 h-5"></i> 업체 리스트 한눈에 보기
+                </button>
+            </div>
+        </div>
+
+        <!-- 결과 리스트 영역 (초기 숨김) -->
+        <div id="resultsContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <!-- 결과 카드가 여기에 생성됩니다 -->
+        </div>
+
+        <!-- 데이터가 없을 때 표시할 UI -->
+        <div id="emptyState" class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-12 text-center mt-6 border border-gray-100 dark:border-gray-700">
+            <div class="mx-auto w-16 h-16 bg-gray-50 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="contact" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">검색 결과가 없습니다</h3>
+            <p class="text-gray-500 dark:text-gray-400 mt-2 mb-6">검색어와 필터 조건을 확인하시거나 새로운 연락처를 등록해 주세요.</p>
+            <div class="flex justify-center flex-wrap gap-3">
+                <button onclick="openModal()" class="px-5 py-2.5 bg-yushin-600 text-white rounded-xl hover:bg-yushin-700 transition-colors shadow-sm font-medium">새 연락처 추가</button>
+                <button onclick="viewAllList()" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 inline-block mr-1"></i>검색 초기화
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 하단 푸터 (면책조항) -->
+    <footer class="mt-12 py-6 text-center text-xs text-gray-400 dark:text-gray-500 border-t border-gray-200 dark:border-gray-800 w-full bg-white dark:bg-gray-900">
+        <p>본 통합 연락처 시스템은 <strong>김민수</strong>이 관리하고 있습니다.</p>
+        <p class="mt-1">※ 본 자료는 부서 내 연락처 공유 및 업무 참고용으로만 제공되며, 정보의 최신성이나 누락에 대한 법적 책임은 지지 않습니다.</p>
+    </footer>
+
+    <!-- 업체 관리 및 일괄 수정 모달 -->
+    <div id="companyModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[90vh] border dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-blue-50 dark:bg-gray-900/50">
+                <div class="flex items-center gap-2 text-blue-800 dark:text-blue-400">
+                    <i data-lucide="building" class="w-5 h-5"></i>
+                    <h3 class="text-lg font-bold">업체 리스트 및 일괄 관리</h3>
+                </div>
+                <button onclick="closeCompanyModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 flex justify-between items-center">
+                <p><i data-lucide="info" class="w-4 h-4 inline mr-1 text-blue-500"></i>오타난 업체명을 수정하거나 모든 소속 직원의 담당 지역을 한번에 변경할 수 있습니다.</p>
+                <span id="companyCountBadge" class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-3 py-1 rounded-full font-bold text-xs">업체 수 계산 중...</span>
+            </div>
+            
+            <div class="flex-1 overflow-hidden flex flex-col p-6 pt-2 bg-white dark:bg-gray-800">
+                <div class="table-container border border-gray-200 dark:border-gray-700 rounded-xl mt-4">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-900/50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-bold text-gray-700 dark:text-gray-300 w-1/3">업체/기관명 (수정 가능)</th>
+                                <th class="px-4 py-3 text-left font-bold text-gray-700 dark:text-gray-300 w-1/3">담당 지역 일괄 지정</th>
+                                <th class="px-4 py-3 text-center font-bold text-gray-700 dark:text-gray-300 w-1/6">등록 인원</th>
+                                <th class="px-4 py-3 text-center font-bold text-gray-700 dark:text-gray-300 w-1/6">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companyTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <!-- JS로 렌더링 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 추가/수정 모달 (단건) -->
+    <div id="editModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-[55] p-4 transition-opacity">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] border dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
+                <h3 id="modalTitle" class="text-lg font-bold text-gray-800 dark:text-white">연락처 상세 정보</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <input type="hidden" id="modalId">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">구분 <span class="text-red-500">*</span></label>
+                        <select id="modalCategory" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white">
+                            <option value="발주처">발주처</option>
+                            <option value="공동사" selected>공동사</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">담당 지역 <span class="text-red-500">*</span></label>
+                        <select id="modalRegion" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white">
+                            <option value="미지정">미지정</option>
+                            <option value="서울">서울</option>
+                            <option value="경기/인천">경기/인천</option>
+                            <option value="강원">강원</option>
+                            <option value="충청">충청</option>
+                            <option value="전라">전라</option>
+                            <option value="경상">경상</option>
+                            <option value="제주">제주</option>
+                            <option value="기타">해외/기타</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">현장명 (선택)</label>
+                        <input type="text" id="modalSiteName" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: GTX-B 1공구">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">업체/기관명 <span class="text-red-500">*</span></label>
+                        <input type="text" id="modalCompanyName" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 발주기관, (주)베타엔지니어링">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">성명 <span class="text-red-500">*</span></label>
+                        <input type="text" id="modalPersonName" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 홍길동">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">직급</label>
+                        <input type="text" id="modalPosition" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 처장, 부장, 단장">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">부서</label>
+                        <input type="text" id="modalDepartment" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 건축사업처">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">담당업무</label>
+                        <input type="text" id="modalTask" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 공무, 현장대리인">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">휴대폰 (H.P)</label>
+                        <input type="text" id="modalPhone1" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 010-XXXX-XXXX">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">직통전화 (Tel)</label>
+                        <input type="text" id="modalPhone2" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: 0XX-XXXX-XXXX">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">이메일</label>
+                        <input type="email" id="modalEmail" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="예: demo@example.co.kr">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">비고 및 특이사항</label>
+                        <textarea id="modalNote" rows="2" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yushin-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white" placeholder="자주 연락하는 시간대, 성향 등 메모"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
+                <button id="modalDeleteBtn" type="button" class="hidden text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <i data-lucide="trash-2" class="w-4 h-4 inline-block mr-1"></i>삭제
+                </button>
+                <div class="flex gap-2 ml-auto">
+                    <button onclick="closeModal()" class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm font-medium">취소</button>
+                    <button onclick="saveContact()" class="px-4 py-2 text-white bg-yushin-600 rounded-lg hover:bg-yushin-700 transition-colors text-sm font-medium">정보 저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스마트 대량 추가 모달 -->
+    <div id="bulkModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-7xl overflow-hidden flex flex-col max-h-[95vh] border dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-yushin-50 dark:bg-gray-900/50">
+                <div class="flex items-center gap-2 text-yushin-800 dark:text-yushin-400">
+                    <i data-lucide="table" class="w-6 h-6"></i>
+                    <h3 class="text-lg font-bold">엑셀/텍스트 데이터 대량 붙여넣기</h3>
+                </div>
+                <button onclick="closeBulkModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 flex-1 flex flex-col overflow-hidden min-h-[400px]">
+                <!-- 1단계: 붙여넣기 영역 -->
+                <div id="bulkStep1" class="flex-1 flex flex-col">
+                    <div class="flex justify-between items-end mb-3">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            <i data-lucide="info" class="w-4 h-4 inline-block text-yushin-600 dark:text-yushin-400 mb-1"></i>
+                            엑셀의 표를 복사(<kbd class="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-1 text-xs">Ctrl+C</kbd>)하여 아래에 붙여넣기(<kbd class="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-1 text-xs">Ctrl+V</kbd>) 하거나 엑셀/텍스트 파일을 직접 불러오세요.<br>
+                        </p>
+                        <!-- 파일 불러오기 버튼 (.xlsx, .csv, .txt 지원) -->
+                        <label class="cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-1.5">
+                            <i data-lucide="file-up" class="w-4 h-4"></i> .xlsx / .txt 파일 불러오기
+                            <input type="file" id="fileInput" accept=".xlsx, .xls, .txt, .csv, .tsv" class="hidden" onchange="handleFileUpload(event)">
+                        </label>
+                    </div>
+                    <textarea id="bulkPasteArea" class="flex-1 w-full border border-gray-300 dark:border-gray-600 rounded-xl p-4 text-sm focus:ring-2 focus:ring-yushin-500 focus:outline-none whitespace-pre bg-gray-50 dark:bg-gray-900/50 dark:text-gray-100 hover:bg-white dark:hover:bg-gray-800 transition-colors font-mono" placeholder="이곳을 클릭하고 Ctrl+V를 눌러 데이터를 붙여넣거나 우측 상단 버튼으로 파일을 불러오세요..."></textarea>
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="processPasteData()" class="bg-yushin-600 hover:bg-yushin-700 text-white px-6 py-3 rounded-xl font-medium shadow-sm flex items-center gap-2">
+                            양식 맞추기 단계로 이동 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2단계: 열(Column) 매핑 영역 -->
+                <div id="bulkStep2" class="hidden flex-1 flex flex-col h-full">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 p-3 rounded-lg text-sm mb-4 border border-blue-100 dark:border-blue-800/30 flex gap-3 items-start">
+                        <i data-lucide="check-circle" class="w-5 h-5 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400"></i>
+                        <div>
+                            <strong>데이터 연결 확인:</strong> 각 세로줄이 어떤 정보인지 상단에서 선택해주세요. <strong>(회사명 자동 풀네임 변환 적용됨)</strong><br>
+                            <span class="text-rose-600 dark:text-rose-400 font-bold text-xs mt-1 block">✨ 마법의 기능: 하나의 셀에 여러 명의 이름/직급/연락처가 섞여있다면 "✨ 다중 담당자 셀"로 선택하세요! 완벽하게 분리됩니다.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 flex flex-wrap items-center justify-between gap-4">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                            <input type="checkbox" id="skipFirstRow" checked class="w-4 h-4 text-yushin-600 rounded border-gray-300 focus:ring-yushin-500 bg-white dark:bg-gray-700">
+                            첫 번째 줄 제외 (제목줄인 경우 체크)
+                        </label>
+                        <span id="bulkRowCount" class="text-sm font-bold text-yushin-700 dark:text-yushin-300 bg-yushin-50 dark:bg-yushin-900/30 px-3 py-1 rounded-full border dark:border-yushin-800"></span>
+                    </div>
+
+                    <div class="table-container border border-gray-200 dark:border-gray-700 rounded-xl flex-1 bg-white dark:bg-gray-800 overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                            <thead class="bg-gray-50 dark:bg-gray-900/50" id="bulkTableHeader"></thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800" id="bulkTableBody"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <button onclick="backToStep1()" class="text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-5 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i> 다시 복사하기
+                        </button>
+                        <button onclick="saveBulkData()" class="bg-yushin-600 hover:bg-yushin-700 text-white px-8 py-2.5 rounded-xl font-bold shadow-md flex items-center gap-2 transition-colors">
+                            <i data-lucide="cloud-upload" class="w-4 h-4"></i> 데이터 병합 및 저장
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공통 모달 시스템 -->
+    <div id="customAlertModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-[70] p-4 opacity-0 transition-opacity">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6 text-center transform scale-95 transition-transform duration-200 border dark:border-gray-700">
+            <div class="mx-auto w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="info" class="w-6 h-6 text-blue-500 dark:text-blue-400"></i>
+            </div>
+            <h3 id="customAlertTitle" class="text-lg font-bold text-gray-900 dark:text-white mb-2">알림</h3>
+            <p id="customAlertMessage" class="text-gray-600 dark:text-gray-300 mb-6 text-sm"></p>
+            <button onclick="closeCustomAlert()" class="w-full bg-yushin-600 hover:bg-yushin-700 text-white font-medium py-2.5 rounded-xl transition-colors">확인</button>
+        </div>
+    </div>
+
+    <div id="customConfirmModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-[70] p-4 opacity-0 transition-opacity">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6 text-center transform scale-95 transition-transform duration-200 border dark:border-gray-700">
+            <div class="mx-auto w-12 h-12 bg-red-50 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-500 dark:text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">연락처 삭제</h3>
+            <p id="customConfirmMessage" class="text-gray-600 dark:text-gray-300 mb-6 text-sm"></p>
+            <div class="flex gap-3">
+                <button onclick="closeCustomConfirm()" class="flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-2.5 rounded-xl transition-colors">취소</button>
+                <button id="customConfirmBtn" onclick="executeCustomConfirm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 rounded-xl transition-colors">삭제하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 로직 (하이브리드 모드: 로컬/파이어베이스 자동 전환) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const myFirebaseConfig = null; // 로컬용
+
+        const IS_CANVAS = typeof __firebase_config !== 'undefined';
+        let useFirebase = false;
+        let app, auth, db, appId;
+
+        try {
+            const configToUse = IS_CANVAS ? JSON.parse(__firebase_config) : myFirebaseConfig;
+            if (configToUse && configToUse.projectId) {
+                app = initializeApp(configToUse);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                appId = IS_CANVAS ? __app_id : 'my-local-app-id';
+                useFirebase = true;
+            }
+        } catch(e) {
+            console.warn("로컬 오프라인 모드로 전환됩니다.");
+        }
+
+        let currentUserId = null;
+        let contactData = [];
+        let filteredData = [];
+        let parsedBulkData = [];
+        let isFirstLoad = true;
+        let isWelcomeScreen = true; // 첫 화면 클린 모드 상태
+
+        const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
+        // ==========================================
+        // UI 유틸리티
+        // ==========================================
+        window.toggleDarkMode = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        };
+
+        const customAlert = (message, title="알림") => {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertMessage').innerText = message;
+            const modal = document.getElementById('customAlertModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modal.querySelector('div').classList.remove('scale-95'); }, 10);
+        };
+        const closeCustomAlert = () => {
+            const modal = document.getElementById('customAlertModal');
+            modal.classList.add('opacity-0'); modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        };
+        window.closeCustomAlert = closeCustomAlert;
+
+        let confirmCallback = null;
+        const customConfirm = (message, callback) => {
+            document.getElementById('customConfirmMessage').innerText = message;
+            confirmCallback = callback;
+            const modal = document.getElementById('customConfirmModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modal.querySelector('div').classList.remove('scale-95'); }, 10);
+        };
+        const closeCustomConfirm = () => {
+            const modal = document.getElementById('customConfirmModal');
+            modal.classList.add('opacity-0'); modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); confirmCallback = null; }, 200);
+        };
+        window.closeCustomConfirm = closeCustomConfirm;
+        window.executeCustomConfirm = () => {
+            if (confirmCallback) confirmCallback();
+            closeCustomConfirm();
+        };
+
+        const showToast = (msg) => {
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 dark:bg-gray-700 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium transition-opacity duration-300 opacity-0 z-[100] flex items-center gap-2 pointer-events-none';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> <span>${msg}</span>`;
+            if (window.lucide) window.lucide.createIcons();
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+        };
+
+        // ==========================================
+        // 지역 통일 알고리즘 (지능형 Auto-Unify)
+        // ==========================================
+        const autoUnifyRegions = async () => {
+            if(contactData.length === 0) return;
+            
+            const compMap = new Map();
+            let updates = [];
+
+            // 각 회사별 유효 지역 수집 (미지정 제외)
+            contactData.forEach(c => {
+                if(!c.companyName || c.companyName === '-') return;
+                if (!compMap.has(c.companyName)) compMap.set(c.companyName, new Set());
+                if (c.region && c.region !== '미지정') compMap.get(c.companyName).add(c.region);
+            });
+
+            // 미지정 인원들에게 정확히 1개의 유효 지역이 있는 회사라면 일괄 적용
+            contactData.forEach(c => {
+                if (c.region === '미지정' && c.companyName && compMap.has(c.companyName)) {
+                    const regions = Array.from(compMap.get(c.companyName));
+                    if (regions.length === 1) { // 2개 이상의 혼재된 지역이면 모호하므로 건드리지 않음
+                        c.region = regions[0];
+                        updates.push(c);
+                    }
+                }
+            });
+
+            if (updates.length > 0) {
+                if (useFirebase) {
+                    const promises = updates.map(c => setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'yushin_contacts', c.id), c));
+                    await Promise.all(promises);
+                } else {
+                    saveToLocalStorage();
+                }
+                showToast(`지능형 정리: ${updates.length}명 담당자의 '미지정' 지역이 소속 업체의 지역으로 자동 통일되었습니다.`);
+                if (!isWelcomeScreen) filterResults();
+            }
+        };
+
+        // ==========================================
+        // 텍스트 분석 및 정제 엔진
+        // ==========================================
+        const parseContactsFromText = (text) => {
+            if (!text || text === '-') return [];
+            const lines = text.split(/\n|,|\//).map(s => s.trim()).filter(s => s.length > 0);
+            const contacts = [];
+            let current = null;
+            const posRegex = /(부사장|전무|상무|이사|부장|차장|과장|대리|사원|주임|대표|사장|소장|부회장|주무관|팀장|팀원|실장|본부장)/;
+            const phoneRegex = /(0[0-9]{1,2}[-\)][0-9]{3,4}[-\.][0-9]{4}(?:\s*(?:내선|\+)\s*[0-9]{1,4})?)/g;
+            const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/;
+
+            lines.forEach(line => {
+                let posMatch = line.match(posRegex);
+                let phones = [...line.matchAll(phoneRegex)].map(m => m[1]);
+                let emailMatch = line.match(emailRegex);
+                let cleanStr = line.replace(phoneRegex, '').replace(emailRegex, '').replace(posRegex, '').replace(/\([^)]*\)/g, '').replace(/[0-9-]/g, '').trim();
+                let nameMatch = cleanStr.match(/[가-힣]{2,4}/);
+                let name = nameMatch ? nameMatch[0] : '';
+
+                if (name || posMatch) {
+                    current = { personName: name || '담당자', position: posMatch ? posMatch[1] : '-', phone1: '-', phone2: '-', email: emailMatch ? emailMatch[1] : '-' };
+                    phones.forEach(p => { let cp = p.replace(')', '-'); if (cp.startsWith('010') && current.phone1 === '-') current.phone1 = cp; else if (current.phone2 === '-') current.phone2 = cp; else if (current.phone1 === '-') current.phone1 = cp; });
+                    contacts.push(current);
+                } else if (current) {
+                    phones.forEach(p => { let cp = p.replace(')', '-'); if (cp.startsWith('010') && current.phone1 === '-') current.phone1 = cp; else if (current.phone2 === '-') current.phone2 = cp; else if (current.phone1 === '-') current.phone1 = cp; });
+                    if (emailMatch && current.email === '-') current.email = emailMatch[1];
+                } else if (phones.length > 0) {
+                    current = { personName: '담당자', position: '-', phone1: '-', phone2: '-', email: emailMatch ? emailMatch[1] : '-' };
+                    phones.forEach(p => { let cp = p.replace(')', '-'); if (cp.startsWith('010') && current.phone1 === '-') current.phone1 = cp; else if (current.phone2 === '-') current.phone2 = cp; else if (current.phone1 === '-') current.phone1 = cp; });
+                    contacts.push(current);
+                }
+            });
+            return contacts;
+        };
+
+        const normalizeRegion = (r) => {
+            if (!r) return '미지정';
+            const str = r.trim().replace(/\s/g, '');
+            if (str.includes('서울')) return '서울';
+            if (str.match(/경기|인천/)) return '경기/인천';
+            if (str.match(/충청|충남|충북|대전|세종/)) return '충청';
+            if (str.match(/전라|전남|전북|광주/)) return '전라';
+            if (str.match(/경상|경남|경북|부산|대구|울산/)) return '경상';
+            if (str.match(/강원/)) return '강원';
+            if (str.match(/제주/)) return '제주';
+            return '미지정';
+        };
+
+        const companyNameMap = {
+            '알파': '(주)알파건축', '베타': '(주)베타엔지니어링', '감마': '(주)감마기술', '델타': '(주)델타컨설팅', '엡실론': '(주)엡실론엔지니어링', '제타': '(주)제타엔지니어링',
+            '에타': '(주)에타솔루션', '세타': '(주)세타엔지니어링', '이오타': '(주)이오타컨설팅', '카파': '(주)카파기술', '람다': '(주)람다엔지니어링', '뮤': '뮤엔지니어링(주)'
+            // 전체 맵핑 로직이 내부적으로 더 있지만 가독성을 위해 대표적인 부분만 맵핑
+        };
+        
+        const normalizeCompanyName = (name) => {
+            if (!name) return '';
+            let stripped = name.replace(/[\s\(\)주㈜]/g, '').toUpperCase();
+            for (const [key, fullName] of Object.entries(companyNameMap)) {
+                if (stripped === key.replace(/[\s\(\)주㈜]/g, '').toUpperCase()) return fullName;
+            }
+            return name.replace('㈜', '(주)');
+        };
+
+        const mergeField = (oldVal, newVal) => {
+            let o = String(oldVal || '').trim(); let n = String(newVal || '').trim();
+            if (o === '-' || o === '') return n === '' ? '-' : n;
+            if (n === '-' || n === '') return o === '' ? '-' : o;
+            if (o === n || o.includes(n)) return o;
+            if (n.includes(o)) return n;
+            return o + ", " + n;
+        };
+
+        // ==========================================
+        // 초성 추출 엔진 (검색용)
+        // ==========================================
+        const getChosung = (str) => {
+            const chosungList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+            let result = '';
+            for (let i = 0; i < str.length; i++) {
+                const code = str.charCodeAt(i);
+                if (code >= 0xAC00 && code <= 0xD7A3) {
+                    result += chosungList[Math.floor((code - 0xAC00) / 588)];
+                } else {
+                    result += str.charAt(i);
+                }
+            }
+            return result;
+        };
+
+        // ==========================================
+        // 화면 모드 제어 및 렌더링
+        // ==========================================
+        const filterResults = () => {
+            const query = document.getElementById('searchInput').value.toLowerCase().replace(/\s/g, '');
+            const categoryF = document.getElementById('categoryFilter').value;
+            const regionF = document.getElementById('regionFilter').value;
+            
+            // 검색어 입력이나 필터를 조작하면 무조건 환영 화면을 닫음
+            if (query !== '' || categoryF !== 'all' || regionF !== 'all') {
+                isWelcomeScreen = false;
+            }
+
+            const welcomeContainer = document.getElementById('welcomeState');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (isWelcomeScreen) {
+                welcomeContainer.classList.remove('hidden');
+                resultsContainer.classList.add('hidden');
+                emptyState.classList.add('hidden');
+                document.getElementById('resultCount').innerText = `총 ${contactData.length}건 대기 중`;
+                return; // 웰컴 스크린일땐 카드 렌더링 안함
+            } else {
+                welcomeContainer.classList.add('hidden');
+            }
+
+            const isChosungOnly = /^[ㄱ-ㅎ]+$/.test(query);
+
+            filteredData = contactData.filter(contact => {
+                const textMatch = query === '' || Object.values(contact).some(value => {
+                    const strVal = String(value).toLowerCase().replace(/\s/g, '');
+                    if (strVal.includes(query)) return true;
+                    // 검색어가 100% 자음(초성)일 때만 초성 검색 활성화
+                    if (isChosungOnly && getChosung(strVal).includes(query)) return true;
+                    return false;
+                });
+                const catMatch = categoryF === 'all' || contact.category === categoryF;
+                const regMatch = regionF === 'all' || contact.region === regionF;
+
+                return textMatch && catMatch && regMatch;
+            });
+
+            document.getElementById('resultCount').innerText = `전체 ${contactData.length}건 (검색: ${filteredData.length}건)`;
+
+            if (filteredData.length === 0) {
+                resultsContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+                renderCards();
+            }
+        };
+        // 전역 스코프로 노출하여 HTML 내 onkeyup, onchange 이벤트가 접근할 수 있도록 함
+        window.filterResults = filterResults;
+
+        window.viewAllList = () => {
+            isWelcomeScreen = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('regionFilter').value = 'all';
+            filterResults();
+            if (contactData.length === 0) {
+                window.autoSeedData();
+            }
+        };
+
+        const renderCards = () => {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = ''; 
+
+            filteredData.forEach(contact => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all relative overflow-hidden flex flex-col h-full hover:border-yushin-400 dark:hover:border-yushin-500";
+                
+                const v = (val) => (!val || val.trim() === '-' || val.trim() === '') ? '<span class="text-gray-300 dark:text-gray-600">-</span>' : val;
+                const raw = (val) => (!val || val.trim() === '-' || val.trim() === '') ? '' : val;
+
+                let catColor = "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+                if(contact.category === '발주처') catColor = "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800";
+                else if(contact.category === '공동사') catColor = "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800";
+
+                const copyText = `[${raw(contact.category)}] ${raw(contact.companyName)} ${raw(contact.personName)} ${raw(contact.position)}\n- 연락처: ${raw(contact.phone1)} / ${raw(contact.phone2)}\n- 부서/업무: ${raw(contact.department)} / ${raw(contact.task)}\n- 현장: ${raw(contact.siteName)}`;
+
+                card.innerHTML = `
+                    <div class="p-5 flex-1 flex flex-col">
+                        <!-- 상단: 회사명 및 액션 버튼 -->
+                        <div class="flex items-start justify-between mb-2 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            <div class="pr-2 w-full overflow-hidden">
+                                <!-- 회사명 (크게 강조) -->
+                                <div class="text-xl font-extrabold text-yushin-700 dark:text-yushin-400 truncate w-full" title="${raw(contact.companyName)}">
+                                    ${v(contact.companyName)}
+                                </div>
+                                <!-- 성명 및 직급 -->
+                                <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-1.5 mt-1">
+                                    ${v(contact.personName)} <span class="text-sm font-medium text-gray-500 dark:text-gray-400">${v(contact.position)}</span>
+                                </h2>
+                            </div>
+                            <div class="flex flex-col gap-1 shrink-0 ml-1">
+                                <button onclick="window.copyToClipboard(\`${copyText}\`)" class="text-gray-400 hover:text-yushin-600 dark:hover:text-yushin-400 bg-gray-50 hover:bg-yushin-50 dark:bg-gray-700 dark:hover:bg-gray-600 p-1.5 rounded transition-colors" title="정보 복사">
+                                    <i data-lucide="copy" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="window.openModal('${contact.id}')" class="text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 bg-gray-50 hover:bg-amber-50 dark:bg-gray-700 dark:hover:bg-gray-600 p-1.5 rounded transition-colors" title="수정">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="window.deleteContactFromCard('${contact.id}')" class="text-gray-400 hover:text-red-600 dark:hover:text-red-400 bg-gray-50 hover:bg-red-50 dark:bg-gray-700 dark:hover:bg-gray-600 p-1.5 rounded transition-colors" title="삭제">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 중단: 세부 연락처 정보 -->
+                        <div class="space-y-2.5 text-sm flex-1 mt-2 mb-4">
+                            ${contact.siteName && contact.siteName !== '-' ? `
+                            <div class="flex items-start gap-2 text-yushin-700 dark:text-yushin-300 bg-yushin-50/50 dark:bg-yushin-900/20 p-1.5 rounded">
+                                <i data-lucide="hard-hat" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                                <div class="font-medium truncate" title="${raw(contact.siteName)}">${v(contact.siteName)}</div>
+                            </div>` : ''}
+                            
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="briefcase" class="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5"></i>
+                                <div class="text-gray-700 dark:text-gray-300 flex-1 truncate" title="${raw(contact.department)} / ${raw(contact.task)}">
+                                    ${v(contact.department)} <span class="text-gray-300 dark:text-gray-600">|</span> ${v(contact.task)}
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="smartphone" class="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5"></i>
+                                <div class="text-gray-800 dark:text-gray-200 font-medium">${v(contact.phone1)}</div>
+                            </div>
+                            ${contact.phone2 && contact.phone2 !== '-' ? `
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="phone" class="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5"></i>
+                                <div class="text-gray-600 dark:text-gray-400 text-xs mt-0.5">${v(contact.phone2)}</div>
+                            </div>` : ''}
+                            ${contact.email && contact.email !== '-' ? `
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="mail" class="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5"></i>
+                                <div class="text-gray-600 dark:text-gray-400 text-xs truncate mt-0.5" title="${raw(contact.email)}">${v(contact.email)}</div>
+                            </div>` : ''}
+                            
+                            ${contact.note && contact.note !== '-' ? `
+                            <div class="mt-2 pt-2 border-t border-gray-50 dark:border-gray-700/50 text-xs bg-gray-50/80 dark:bg-gray-800/80 rounded p-2.5 text-gray-600 dark:text-gray-400 line-clamp-2" title="${raw(contact.note)}">
+                                ${raw(contact.note)}
+                            </div>` : ''}
+                        </div>
+                        
+                        <!-- 하단: 구분 및 지역 배지 -->
+                        <div class="mt-auto pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${catColor}">${v(contact.category)}</span>
+                                <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-600">
+                                    <i data-lucide="map-pin" class="w-3 h-3 inline pb-0.5"></i> ${v(contact.region)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        // ==========================================
+        // 업체 관리 모달 (Company List & Bulk Edit)
+        // ==========================================
+        window.openCompanyModal = () => {
+            const compMap = new Map();
+            // 데이터 그룹화 (업체명 + 지역명을 기준으로 독립 분리)
+            contactData.forEach(c => {
+                if(!c.companyName || c.companyName === '-') return;
+                const regionKey = c.region || '미지정';
+                const key = c.companyName + '|' + regionKey;
+                
+                if(!compMap.has(key)) {
+                    compMap.set(key, { name: c.companyName, region: regionKey, count: 0 });
+                }
+                compMap.get(key).count++;
+            });
+
+            const compArray = Array.from(compMap.values()).sort((a, b) => a.name.localeCompare(b.name) || a.region.localeCompare(b.region));
+            
+            document.getElementById('companyCountBadge').innerText = `총 ${compArray.length}개 지사/그룹 등록됨`;
+            const tbody = document.getElementById('companyTableBody');
+            tbody.innerHTML = '';
+
+            const allRegions = ['미지정', '서울', '경기/인천', '강원', '충청', '전라', '경상', '제주', '기타'];
+
+            compArray.forEach((comp, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = idx % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50/50 dark:bg-gray-800/50";
+                
+                let regionOptions = '';
+                allRegions.forEach(r => {
+                    regionOptions += `<option value="${r}" ${comp.region === r ? 'selected' : ''}>${r}</option>`;
+                });
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 align-middle">
+                        <input type="text" id="compName_${idx}" value="${comp.name}" class="w-full px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white text-sm font-bold">
+                    </td>
+                    <td class="px-4 py-3 align-middle">
+                        <select id="compRegion_${idx}" class="w-full px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white text-sm cursor-pointer">
+                            ${regionOptions}
+                        </select>
+                    </td>
+                    <td class="px-4 py-3 align-middle text-center font-medium text-gray-700 dark:text-gray-300">
+                        ${comp.count} 명
+                    </td>
+                    <td class="px-4 py-3 align-middle text-center">
+                        <button onclick="window.updateCompanyInfo('${comp.name}', '${comp.region}', ${idx})" class="bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 dark:bg-gray-700 dark:hover:bg-blue-900/50 dark:text-gray-200 dark:hover:text-blue-400 border border-gray-300 dark:border-gray-600 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold shadow-sm">
+                            변경사항 저장
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('companyModal').classList.remove('hidden');
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        window.closeCompanyModal = () => {
+            document.getElementById('companyModal').classList.add('hidden');
+        };
+
+        // 업체 일괄 수정 저장 로직
+        window.updateCompanyInfo = async (oldName, oldRegion, index) => {
+            const newName = document.getElementById(`compName_${index}`).value.trim();
+            const newRegion = document.getElementById(`compRegion_${index}`).value;
+
+            if(!newName) return customAlert("수정할 업체명을 입력하세요.");
+
+            let updatedCount = 0;
+            let promises = [];
+
+            contactData.forEach(c => {
+                // 이름과 지역이 모두 정확히 일치하는 사람들만 골라서 수정 (다중 지사 보호)
+                if (c.companyName === oldName && (c.region || '미지정') === oldRegion) {
+                    let isModified = false;
+                    
+                    // 업체명 변경
+                    if (c.companyName !== newName) { 
+                        c.companyName = newName; 
+                        isModified = true; 
+                    }
+                    
+                    // 지역 변경
+                    if (c.region !== newRegion) { 
+                        c.region = newRegion; 
+                        isModified = true; 
+                    }
+
+                    if (isModified) {
+                        updatedCount++;
+                        if (useFirebase) promises.push(setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'yushin_contacts', c.id), c));
+                    }
+                }
+            });
+
+            if (updatedCount > 0) {
+                if (useFirebase) await Promise.all(promises);
+                else saveToLocalStorage();
+                showToast(`${updatedCount}명 담당자의 업체 정보가 성공적으로 수정되었습니다.`);
+                window.openCompanyModal(); // UI 리렌더링
+                if(!isWelcomeScreen) filterResults(); // 뒷배경 리스트도 리렌더링
+            } else {
+                showToast('변경된 내용이 없습니다.');
+            }
+        };
+
+        // ==========================================
+        // 파일/엑셀 대량 처리 및 기타 함수
+        // ==========================================
+        window.openBulkModal = () => {
+            document.getElementById('bulkPasteArea').value = '';
+            document.getElementById('bulkStep1').classList.remove('hidden');
+            document.getElementById('bulkStep2').classList.add('hidden');
+            document.getElementById('bulkModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('bulkPasteArea').focus(), 100);
+        };
+        window.closeBulkModal = () => document.getElementById('bulkModal').classList.add('hidden');
+        window.backToStep1 = () => { document.getElementById('bulkStep2').classList.add('hidden'); document.getElementById('bulkStep1').classList.remove('hidden'); };
+        
+        window.copyToClipboard = (text) => {
+            const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            showToast('연락처 텍스트가 복사되었습니다.');
+        };
+        
+        // 전역으로 복구한 파일 업로드 핸들러
+        window.handleFileUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+
+            if (ext === 'xlsx' || ext === 'xls') {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const csv = XLSX.utils.sheet_to_csv(worksheet, {FS: "\t"});
+                    
+                    document.getElementById('bulkPasteArea').value = csv;
+                    document.getElementById('fileInput').value = '';
+                    showToast('엑셀 파일을 성공적으로 불러왔습니다.');
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('bulkPasteArea').value = e.target.result;
+                    document.getElementById('fileInput').value = '';
+                    showToast('텍스트 파일을 성공적으로 불러왔습니다.');
+                };
+                reader.readAsText(file, "UTF-8"); 
+            }
+        };
+
+        window.exportToExcel = () => {
+            if (contactData.length === 0) return customAlert("내보낼 데이터가 없습니다.");
+            const formattedData = contactData.map(c => ({
+                "구분": c.category, "지역": c.region, "업체/기관명": c.companyName, "성명": c.personName, "직급": c.position !== '-' ? c.position : '',
+                "부서": c.department !== '-' ? c.department : '', "담당업무": c.task !== '-' ? c.task : '', "휴대폰": c.phone1 !== '-' ? c.phone1 : '',
+                "직통전화": c.phone2 !== '-' ? c.phone2 : '', "이메일": c.email !== '-' ? c.email : '', "현장명": c.siteName !== '-' ? c.siteName : '', "비고": c.note !== '-' ? c.note : ''
+            }));
+            const worksheet = XLSX.utils.json_to_sheet(formattedData); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, worksheet, "연락처 목록");
+            const today = new Date().toISOString().slice(0, 10).replace(/-/g, ''); XLSX.writeFile(workbook, `통합연락처_${today}.xlsx`); showToast('엑셀 파일이 성공적으로 다운로드 되었습니다.');
+        };
+
+        window.processPasteData = () => {
+            const rawText = document.getElementById('bulkPasteArea').value;
+            if (!rawText.trim()) return customAlert("데이터를 먼저 붙여넣거나 파일을 불러와 주세요.");
+            window.Papa.parse(rawText, {
+                delimiter: "\t", 
+                complete: function(results) {
+                    let data = results.data;
+                    if (data.length > 0 && data[0].length === 1 && rawText.includes(',')) data = window.Papa.parse(rawText, {delimiter: ","}).data;
+                    parsedBulkData = data.filter(row => row.join('').trim() !== '');
+                    if (parsedBulkData.length === 0) return customAlert("유효한 데이터를 찾을 수 없습니다.");
+                    renderBulkTable(); document.getElementById('bulkStep1').classList.add('hidden'); document.getElementById('bulkStep2').classList.remove('hidden');
+                }
+            });
+        };
+
+        const renderBulkTable = () => {
+            const maxCols = Math.max(...parsedBulkData.map(row => row.length));
+            const thead = document.getElementById('bulkTableHeader'); const tbody = document.getElementById('bulkTableBody');
+            thead.innerHTML = ''; tbody.innerHTML = '';
+            document.getElementById('bulkRowCount').innerText = `인식된 데이터: ${parsedBulkData.length} 줄`;
+            const trHead = document.createElement('tr');
+            let guess = { category:[], region:[], siteName:[], companyName:[], personName:[], multiContact:[], position:[], department:[], task:[], phone1:[], phone2:[], email:[], note:[] };
+            if (parsedBulkData.length > 0) {
+                parsedBulkData[0].forEach((cell, idx) => {
+                    const text = cell.replace(/\s/g, '').toLowerCase();
+                    if (text.includes('구분')) guess.category.push(idx); else if (text.includes('지역')) guess.region.push(idx); else if (text.includes('현장') || text.includes('프로젝트')) guess.siteName.push(idx);
+                    else if (text.includes('업체') || text.includes('기관') || text.includes('회사') || text.includes('발주처')) guess.companyName.push(idx); else if (text.includes('본부장') || text.includes('pq') || text.includes('업무부') || text.includes('이름 (전화')) guess.multiContact.push(idx);
+                    else if (text.includes('성명') || text.includes('이름') || text.includes('담당자')) guess.personName.push(idx); else if (text.includes('직급') || text.includes('직위')) guess.position.push(idx); else if (text.includes('부서') || text.includes('소속')) guess.department.push(idx);
+                    else if (text.includes('업무') || text.includes('담당')) guess.task.push(idx); else if (text.includes('휴대') || text.includes('핸드폰') || text.includes('h.p')) guess.phone1.push(idx); else if (text.includes('전화') || text.includes('직통') || text.includes('사무실')) guess.phone2.push(idx);
+                    else if (text.includes('메일') || text.includes('mail')) guess.email.push(idx); else if (text.includes('비고') || text.includes('특이') || text.includes('메모')) guess.note.push(idx);
+                });
+            }
+            for (let i = 0; i < maxCols; i++) {
+                const th = document.createElement('th'); th.className = "px-2 py-3 text-left min-w-[130px]";
+                th.innerHTML = `
+                    <select id="colSelect_${i}" class="block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-yushin-500 focus:border-yushin-500 text-xs font-bold bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 border">
+                        <option value="ignore" class="text-gray-400">가져오지 않음</option>
+                        <option value="category" ${guess.category.includes(i) ? 'selected' : ''}>구분 (발주처/공동사 등)</option>
+                        <option value="region" ${guess.region.includes(i) ? 'selected' : ''}>지역</option>
+                        <option value="siteName" ${guess.siteName.includes(i) ? 'selected' : ''}>현장명</option>
+                        <option value="companyName" ${guess.companyName.includes(i) ? 'selected' : ''} class="text-blue-600 dark:text-blue-400">✅ 업체/기관명</option>
+                        <option value="multiContact" ${guess.multiContact.includes(i) ? 'selected' : ''} class="text-purple-600 dark:text-purple-400">✨ 다중 담당자 셀</option>
+                        <option value="personName" ${guess.personName.includes(i) && !guess.multiContact.includes(i) ? 'selected' : ''} class="text-blue-600 dark:text-blue-400">✅ 담당자 성명 (단일)</option>
+                        <option value="position" ${guess.position.includes(i) ? 'selected' : ''}>직급</option>
+                        <option value="department" ${guess.department.includes(i) ? 'selected' : ''}>부서</option>
+                        <option value="task" ${guess.task.includes(i) ? 'selected' : ''}>담당업무</option>
+                        <option value="phone1" ${guess.phone1.includes(i) ? 'selected' : ''}>휴대폰(H.P)</option>
+                        <option value="phone2" ${guess.phone2.includes(i) ? 'selected' : ''}>직통전화(Tel)</option>
+                        <option value="email" ${guess.email.includes(i) ? 'selected' : ''}>이메일</option>
+                        <option value="note" ${guess.note.includes(i) ? 'selected' : ''}>비고</option>
+                    </select>`;
+                trHead.appendChild(th);
+            }
+            thead.appendChild(trHead);
+            const previewData = parsedBulkData.slice(0, 50);
+            previewData.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr'); tr.className = rowIndex % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50/50 dark:bg-gray-700/50";
+                for (let i = 0; i < maxCols; i++) {
+                    const td = document.createElement('td'); td.className = "px-3 py-2 whitespace-nowrap text-gray-700 dark:text-gray-300 text-xs truncate max-w-[150px]";
+                    td.title = row[i] || ''; td.innerText = row[i] || ''; tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.saveBulkData = async () => {
+            const maxCols = Math.max(...parsedBulkData.map(row => row.length));
+            let mapping = { category:[], region:[], siteName:[], companyName:[], personName:[], position:[], department:[], task:[], phone1:[], phone2:[], email:[], note:[] };
+            let multiContactIndices = []; 
+            for (let i = 0; i < maxCols; i++) {
+                const val = document.getElementById(`colSelect_${i}`).value;
+                if (val === 'multiContact') multiContactIndices.push(i); else if (val !== 'ignore') mapping[val].push(i);
+            }
+
+            if (mapping.companyName.length === 0) return customAlert("'업체/기관명' 열은 반드시 지정해야 합니다.");
+            if (mapping.personName.length === 0 && multiContactIndices.length === 0) return customAlert("최소한 '성명(단일)'이나 '✨ 다중 담당자 셀' 중 하나는 지정해야 담당자를 추출할 수 있습니다.");
+
+            const skipFirst = document.getElementById('skipFirstRow').checked;
+            let contactsMap = new Map();
+            contactData.forEach(c => contactsMap.set((c.companyName || '').trim() + "|" + (c.personName || '').trim(), c));
+
+            for (let i = skipFirst ? 1 : 0; i < parsedBulkData.length; i++) {
+                const row = parsedBulkData[i];
+                const getVal = (key, indices) => {
+                    if (indices.length === 0) return '-'; let vals = indices.map(idx => row[idx] ? String(row[idx]).trim() : '').filter(v => v !== ''); if (vals.length === 0) return '-';
+                    if (['phone1', 'phone2'].includes(key)) { let result = vals[0]; for (let j = 1; j < vals.length; j++) { if (result.endsWith('-') || vals[j].startsWith('-')) result += vals[j]; else result += '-' + vals[j]; } return result; }
+                    else if (key === 'note') return vals.join(' / '); else return vals.join('');
+                };
+                let rawCName = getVal('companyName', mapping.companyName); let pName = getVal('personName', mapping.personName);
+                if ((rawCName === '-' || rawCName === '') && (pName === '-' || pName === '')) continue;
+                
+                let cName = normalizeCompanyName(rawCName); let rawCat = getVal('category', mapping.category);
+                if (rawCat.includes('협력')) rawCat = '공동사'; let cat = ['발주처', '공동사', '기타'].includes(rawCat) ? rawCat : '공동사'; 
+                let reg = normalizeRegion(getVal('region', mapping.region));
+
+                const baseContact = { category: cat, region: reg, siteName: getVal('siteName', mapping.siteName), companyName: cName, department: getVal('department', mapping.department), task: getVal('task', mapping.task), note: getVal('note', mapping.note) };
+
+                const addOrMerge = (extPerson) => {
+                    let key = baseContact.companyName + "|" + extPerson.personName;
+                    if (contactsMap.has(key)) {
+                        let existing = contactsMap.get(key); existing.siteName = mergeField(existing.siteName, baseContact.siteName); existing.position = mergeField(existing.position, extPerson.position);
+                        existing.department = mergeField(existing.department, baseContact.department); existing.task = mergeField(existing.task, baseContact.task !== '-' ? baseContact.task : extPerson.task);
+                        existing.phone1 = mergeField(existing.phone1, extPerson.phone1); existing.phone2 = mergeField(existing.phone2, extPerson.phone2); existing.email = mergeField(existing.email, extPerson.email); existing.note = mergeField(existing.note, baseContact.note);
+                        if(existing.region === '미지정' && baseContact.region !== '미지정') existing.region = baseContact.region; contactsMap.set(key, existing); 
+                    } else contactsMap.set(key, { ...baseContact, ...extPerson, id: generateId() });
+                };
+
+                if (mapping.personName.length > 0) { let singlePName = getVal('personName', mapping.personName); if (singlePName !== '-' && singlePName !== '') addOrMerge({ personName: singlePName, position: getVal('position', mapping.position), task: baseContact.task, phone1: getVal('phone1', mapping.phone1), phone2: getVal('phone2', mapping.phone2), email: getVal('email', mapping.email) }); }
+                multiContactIndices.forEach(idx => { let cellText = String(row[idx] || '').trim(); if (cellText && cellText !== '-') { let extractedContacts = parseContactsFromText(cellText); extractedContacts.forEach(ext => addOrMerge({ personName: ext.personName, position: ext.position, task: baseContact.task, phone1: ext.phone1, phone2: ext.phone2, email: ext.email })); } });
+            }
+
+            try {
+                if (useFirebase) { const promises = Array.from(contactsMap.values()).map(c => setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'yushin_contacts', c.id), c)); await Promise.all(promises); }
+                else { contactData = Array.from(contactsMap.values()).sort((a, b) => (a.companyName || '').localeCompare(b.companyName || '')); saveToLocalStorage(); }
+                closeBulkModal();
+                showToast(`대량의 데이터가 성공적으로 병합되어 저장되었습니다.`);
+            } catch (err) { customAlert('저장 중 오류가 발생했습니다.'); }
+        };
+
+        const MEGA_RAW_DATA = `
+(유)주영엔지니어링	주영	대표번호		0XX-XXXX-XXXX		팩스 0XX-XXXX-XXXX					
+(주)알파엔지니어링	알파	김민수	상무	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	업무부	서울특별시 강남구 (가공)	사업A (가공)	본사	협약 (가공)
+(주)베타엔지니어링	베타	이지연	부장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	관리부	경기도 성남시 (가공)	사업B (가공)	본사	업무연락 (가공)
+(주)감마기술	감마	박상호	차장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	기술부	대전광역시 유성구 (가공)	사업C (가공)	본사	설계 (가공)
+(주)델타컨설팅	델타	최영주	과장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	설계부	부산광역시 해운대구 (가공)	사업D (가공)	본사	감리 (가공)
+(주)엡실론기술	엡실론	정현우	대리	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	영업부	대구광역시 (가공)	사업E (가공)	본사	감리 (가공)
+(주)제타엔지니어링	제타	강은영	상무	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	업무부	광주광역시 (가공)	사업F (가공)	본사	협약 (가공)
+(주)에타솔루션	에타	윤도현	부장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	관리부	인천광역시 (가공)	사업G (가공)	본사	업무연락 (가공)
+(주)세타엔지니어링	세타	임수빈	차장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	기술부	울산광역시 (가공)	사업H (가공)	본사	설계 (가공)
+(주)이오타컨설팅	이오타	오민재	과장	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	설계부	제주특별자치도 (가공)	사업I (가공)	본사	감리 (가공)
+(주)카파기술	카파	한지원	대리	0XX-XXXX-XXXX	010-XXXX-XXXX	demo@example.co.kr	영업부	세종특별자치시 (가공)	사업J (가공)	본사	감리 (가공)
+`;
+        
+        window.autoSeedData = async () => {
+            if (useFirebase && !currentUserId) return; 
+            if (!isFirstLoad) return;
+            isFirstLoad = false;
+            
+            // 데이터가 이미 로드되어 있다면 실행 안 함
+            if (contactData.length > 0) {
+                autoUnifyRegions(); // 단, 지능형 정리는 한번 시도
+                return;
+            }
+
+            document.getElementById('dataStatus').innerHTML = '<span class="text-blue-500 font-bold flex items-center gap-1"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> 초기 데이터 구성 중...</span>';
+            
+            // 기존과 동일한 파싱 과정 거침
+            const parsedData = window.Papa.parse(MEGA_RAW_DATA.trim(), { delimiter: '\t' }).data;
+            let contactsMap = new Map();
+
+            // 파싱 처리 
+            parsedData.forEach(row => {
+                if (row.length < 2) return;
+                let cReg = normalizeRegion(row[0] || '');
+                let cComp = normalizeCompanyName(row[1] ? row[1].trim() : '');
+                if (!cComp) return;
+                let cNameCol = row[2] ? row[2].trim() : '';
+                let cTask = row[3] ? row[3].trim() : '';
+                let cPhone1 = row[4] ? row[4].trim() : '';
+                let cPhone2 = row[5] ? row[5].trim() : '';
+                let cEmail = row[6] ? row[6].trim() : '';
+                let cDept = row[7] ? row[7].trim() : '';
+                let cSite = row[8] ? row[8].trim() : '';
+                let cNote = row[11] || row[10] || row[9] || '';
+
+                if (cNameCol.length > 5) {
+                    let extContacts = parseContactsFromText(cNameCol);
+                    if(extContacts.length === 0) extContacts.push({ personName: '담당자', position: '-', phone1: '-', phone2: '-', email: '-' });
+                    
+                    extContacts.forEach(ext => {
+                        let key = cComp + "|" + ext.personName;
+                        contactsMap.set(key, {
+                            id: generateId(), category: '공동사', region: cReg, siteName: cSite || '-',
+                            companyName: cComp, personName: ext.personName, position: ext.position || '-',
+                            department: cDept || '-', task: cTask || '-', phone1: ext.phone1 || cPhone1 || '-', phone2: ext.phone2 || cPhone2 || '-',
+                            email: (ext.email && ext.email !== '-') ? ext.email : (cEmail || '-'), note: cNote || '-'
+                        });
+                    });
+                } else {
+                    let key = cComp + "|" + cNameCol;
+                    contactsMap.set(key, {
+                        id: generateId(), category: '공동사', region: cReg, siteName: cSite || '-',
+                        companyName: cComp, personName: cNameCol, position: cTask || '-',
+                        department: cDept || '-', task: '-', phone1: cPhone1 || '-', phone2: cPhone2 || '-',
+                        email: cEmail || '-', note: cNote || '-'
+                    });
+                }
+            });
+
+            contactData = Array.from(contactsMap.values());
+            saveToLocalStorage();
+            document.getElementById('dataStatus').innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1"><i data-lucide="hard-drive" class="w-4 h-4"></i> 로컬 저장소 연결됨</span>';
+            
+            autoUnifyRegions(); // 셋업 직후 자동 지역 정리 알고리즘 실행
+        };
+
+
+        // ==========================================
+        // 시스템 초기 구동 영역 (반드시 최하단)
+        // ==========================================
+        const saveToLocalStorage = () => {
+            localStorage.setItem('yushin_contacts_db', JSON.stringify(contactData));
+            if (!isWelcomeScreen) filterResults();
+        };
+
+        const loadFromLocalStorage = () => {
+            const localData = localStorage.getItem('yushin_contacts_db');
+            if (localData) {
+                contactData = JSON.parse(localData).sort((a, b) => (a.companyName || '').localeCompare(b.companyName || ''));
+                document.getElementById('dataStatus').innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1"><i data-lucide="hard-drive" class="w-4 h-4"></i> 로컬 저장소(PC) 연결됨</span>';
+                autoUnifyRegions(); // 로드 직후 1번 빈 지역 자동 채우기 실행
+            } else {
+                contactData = [];
+                document.getElementById('dataStatus').innerHTML = '<span class="text-blue-500 font-bold flex items-center gap-1"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> 기본 데이터 구성 대기 중...</span>';
+            }
+            filterResults();
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        const initSystem = () => {
+            if (useFirebase) {
+                const initAuth = async () => {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
+                        else await signInAnonymously(auth);
+                    } catch (error) {
+                        useFirebase = false; loadFromLocalStorage(); autoSeedTrigger();
+                    }
+                };
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user && useFirebase) {
+                        currentUserId = user.uid;
+                        const contactsRef = collection(db, 'artifacts', appId, 'public', 'data', 'yushin_contacts'); 
+                        onSnapshot(contactsRef, (snapshot) => {
+                            const data = []; snapshot.forEach((doc) => { data.push({ id: doc.id, ...doc.data() }); });
+                            contactData = data.sort((a, b) => (a.companyName || '').localeCompare(b.companyName || ''));
+                            filterResults();
+                            autoUnifyRegions(); // 로드 직후 지역 통일
+                            document.getElementById('dataStatus').innerHTML = '<span class="text-yushin-600 dark:text-yushin-400 font-bold flex items-center gap-1"><i data-lucide="cloud-check" class="w-4 h-4"></i> 실시간 서버 동기화 중</span>';
+                            if (window.lucide) window.lucide.createIcons();
+                            autoSeedTrigger();
+                        }, (error) => {
+                            useFirebase = false; loadFromLocalStorage(); autoSeedTrigger();
+                        });
+                    }
+                });
+                initAuth();
+            } else {
+                loadFromLocalStorage();
+                autoSeedTrigger();
+            }
+        };
+
+        const autoSeedTrigger = () => {
+            setTimeout(() => { if (contactData.length === 0 && isFirstLoad) window.autoSeedData(); }, 500);
+        };
+
+        initSystem();
+        if (window.lucide) window.lucide.createIcons();
+    </script>
+</body>
+</html>

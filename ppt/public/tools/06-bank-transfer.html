@@ -1,0 +1,684 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하나은행 대량 이체 파일 생성기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f3f4f6; }
+        /* Chrome, Safari, Edge, Opera 숫자 화살표 숨기기 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        /* Firefox 숫자 화살표 숨기기 */
+        input[type=number] { -moz-appearance: textfield; }
+        
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+    </style>
+</head>
+<body class="text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <!-- 헤더 -->
+        <header class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+            <div class="bg-teal-100 p-3 rounded-xl text-teal-600">
+                <i data-lucide="file-spreadsheet" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">하나은행 대량 이체 파일 생성기</h1>
+                <p class="text-sm text-gray-500 mt-1">이름을 입력하면 계좌정보가 자동완성됩니다. 리스트를 작성 후 CSV로 다운로드하세요.</p>
+            </div>
+        </header>
+
+        <!-- ⚠️ 책임 한계 및 주의사항 안내 -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm flex items-start gap-3">
+            <i data-lucide="alert-triangle" class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+                <h3 class="text-red-800 font-bold text-sm">※ 송금 전 필수 확인 사항</h3>
+                <p class="text-red-700 text-sm mt-1 leading-relaxed">
+                    이 프로그램은 업무 편의를 위해 <strong>김민수</strong>이 작성한 유틸리티입니다. 데이터 변환 과정이나 자동 입력 중 잘못된 부분이 발생할 수 있으며, <strong>프로그램 오류로 인한 오송금 등의 문제는 책임지지 않으니 송금 시 최종 확인을 개인적으로 꼭 진행해 주시기 바랍니다.</strong><br>
+                    다운로드하신 파일은 <strong>하나은행 파일이체 메뉴에 그대로 업로드</strong>하여 사용하시면 됩니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 입력 폼 섹션 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-1 h-fit">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <i data-lucide="pen-line" class="w-5 h-5 text-gray-500"></i> 이체 정보 입력
+                    </h2>
+                    <!-- 관리자 모달 열기 버튼 -->
+                    <button onclick="openContactModal()" class="text-sm text-teal-600 hover:text-teal-800 font-medium flex items-center gap-1 bg-teal-50 px-2 py-1 rounded-md transition-colors">
+                        <i data-lucide="book-user" class="w-4 h-4"></i> 즐겨찾기 관리
+                    </button>
+                </div>
+                <form id="transferForm" class="space-y-4">
+                    
+                    <!-- 이름 (예상예금주) -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">받는 분 이름 (예상예금주) *</label>
+                        <input type="text" id="inputName" required autocomplete="off" placeholder="예: 김민수"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
+                        <!-- 커스텀 자동완성 드롭다운 -->
+                        <ul id="autocompleteList" class="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 hidden max-h-48 overflow-y-auto"></ul>
+                        <p id="nameHelper" class="text-xs text-teal-600 mt-1 hidden">등록된 직원입니다. 계좌가 자동 입력되었습니다.</p>
+                    </div>
+
+                    <!-- 은행 선택 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">입금 은행 *</label>
+                        <select id="inputBank" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all appearance-none bg-white">
+                            <option value="">은행을 선택하세요</option>
+                            <!-- JS에서 동적 생성됨 -->
+                        </select>
+                    </div>
+
+                    <!-- 계좌번호 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">계좌번호 *</label>
+                        <input type="text" id="inputAccount" required placeholder="숫자만 입력"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
+                    </div>
+
+                    <!-- 이체금액 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">이체 금액 *</label>
+                        <div class="relative">
+                            <input type="text" id="inputAmount" required placeholder="0"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-right pr-8">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">원</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- 보내는 분 통장표시내용 -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">보내는 분 메모</label>
+                            <input type="text" id="inputSenderMemo" placeholder="선택사항"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm">
+                        </div>
+                        
+                        <!-- 받는 분 통장표시내용 -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">받는 분 메모</label>
+                            <input type="text" id="inputReceiverMemo" placeholder="선택사항"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm">
+                        </div>
+                    </div>
+
+                    <!-- 폼 버튼 영역 -->
+                    <div class="flex gap-2 mt-6">
+                        <button type="button" id="clearFormBtn"
+                            class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i> 초기화
+                        </button>
+                        <button type="submit" 
+                            class="w-2/3 bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2">
+                            <i data-lucide="plus" class="w-5 h-5"></i> 목록에 추가하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 목록 및 다운로드 섹션 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2 flex flex-col h-full">
+                <div class="flex justify-between items-end mb-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <i data-lucide="list" class="w-5 h-5 text-gray-500"></i> 이체 대기 목록
+                    </h2>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500">총 <span id="totalCount" class="font-bold text-gray-900">0</span>건</p>
+                        <p class="text-lg font-bold text-teal-600"><span id="totalAmount">0</span>원</p>
+                    </div>
+                </div>
+
+                <!-- 테이블 영역 -->
+                <div class="flex-1 overflow-auto border border-gray-200 rounded-xl max-h-[500px]">
+                    <table class="w-full text-sm text-left whitespace-nowrap">
+                        <thead class="text-xs text-gray-700 bg-gray-50 sticky top-0">
+                            <tr>
+                                <th class="px-4 py-3">이름</th>
+                                <th class="px-4 py-3">은행</th>
+                                <th class="px-4 py-3">계좌번호</th>
+                                <th class="px-4 py-3 text-right">금액</th>
+                                <th class="px-4 py-3">메모(보냄/받음)</th>
+                                <th class="px-4 py-3 text-center">삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transferListBody" class="divide-y divide-gray-200">
+                            <tr id="emptyStateRow">
+                                <td colspan="6" class="px-4 py-12 text-center text-gray-400">
+                                    <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                                    입력 폼에서 이체할 내역을 추가해주세요.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 다운로드 버튼 -->
+                <div class="mt-6">
+                    <button id="downloadBtn" disabled
+                        class="w-full bg-gray-800 hover:bg-gray-900 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3 md:py-4 rounded-xl transition-colors flex justify-center items-center gap-2 text-lg">
+                        <i data-lucide="download" class="w-6 h-6"></i> 하나은행 업로드용 CSV 다운로드
+                    </button>
+                    <p class="text-xs text-center text-gray-500 mt-2">※ 다운로드된 파일을 하나은행 기업뱅킹 대량이체 메뉴에 그대로 업로드하세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌟 즐겨찾기/계좌 관리 모달 -->
+    <div id="contactModal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="contactModalContent">
+            
+            <!-- 모달 헤더 -->
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-2xl">
+                <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                    <i data-lucide="book-user" class="w-5 h-5 text-teal-600"></i> 계좌 즐겨찾기 관리
+                </h2>
+                <button onclick="closeContactModal()" class="text-gray-400 hover:text-gray-700 p-1 rounded-md hover:bg-gray-200 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- 모달 콘텐츠 -->
+            <div class="p-6 overflow-y-auto flex-1 bg-white flex flex-col gap-6">
+                
+                <!-- 신규 계좌 추가 폼 -->
+                <div class="bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+                    <h3 class="text-sm font-bold text-teal-800 mb-3 flex items-center gap-1">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> 새 연락처 추가 / 기존 수정
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="newContactName" placeholder="이름 입력" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 outline-none">
+                        <select id="newContactBank" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 outline-none bg-white">
+                            <option value="">은행 선택</option>
+                        </select>
+                        <input type="text" id="newContactAccount" placeholder="계좌번호 (숫자만)" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 outline-none">
+                    </div>
+                    <button onclick="saveNewContact()" class="mt-3 w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 rounded-lg transition-colors text-sm">
+                        저장하기 (브라우저에 영구 보관)
+                    </button>
+                </div>
+
+                <!-- 등록된 목록 리스트 -->
+                <div class="flex-1 flex flex-col">
+                    <div class="flex justify-between items-end mb-2">
+                        <h3 class="text-sm font-bold text-gray-700">등록된 계좌 목록</h3>
+                        <div class="relative">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="searchContact" placeholder="이름 검색..." class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg text-sm w-48 focus:ring-2 focus:ring-teal-500 outline-none">
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden flex-1">
+                        <ul id="contactListUl" class="divide-y divide-gray-100 max-h-[300px] overflow-y-auto bg-white">
+                            <!-- JS에서 렌더링 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 모달 푸터 (백업 버튼 추가됨) -->
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="resetToDefaultData()" class="text-xs text-gray-500 hover:text-red-500 underline transition-colors mr-2">초기 데이터로 리셋</button>
+                    <!-- 내보내기 버튼 -->
+                    <button onclick="exportContacts()" class="text-xs bg-indigo-100 text-indigo-700 hover:bg-indigo-200 px-3 py-2 rounded-md font-bold transition-colors flex items-center gap-1 shadow-sm">
+                        <i data-lucide="download-cloud" class="w-4 h-4"></i> 즐겨찾기 백업
+                    </button>
+                    <!-- 불러오기 버튼 -->
+                    <button onclick="document.getElementById('importContactsFile').click()" class="text-xs bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-3 py-2 rounded-md font-bold transition-colors flex items-center gap-1 shadow-sm">
+                        <i data-lucide="upload-cloud" class="w-4 h-4"></i> 백업 불러오기
+                    </button>
+                    <input type="file" id="importContactsFile" accept=".json" class="hidden" onchange="importContacts(event)">
+                </div>
+                <button onclick="closeContactModal()" class="bg-gray-800 hover:bg-gray-900 text-white px-8 py-2.5 rounded-lg font-medium transition-colors text-sm w-full sm:w-auto">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 은행 코드 데이터
+        const bankCodes = {
+            "039": "경남은행", "034": "광주은행", "004": "국민은행", "003": "기업은행", "011": "농협",
+            "055": "도이치뱅크", "032": "부산은행", "064": "산림조합", "002": "산업은행", "045": "새마을금고",
+            "007": "수협", "088": "신한은행", "048": "신협", "020": "우리은행", "071": "우체국",
+            "050": "저축은행", "037": "전북은행", "035": "제주은행", "063": "중국은행", "067": "중국건설은행",
+            "062": "중국공상은행", "090": "카카오뱅크", "089": "케이뱅크", "092": "토스뱅크", "081": "하나은행",
+            "027": "한국씨티", "061": "BNP파리바", "060": "BOA", "054": "HSBC", "031": "iM뱅크(대구)",
+            "057": "JP모간", "023": "SC제일은행"
+        };
+
+        function findBankCodeByName(name) {
+            if (!name) return "";
+            let cleanName = name.replace(/\s+/g, '');
+            if (cleanName.includes("농협")) return "011";
+            if (cleanName.includes("기업") || cleanName.includes("IBK")) return "003";
+            if (cleanName.includes("국민") || cleanName.includes("KB")) return "004";
+            if (cleanName.includes("신한")) return "088";
+            if (cleanName.includes("우리")) return "020";
+            if (cleanName.includes("하나") || cleanName.includes("KEB")) return "081";
+            if (cleanName.includes("새마을") || cleanName.includes("금고")) return "045";
+            if (cleanName.includes("우체국")) return "071";
+            if (cleanName.includes("카카오")) return "090";
+            if (cleanName.includes("토스")) return "092";
+            if (cleanName.includes("케이뱅크") || cleanName.includes("K뱅크")) return "089";
+            if (cleanName.includes("산업") || cleanName.includes("KDB")) return "002";
+            if (cleanName.includes("수협")) return "007";
+            if (cleanName.includes("신협")) return "048";
+            if (cleanName.includes("부산")) return "032";
+            if (cleanName.includes("경남")) return "039";
+            if (cleanName.includes("광주")) return "034";
+            if (cleanName.includes("전북")) return "037";
+            if (cleanName.includes("제주")) return "035";
+            if (cleanName.includes("대구") || cleanName.includes("iM") || cleanName.includes("IM")) return "031";
+            if (cleanName.includes("씨티")) return "027";
+            if (cleanName.includes("SC") || cleanName.includes("제일")) return "023";
+
+            for (const [code, fullName] of Object.entries(bankCodes)) {
+                const cleanFullName = fullName.replace("은행", "").replace(/\s+/g, '');
+                if (cleanName.includes(cleanFullName) || cleanFullName.includes(cleanName.replace("은행", ""))) return code;
+            }
+            return "";
+        }
+
+        // 2. 데이터 관리
+        let employeeData = {};
+
+        // V3로 업데이트된 데이터 (김현모 삭제, 최영문/한옥순 추가 반영)
+        const rawExcelData = `
+김민수	하나은행	XXXXXXXXXXXXXX (가공)
+이지연	국민은행	XXXXXXXXXXXX (가공)
+박상호	우리은행	XXXXXXXXXXXXX (가공)
+최영주	신한은행	XXXXXXXXXXXX (가공)
+정현우	기업은행	XXXXXXXXXXXXXX (가공)
+강은영	농협	XXXXXXXXXXX (가공)
+윤도현	하나은행	XXXXXXXXXXXXXX (가공)
+임수빈	국민은행	XXXXXXXXXXXX (가공)
+오민재	우리은행	XXXXXXXXXXXXX (가공)
+한지원	신한은행	XXXXXXXXXXXX (가공)
+        `;
+
+        function initializeData() {
+            // 버전 V3로 업데이트 (새로운 변경사항 강제 적용 위해)
+            const savedData = localStorage.getItem('hanaEmployeeDataV3');
+            
+            if (savedData) {
+                employeeData = JSON.parse(savedData);
+            } else {
+                employeeData = {};
+                const lines = rawExcelData.split(/\r?\n/);
+                let lastName = "";
+                lines.forEach(line => {
+                    if (!line.trim()) return;
+                    const cols = line.split(/[\t,]+/).map(c => c.trim().replace(/^"|"$/g, '').replace(/'/g, ''));
+                    if (cols.length < 2) return;
+                    
+                    let name = cols[0];
+                    let bankNameRaw = cols[1];
+                    let accountRaw = cols[2] || "";
+
+                    if (name.includes("성명") || name.includes("이름")) return;
+
+                    if (!name && bankNameRaw && accountRaw) name = lastName;
+                    else if (name) lastName = name;
+
+                    let account = accountRaw.replace(/[^0-9]/g, '');
+                    if (!name || !account) return;
+
+                    const bankCode = findBankCodeByName(bankNameRaw);
+                    
+                    if (!employeeData[name]) employeeData[name] = [];
+                    
+                    const exists = employeeData[name].find(acc => acc.account === account);
+                    if (!exists) employeeData[name].push({ bankCode: bankCode || "", account });
+                });
+                saveDataToLocal();
+            }
+        }
+
+        function saveDataToLocal() {
+            localStorage.setItem('hanaEmployeeDataV3', JSON.stringify(employeeData));
+        }
+
+        // ==========================================
+        // UI 조작
+        // ==========================================
+        let transfers = [];
+
+        const elBankSelect = document.getElementById('inputBank');
+        const elNameInput = document.getElementById('inputName');
+        const elAccountInput = document.getElementById('inputAccount');
+        const elAmountInput = document.getElementById('inputAmount');
+        const elNameHelper = document.getElementById('nameHelper');
+        const elAutocompleteList = document.getElementById('autocompleteList');
+        const elClearFormBtn = document.getElementById('clearFormBtn');
+        const elNewContactBank = document.getElementById('newContactBank');
+        
+        function init() {
+            lucide.createIcons();
+            initializeData();
+
+            const sortedBanks = Object.entries(bankCodes).sort((a, b) => a[1].localeCompare(b[1]));
+            sortedBanks.forEach(([code, name]) => {
+                const option1 = document.createElement('option');
+                option1.value = code; option1.textContent = name;
+                elBankSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = code; option2.textContent = name;
+                elNewContactBank.appendChild(option2);
+            });
+        }
+
+        elClearFormBtn.addEventListener('click', function() {
+            elNameInput.value = ''; elBankSelect.value = ''; elAccountInput.value = '';
+            elAmountInput.value = ''; document.getElementById('inputSenderMemo').value = '';
+            document.getElementById('inputReceiverMemo').value = '';
+            elNameHelper.classList.add('hidden'); elAutocompleteList.classList.add('hidden');
+            elNameInput.focus();
+        });
+
+        elAmountInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = value ? parseInt(value, 10).toLocaleString('ko-KR') : '';
+        });
+
+        function fillAccountInfo(name) {
+            if (employeeData[name] && employeeData[name].length > 0) {
+                const accountInfo = employeeData[name][0];
+                elBankSelect.value = accountInfo.bankCode || "";
+                elAccountInput.value = accountInfo.account;
+                elNameHelper.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!elNameInput.contains(e.target) && !elAutocompleteList.contains(e.target)) {
+                elAutocompleteList.classList.add('hidden');
+            }
+        });
+
+        elNameInput.addEventListener('input', function(e) {
+            const name = e.target.value.trim();
+            elAutocompleteList.innerHTML = '';
+            
+            if (!name) {
+                elAutocompleteList.classList.add('hidden');
+                elNameHelper.classList.add('hidden');
+                return;
+            }
+
+            const matches = Object.keys(employeeData).filter(empName => empName.includes(name));
+            
+            if (matches.length > 0) {
+                elAutocompleteList.classList.remove('hidden');
+                matches.forEach(matchName => {
+                    const li = document.createElement('li');
+                    li.className = "px-4 py-2 hover:bg-teal-50 cursor-pointer text-sm text-gray-700 border-b border-gray-100 last:border-b-0";
+                    li.innerHTML = matchName.replace(new RegExp(name, 'g'), `<span class="text-teal-600 font-bold">${name}</span>`);
+                    
+                    li.addEventListener('click', () => {
+                        elNameInput.value = matchName;
+                        elAutocompleteList.classList.add('hidden');
+                        fillAccountInfo(matchName);
+                    });
+                    
+                    elAutocompleteList.appendChild(li);
+                });
+            } else {
+                elAutocompleteList.classList.add('hidden');
+            }
+
+            if (employeeData[name]) fillAccountInfo(name);
+            else elNameHelper.classList.add('hidden');
+        });
+
+        document.getElementById('transferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = elNameInput.value.trim();
+            const bankCode = elBankSelect.value;
+            const bankName = bankCodes[bankCode];
+            const account = elAccountInput.value.replace(/[^0-9]/g, '');
+            const amountStr = elAmountInput.value.replace(/[^0-9]/g, '');
+            const amount = parseInt(amountStr, 10);
+            
+            if(!amount || amount <= 0) { alert("이체 금액을 정확히 입력해주세요."); return; }
+
+            transfers.push({
+                id: Date.now(), name, bankCode, bankName, account, amount,
+                senderMemo: document.getElementById('inputSenderMemo').value.trim(),
+                receiverMemo: document.getElementById('inputReceiverMemo').value.trim()
+            });
+            renderTable();
+            elClearFormBtn.click();
+        });
+
+        function renderTable() {
+            const tbody = document.getElementById('transferListBody');
+            const totalCountEl = document.getElementById('totalCount');
+            const totalAmountEl = document.getElementById('totalAmount');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            tbody.innerHTML = '';
+            let totalAmount = 0;
+
+            if (transfers.length === 0) {
+                tbody.innerHTML = `<tr id="emptyStateRow"><td colspan="6" class="px-4 py-12 text-center text-gray-400"><i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>입력 폼에서 이체할 내역을 추가해주세요.</td></tr>`;
+                downloadBtn.disabled = true; totalCountEl.textContent = '0'; totalAmountEl.textContent = '0';
+                lucide.createIcons(); return;
+            }
+
+            transfers.forEach((t) => {
+                totalAmount += t.amount;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-gray-900">${t.name}</td>
+                    <td class="px-4 py-3 text-gray-600">${t.bankName} <span class="text-xs text-gray-400">(${t.bankCode})</span></td>
+                    <td class="px-4 py-3 text-gray-800 tracking-wider">${t.account}</td>
+                    <td class="px-4 py-3 text-right font-bold text-teal-600">${t.amount.toLocaleString('ko-KR')}</td>
+                    <td class="px-4 py-3 text-gray-500 text-xs truncate max-w-[150px]">
+                        ${t.senderMemo ? `<span class="bg-gray-100 px-1 rounded">보냄: ${t.senderMemo}</span>` : ''}
+                        ${t.receiverMemo ? `<span class="bg-gray-100 px-1 rounded ml-1">받음: ${t.receiverMemo}</span>` : ''}
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <button onclick="deleteRow(${t.id})" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            totalCountEl.textContent = transfers.length;
+            totalAmountEl.textContent = totalAmount.toLocaleString('ko-KR');
+            downloadBtn.disabled = false;
+            lucide.createIcons();
+        }
+
+        window.deleteRow = function(id) { transfers = transfers.filter(t => t.id !== id); renderTable(); }
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (transfers.length === 0) return;
+            const headers = ["입금은행코드", "입금계좌번호", "이체금액", "예상예금주", "보내는분 통장표시내용", "받는분 통장표시내용", "CMS/모집인코드"];
+            let csvContent = "\uFEFF" + headers.join(",") + "\n";
+
+            transfers.forEach(t => {
+                const row = [ `="${t.bankCode}"`, `="${t.account}"`, t.amount, t.name, t.senderMemo, t.receiverMemo, "" ];
+                const escapedRow = row.map(str => {
+                    const s = String(str);
+                    if (s.startsWith('="')) return s;
+                    return s.includes(',') ? `"${s}"` : s;
+                });
+                csvContent += escapedRow.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            link.href = URL.createObjectURL(blob);
+            link.download = `하나은행_대량이체_${dateStr}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // ==========================================
+        // 🌟 즐겨찾기(연락처) 관리자 모달 및 백업 시스템
+        // ==========================================
+        const modal = document.getElementById('contactModal');
+        const modalContent = document.getElementById('contactModalContent');
+
+        function openContactModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+            renderContactList();
+        }
+
+        function closeContactModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            
+            document.getElementById('newContactName').value = '';
+            document.getElementById('newContactBank').value = '';
+            document.getElementById('newContactAccount').value = '';
+        }
+
+        window.saveNewContact = function() {
+            const name = document.getElementById('newContactName').value.trim();
+            const bankCode = document.getElementById('newContactBank').value;
+            const account = document.getElementById('newContactAccount').value.replace(/[^0-9]/g, '');
+
+            if (!name || !bankCode || !account) {
+                alert("이름, 은행, 계좌번호를 모두 입력해주세요."); return;
+            }
+
+            employeeData[name] = [{ bankCode, account }];
+            saveDataToLocal(); 
+            
+            document.getElementById('newContactName').value = '';
+            document.getElementById('newContactBank').value = '';
+            document.getElementById('newContactAccount').value = '';
+            
+            alert(`'${name}' 님의 계좌 정보가 저장되었습니다.`);
+            renderContactList();
+        }
+
+        window.deleteContact = function(name) {
+            if (confirm(`'${name}' 님의 데이터를 정말 삭제하시겠습니까?\n(영구 삭제됩니다)`)) {
+                delete employeeData[name];
+                saveDataToLocal();
+                renderContactList();
+            }
+        }
+
+        window.resetToDefaultData = function() {
+            if (confirm("정말 모든 변경/추가 내역을 삭제하고 초기 엑셀 데이터로 되돌리시겠습니까?\n(이 작업은 취소할 수 없습니다)")) {
+                localStorage.removeItem('hanaEmployeeDataV3');
+                initializeData();
+                renderContactList();
+                alert("초기 데이터로 완벽하게 복구되었습니다.");
+            }
+        }
+
+        // 🌟 내보내기 (JSON 백업) 기능 추가
+        window.exportContacts = function() {
+            const dataStr = JSON.stringify(employeeData, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            
+            link.href = url;
+            link.download = `계좌즐겨찾기_백업_${dateStr}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        };
+
+        // 🌟 불러오기 (JSON 복원) 기능 추가
+        window.importContacts = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (typeof importedData === 'object' && importedData !== null) {
+                        if (confirm("불러온 데이터로 기존 즐겨찾기를 덮어쓰시겠습니까?\n(기존에 추가한 데이터가 사라질 수 있습니다)")) {
+                            employeeData = importedData;
+                            saveDataToLocal();
+                            renderContactList();
+                            alert("성공적으로 즐겨찾기를 불러왔습니다.");
+                        }
+                    } else {
+                        alert("올바른 백업 파일(JSON) 형식이 아닙니다.");
+                    }
+                } catch (error) {
+                    alert("파일을 읽는 중 오류가 발생했습니다. 내보내기 한 올바른 파일인지 확인해주세요.");
+                }
+                // input 필드 초기화 (동일 파일 재선택 가능하게)
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        };
+
+        function renderContactList(filterText = '') {
+            const ul = document.getElementById('contactListUl');
+            ul.innerHTML = '';
+            
+            const names = Object.keys(employeeData).sort();
+            let count = 0;
+
+            names.forEach(name => {
+                if (filterText && !name.includes(filterText)) return;
+
+                employeeData[name].forEach(acc => {
+                    count++;
+                    const li = document.createElement('li');
+                    li.className = "px-4 py-3 flex justify-between items-center hover:bg-gray-50 transition-colors";
+                    const bankName = bankCodes[acc.bankCode] || "알수없음";
+                    
+                    li.innerHTML = `
+                        <div>
+                            <p class="text-sm font-bold text-gray-900">${name}</p>
+                            <p class="text-xs text-gray-500 mt-0.5">${bankName} <span class="text-gray-400">(${acc.account})</span></p>
+                        </div>
+                        <button onclick="deleteContact('${name}')" class="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                    ul.appendChild(li);
+                });
+            });
+
+            if (count === 0) {
+                ul.innerHTML = `<li class="px-4 py-8 text-center text-sm text-gray-500">등록된 계좌가 없거나 검색 결과가 없습니다.</li>`;
+            }
+            lucide.createIcons();
+        }
+
+        document.getElementById('searchContact').addEventListener('input', function(e) {
+            renderContactList(e.target.value.trim());
+        });
+
+        init();
+    </script>
+</body>
+</html>

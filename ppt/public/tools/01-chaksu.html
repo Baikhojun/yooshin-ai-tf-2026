@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건설사업관리 착수계 통합 작성 도구 (전체/1차분 지원)</title>
+    <script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        :root { --primary: #1e40af; --bg: #f8fafc; --card: #ffffff; --border: #cbd5e1; --highlight: #eff6ff; }
+        /* UI 기본 폰트에도 DemoCompany을 최우선으로 추가하여 설치된 경우 화면에서도 보이도록 함 */
+        body { font-family: 'DemoCompany', 'Pretendard', 'Malgun Gothic', sans-serif; background-color: var(--bg); color: #1e293b; padding: 20px; font-size: 14px; line-height: 1.5; }
+        .container { max-width: 1200px; margin: 0 auto; background: var(--card); padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        
+        header { border-bottom: 2px solid var(--primary); margin-bottom: 30px; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: end; }
+        h1 { margin: 0; color: var(--primary); font-size: 26px; font-weight: 800; }
+        .sub-title { font-size: 14px; color: #64748b; }
+        
+        .section { border: 1px solid var(--border); padding: 25px; border-radius: 8px; margin-bottom: 24px; background: #fff; position: relative; }
+        .section h3 { margin-top: 0; margin-bottom: 20px; font-size: 18px; color: #0f172a; display: flex; align-items: center; gap: 8px; }
+        .section h3::before { content: ''; display: block; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: #475569; margin-bottom: 6px; font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; box-sizing: border-box; transition: 0.2s; font-family: inherit; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1); }
+        
+        .readonly-box { background: #f1f5f9; padding: 10px; border-radius: 6px; border: 1px dashed #94a3b8; font-size: 13px; color: #334155; font-weight: 600; min-height: 42px; display: flex; align-items: center; }
+        
+        /* 1차분 토글 스타일 */
+        .toggle-area { background: var(--highlight); padding: 15px; border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .toggle-area input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); margin: 0; }
+        .toggle-area label { margin: 0; font-size: 15px; color: var(--primary); cursor: pointer; }
+
+        .phase-box { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 10px; }
+        .phase-title { font-weight: bold; font-size: 14px; margin-bottom: 10px; color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+        .phase-1st { background-color: #f0fdf4; border-color: #bbf7d0; }
+        .phase-1st .phase-title { color: #166534; border-color: #bbf7d0; }
+
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+        th { background: #f8fafc; padding: 10px; font-weight: 600; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: center; }
+        td { padding: 8px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        th:last-child, td:last-child { border-right: none; }
+        
+        .action-bar { position: sticky; bottom: 20px; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); padding: 15px; border-radius: 12px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: flex; gap: 10px; margin-top: 30px; border: 1px solid #e2e8f0; z-index: 100; }
+        .btn { padding: 12px 24px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 15px; font-family: inherit; }
+        .btn-blue { background: var(--primary); color: white; flex: 2; box-shadow: 0 4px 6px rgba(30, 64, 175, 0.2); }
+        .btn-blue:hover { background: #1e3a8a; transform: translateY(-1px); }
+        .btn-gray { background: #64748b; color: white; flex: 1; }
+        .btn-gray:hover { background: #475569; }
+        .btn-red { background: #ef4444; color: white; flex: 1; }
+        .btn-red:hover { background: #dc2626; }
+
+        .footer-notice { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 12px; color: #64748b; line-height: 1.6; }
+        .footer-notice strong { color: #1e40af; font-weight: bold; }
+
+        /* 행 제어 버튼 스타일 */
+        .row-controls { display: flex; flex-direction: column; gap: 4px; justify-content: center; align-items: center; }
+        .btn-icon { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; padding: 4px; font-size: 11px; color: #475569; transition: 0.2s; display: flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; }
+        .btn-icon:hover { background: #e2e8f0; border-color: #94a3b8; color: #0f172a; }
+        .btn-icon.del { background: #fef2f2; color: #ef4444; border-color: #fca5a5; }
+        .btn-icon.del:hover { background: #fee2e2; border-color: #ef4444; }
+
+        /* 2단 표 스타일 */
+        .tech-person:not(:last-child) tr:last-child td { border-bottom: 2px solid #94a3b8 !important; }
+        .duty-label { background: #f8fafc; font-weight: 600; text-align: center; color: #475569; letter-spacing: -0.5px; }
+
+        /* 커스텀 모달 스타일 */
+        dialog { border: none; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 25px; max-width: 400px; text-align: center; color: #1e293b; font-family: inherit; }
+        dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
+        dialog p { margin-top: 0; margin-bottom: 20px; font-size: 15px; word-break: keep-all; line-height: 1.5; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>건설사업관리 착수계 통합 작성 도구</h1>
+            <div class="sub-title">전체분 및 1차분(차수분) 통합 지원 (.docx 다운로드 시 DemoCompany 폰트 완전 강제 적용)</div>
+        </div>
+    </header>
+
+    <div class="section">
+        <h3>1. 계약 및 차수 정보 설정</h3>
+        <div class="toggle-area">
+            <input type="checkbox" id="has_first_phase" onchange="toggleFirstPhase()" checked>
+            <label for="has_first_phase">1차분(차수분) 계약이 존재합니까?</label>
+        </div>
+
+        <div class="input-group">
+            <label>용역명 (차수명 제외)</label>
+            <input id="proj_name" placeholder="용역명을 입력하세요">
+            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">※ 뒤에 (전체분), (1차분)은 자동으로 붙습니다.</div>
+        </div>
+
+        <div class="grid">
+            <!-- 공통 계약 정보 -->
+            <div>
+                <label style="color:var(--primary)">[공통] 계약 정보</label>
+                <div class="input-group"><label>계약년월일</label><input id="date_contract" placeholder="예: 2026. 01. 01."></div>
+                <div class="input-group"><label>착수년월일</label><input id="date_start" placeholder="예: 2026. 01. 15."></div>
+                <div class="input-group">
+                    <label>수신처명</label>
+                    <input id="client_raw" placeholder="예: 서울특별시 서초구청장 (OOO장 형식)">
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">※ '구청', '시청' 대신 '구청장', '시장' 등 직함을 포함해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 데이터 입력 영역 -->
+            <div>
+                <!-- 전체분 박스 -->
+                <div class="phase-box">
+                    <div class="phase-title">전체분 정보</div>
+                    <div class="input-group">
+                        <label>총용역부기금액 (숫자)</label>
+                        <input id="price_total_num" type="number" oninput="updatePriceText(this.value, 'price_total_kr')" placeholder="숫자만 입력">
+                        <div id="price_total_kr" class="readonly-box">금 원정</div>
+                    </div>
+                    <div class="grid" style="gap:10px;">
+                        <div class="input-group"><label>준공예정일</label><input id="date_end_total" placeholder="예: 2028. 01. 14."></div>
+                        <div class="input-group"><label>일수</label><input id="days_total" placeholder="예: 730"></div>
+                    </div>
+                    <div class="input-group"><label>전체분 예정공정표 이미지</label><input type="file" id="img_gantt_total" accept="image/*"></div>
+                </div>
+
+                <!-- 1차분 박스 (숨김 처리됨) -->
+                <div id="phase_1st_area" class="phase-box phase-1st">
+                    <div class="phase-title">1차분 정보</div>
+                    <div class="input-group">
+                        <label>1차분 계약금액 (숫자)</label>
+                        <input id="price_1st_num" type="number" oninput="updatePriceText(this.value, 'price_1st_kr')" placeholder="숫자만 입력">
+                        <div id="price_1st_kr" class="readonly-box">금 원정</div>
+                    </div>
+                    <div class="grid" style="gap:10px;">
+                        <div class="input-group"><label>준공예정일</label><input id="date_end_1st" placeholder="예: 2026. 12. 31."></div>
+                        <div class="input-group"><label>일수</label><input id="days_1st" placeholder="예: 350"></div>
+                    </div>
+                    <div class="input-group"><label>1차분 예정공정표 이미지</label><input type="file" id="img_gantt_1st" accept="image/*"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>2. 회사 및 대표자 정보</h3>
+        <div class="grid">
+            <div class="input-group"><label>회사명</label><input id="co_name" value="(주)멋진엔지니어링"></div>
+            <div class="input-group"><label>대표이사 성명</label><input id="co_ceo" value="(대표)"></div>
+            <div class="input-group"><label>공동대표회사 주소</label><input id="co_addr" value="서울특별시 OO구 (가공 주소)"></div>
+            <div class="input-group"><label>책임기술인 주소 (인감계용)</label><input id="leader_addr" placeholder="주민등록상 주소 입력"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>3. 참여기술인 정보</h3>
+        <div style="margin-bottom: 10px; font-size: 12px; color: #64748b;">
+            ※ 1차분에 참여하는 인원은 <strong>[1차]</strong> 체크박스를 선택해주세요. (미선택 시 전체분 명단에는 나오지만 1차분 명단에서는 제외됩니다)
+        </div>
+        <table id="techTable">
+            <thead>
+                <tr>
+                    <th width="40">1차</th>
+                    <th width="80">구분</th>
+                    <th width="90">분야</th>
+                    <th width="80">성명</th>
+                    <th width="70">등급</th>
+                    <th width="90">생년월일</th>
+                    <th width="120">소속</th>
+                    <th width="100">자격증</th>
+                    <th width="50">관리</th>
+                </tr>
+            </thead>
+            <!-- tbodies가 여기에 동적으로 추가됩니다 -->
+        </table>
+        <div style="margin-top:10px; text-align: center;">
+            <button class="btn btn-gray" onclick="addTechRow()" style="padding: 8px 16px; font-size: 12px;">+ 기술인 추가</button>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button id="btn_sample" class="btn btn-gray" onclick="toggleSampleData()">예시 데이터 로드</button>
+        <button class="btn btn-blue" onclick="generateDocx()">통합 착수계(.docx) 생성하기</button>
+    </div>
+
+    <div class="footer-notice">
+        <div style="margin-bottom: 5px;"><strong>Developed by (주)멋진엔지니어링 김민수 과장</strong> | 본 프로그램의 임의 수정 및 무단 배포를 금지합니다.</div>
+        <div>※ 본 도구는 착수계 초안 작성을 돕기 위한 보조 도구입니다.<br>최종 제출본의 내용 검토 및 결과에 대한 모든 책임은 작성자 본인에게 있습니다.</div>
+    </div>
+</div>
+
+<!-- 커스텀 Confirm 모달 -->
+<dialog id="customConfirm">
+    <p id="confirmMsg"></p>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+        <button class="btn btn-gray" onclick="document.getElementById('customConfirm').close()">취소</button>
+        <button class="btn btn-blue" onclick="executeSampleAction()">확인</button>
+    </div>
+</dialog>
+
+<script>
+    const { Document, Packer, Paragraph, TextRun, AlignmentType, PageBreak, Table, TableRow, TableCell, WidthType, BorderStyle, VerticalAlign, HeightRule, ImageRun, VerticalMergeType } = window.docx;
+
+    const SUPPORT_DEFAULT_DUTY = `• 분야별 기술업무 지원\n• 설계변경, 계약금액조정 등 검토\n• 기성 및 준공검사\n• 현장점검 확인 및 기술지도 등\n• 정기·합동점검\n• 기타 책임기술인 요청사항 검토`;
+
+    function toggleFirstPhase() {
+        const isChecked = document.getElementById('has_first_phase').checked;
+        const area = document.getElementById('phase_1st_area');
+        area.style.display = isChecked ? 'block' : 'none';
+    }
+
+    function numberToKorean(num) {
+        if (!num || isNaN(num)) return "";
+        const units = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"];
+        const bigUnits = ["", "만", "억", "조"];
+        const smallUnits = ["", "십", "백", "천"];
+        let numStr = num.toString();
+        let result = "";
+        let unitCnt = 0;
+        while (numStr.length > 0) {
+            let part = numStr.substring(Math.max(0, numStr.length - 4));
+            numStr = numStr.substring(0, Math.max(0, numStr.length - 4));
+            let partRes = "";
+            for (let i = 0; i < part.length; i++) {
+                let digit = parseInt(part[part.length - 1 - i]);
+                if (digit > 0) partRes = units[digit] + (digit === 0 ? "" : smallUnits[i]) + partRes;
+            }
+            if (partRes !== "") result = partRes + bigUnits[unitCnt] + result;
+            unitCnt++;
+        }
+        return result;
+    }
+
+    function updatePriceText(val, targetId) {
+        if(!val) {
+            document.getElementById(targetId).innerText = "금 원정";
+            return;
+        }
+        const kr = numberToKorean(val);
+        const fmt = parseInt(val).toLocaleString();
+        document.getElementById(targetId).innerText = `금 ${kr}원정 (금 ${fmt}원정)`; 
+    }
+
+    function handleTypeChange(select) {
+        const tbody = select.closest('tbody.tech-person');
+        const textarea = tbody.querySelector('.t-duty');
+        if (select.value === '기술지원' && (!textarea.value || textarea.value.trim() === "")) {
+            textarea.value = SUPPORT_DEFAULT_DUTY;
+        }
+    }
+
+    function moveRowUp(btn) {
+        const currentTbody = btn.closest('tbody.tech-person');
+        const prevTbody = currentTbody.previousElementSibling;
+        if (prevTbody && prevTbody.classList.contains('tech-person')) {
+            currentTbody.parentNode.insertBefore(currentTbody, prevTbody);
+        }
+    }
+
+    function moveRowDown(btn) {
+        const currentTbody = btn.closest('tbody.tech-person');
+        const nextTbody = currentTbody.nextElementSibling;
+        if (nextTbody && nextTbody.classList.contains('tech-person')) {
+            currentTbody.parentNode.insertBefore(nextTbody, currentTbody);
+        }
+    }
+
+    function addTechRow(data = {}) {
+        const table = document.getElementById('techTable');
+        const tbody = document.createElement('tbody');
+        tbody.className = 'tech-person';
+        let initialDuty = data.duty || "";
+        if (data.type === '기술지원' && !initialDuty) initialDuty = SUPPORT_DEFAULT_DUTY;
+
+        tbody.innerHTML = `
+            <tr>
+                <td style="text-align:center;" rowspan="2"><input type="checkbox" class="t-1st-check" ${data.is1st !== false ? 'checked' : ''}></td>
+                <td><select class="t-type" onchange="handleTypeChange(this)">
+                    <option value="책임" ${data.type==='책임'?'selected':''}>책임</option>
+                    <option value="분야" ${data.type==='분야'?'selected':''}>분야</option>
+                    <option value="기술지원" ${data.type==='기술지원'?'selected':''}>기술지원</option>
+                </select></td>
+                <td><input class="t-field" value="${data.field||''}"></td>
+                <td><input class="t-name" value="${data.name||''}"></td>
+                <td><input class="t-grade" value="${data.grade||''}"></td>
+                <td><input class="t-birth" value="${data.birth||''}"></td>
+                <td><input class="t-comp" value="${data.comp||''}"></td>
+                <td><input class="t-cert" value="${data.cert||''}"></td>
+                <td style="text-align:center;" rowspan="2">
+                    <div class="row-controls">
+                        <button class="btn-icon" onclick="moveRowUp(this)" title="위로 이동">▲</button>
+                        <button class="btn-icon" onclick="moveRowDown(this)" title="아래로 이동">▼</button>
+                        <button class="btn-icon del" onclick="this.closest('.tech-person').remove()" title="삭제">✕</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="duty-label">담당업무</td>
+                <td colspan="6" style="padding: 6px;"><textarea class="t-duty" style="height:60px; font-size:12px; resize:vertical; line-height:1.5;">${initialDuty}</textarea></td>
+            </tr>
+        `;
+        table.appendChild(tbody);
+    }
+
+    let isSampleLoaded = false;
+    let pendingSampleAction = null;
+
+    function toggleSampleData() {
+        const dialog = document.getElementById('customConfirm');
+        const msg = document.getElementById('confirmMsg');
+
+        if (isSampleLoaded) {
+            msg.innerHTML = "모든 입력 내용이 초기화됩니다.<br>계속하시겠습니까?";
+            pendingSampleAction = 'reset';
+        } else {
+            msg.innerHTML = "현재 입력하신 데이터가 모두 지워지고 예시 데이터로 덮어씌워집니다.<br>진행하시겠습니까?";
+            pendingSampleAction = 'load';
+        }
+        dialog.showModal();
+    }
+
+    function executeSampleAction() {
+        document.getElementById('customConfirm').close();
+        const btn = document.getElementById('btn_sample');
+
+        if (pendingSampleAction === 'reset') {
+            document.getElementById('proj_name').value = "";
+            document.getElementById('client_raw').value = "";
+            document.getElementById('price_total_num').value = "";
+            updatePriceText("", 'price_total_kr');
+            document.getElementById('date_end_total').value = "";
+            document.getElementById('days_total').value = "";
+            document.getElementById('has_first_phase').checked = true;
+            toggleFirstPhase();
+            document.getElementById('price_1st_num').value = "";
+            updatePriceText("", 'price_1st_kr');
+            document.getElementById('date_end_1st').value = "";
+            document.getElementById('days_1st').value = "";
+            document.getElementById('date_contract').value = "";
+            document.getElementById('date_start').value = "";
+            document.getElementById('co_name').value = "(주)멋진엔지니어링";
+            document.getElementById('co_ceo').value = "(대표)";
+            document.getElementById('co_addr').value = "서울특별시 OO구 (가공 주소)";
+            document.getElementById('leader_addr').value = "";
+            document.getElementById('img_gantt_total').value = "";
+            document.getElementById('img_gantt_1st').value = "";
+            document.querySelectorAll('.tech-person').forEach(el => el.remove());
+            addTechRow();
+            btn.innerText = "예시 데이터 로드";
+            btn.className = "btn btn-gray";
+            isSampleLoaded = false;
+        } else if (pendingSampleAction === 'load') {
+            document.getElementById('proj_name').value = "본사 개선복구사업 건설사업관리용역";
+            document.getElementById('client_raw').value = "서울특별시 서초구청장";
+            document.getElementById('price_total_num').value = 5500000000;
+            updatePriceText(5500000000, 'price_total_kr');
+            document.getElementById('date_end_total').value = "2028. 01. 14.";
+            document.getElementById('days_total').value = "730";
+            document.getElementById('has_first_phase').checked = true;
+            toggleFirstPhase();
+            document.getElementById('price_1st_num').value = 2000000000;
+            updatePriceText(2000000000, 'price_1st_kr');
+            document.getElementById('date_end_1st').value = "2026. 12. 31.";
+            document.getElementById('days_1st').value = "350";
+            document.getElementById('date_contract').value = "2026. 01. 01.";
+            document.getElementById('date_start').value = "2026. 01. 15.";
+            document.getElementById('leader_addr').value = "서울특별시 강남구 테헤란로 123 (가상주소)";
+            document.querySelectorAll('.tech-person').forEach(el => el.remove());
+            addTechRow({is1st: true, type:'책임', field:'토목', name:'김민수', grade:'특급', birth:'1992.12.19.', comp:'(주)멋진엔지니어링', cert:'토목시공기술사', duty:'건설사업관리 업무 총괄\n지시사항 수행보고\n기술검토 및 민원협의'});
+            addTechRow({is1st: true, type:'분야', field:'토목', name:'김철수', grade:'중급', birth:'1980.05.05.', comp:'(주)베타엔지니어링', cert:'토목기사', duty:'공사관리, 안전/환경관리\n품질관리 및 공정관리'});
+            addTechRow({is1st: false, type:'분야', field:'전기', name:'이영희', grade:'특급', birth:'1985.10.10.', comp:'(주)감마기술', cert:'전기공사기사', duty:'전기공사관리 전반'});
+            addTechRow({is1st: true, type:'기술지원', field:'상하수도', name:'박지원', grade:'특급', birth:'1965.12.25.', comp:'(주)델타컨설팅', cert:''});
+            addTechRow({is1st: true, type:'기술지원', field:'토질지질', name:'이지연', grade:'특급', birth:'1970.08.15.', comp:'(주)멋진엔지니어링', cert:''});
+            addTechRow({is1st: false, type:'기술지원', field:'토목구조', name:'정구조', grade:'특급', birth:'1972.03.01.', comp:'(주)베타엔지니어링', cert:''});
+            btn.innerText = "초기화 (입력 지우기)";
+            btn.className = "btn btn-red";
+            isSampleLoaded = true;
+        }
+    }
+
+    function getFormData() {
+        const has1st = document.getElementById('has_first_phase').checked;
+        return {
+            baseName: document.getElementById('proj_name').value || "용역명 미정",
+            has1st: has1st,
+            common: {
+                d_con: document.getElementById('date_contract').value,
+                d_str: document.getElementById('date_start').value,
+                client: document.getElementById('client_raw').value,
+                addr: document.getElementById('co_addr').value,
+                co: document.getElementById('co_name').value,
+                ceo: document.getElementById('co_ceo').value,
+                leader_addr: document.getElementById('leader_addr').value,
+            },
+            total: {
+                price: document.getElementById('price_total_kr').innerText,
+                d_end: document.getElementById('date_end_total').value,
+                days: document.getElementById('days_total').value
+            },
+            first: has1st ? {
+                price: document.getElementById('price_1st_kr').innerText,
+                d_end: document.getElementById('date_end_1st').value,
+                days: document.getElementById('days_1st').value
+            } : null,
+            techs: Array.from(document.querySelectorAll('.tech-person')).map(tbody => ({
+                is1st: tbody.querySelector('.t-1st-check').checked,
+                type: tbody.querySelector('.t-type').value,
+                field: tbody.querySelector('.t-field').value,
+                name: tbody.querySelector('.t-name').value,
+                grade: tbody.querySelector('.t-grade').value,
+                birth: tbody.querySelector('.t-birth').value,
+                comp: tbody.querySelector('.t-comp').value,
+                cert: tbody.querySelector('.t-cert').value,
+                duty: tbody.querySelector('.t-duty').value
+            }))
+        };
+    }
+
+    // --- DOCX GENERATION HELPERS (완전 강제 폰트 적용) ---
+    const Y_FONT = { ascii: "DemoCompany", cs: "DemoCompany", eastAsia: "DemoCompany", hAnsi: "DemoCompany" };
+
+    // 일반 텍스트 및 테이블에 사용될 Helper
+    const pTxt = (txt, align=AlignmentType.LEFT, bold=false, size) => new Paragraph({ 
+        children: [new TextRun({ text: String(txt||""), font: Y_FONT, bold: bold, size: size })], 
+        alignment: align 
+    });
+    const pCen = (txt, bold=false, size) => pTxt(txt, AlignmentType.CENTER, bold, size);
+
+    const centerLine = (txt, size, bold = false) => pCen(txt, bold, size);
+    const addSpacer = (before = 200) => new Paragraph({ spacing: { before: before } });
+    const emptyLine = () => new Paragraph({ children: [] });
+
+    // 표준 하단 (날짜, 대표이사, 수신처)
+    const createFooter = (D, dateLong) => [
+        new Paragraph({ children: [new TextRun({ text: dateLong, size: 28, font: Y_FONT })], alignment: AlignmentType.CENTER, spacing: { before: 800, after: 200 } }),
+        emptyLine(), emptyLine(), emptyLine(),
+        new Paragraph({ children: [new TextRun({ text: "공동대표회사 : " + D.common.addr, size: 22, font: Y_FONT })], alignment: AlignmentType.RIGHT }),
+        new Paragraph({ children: [new TextRun({ text: D.common.co + "   대표이사 " + D.common.ceo + " (인)", size: 30, bold: true, font: Y_FONT })], alignment: AlignmentType.RIGHT, spacing: { after: 800 } }),
+        new Paragraph({ children: [new TextRun({ text: D.common.client + " 귀하", bold: true, size: 36, font: Y_FONT })], alignment: AlignmentType.LEFT })
+    ];
+
+    // 착수계 페이지 생성기 
+    const createInitiationPage = (D, phaseData, titleSuffix, dateLong) => {
+        const titleStr = D.baseName + (titleSuffix ? ` (${titleSuffix})` : "");
+        return [
+            centerLine("착 수 계", 60, true), addSpacer(800),
+            new Paragraph({ children: [new TextRun({ text: `1. 용 역 명 : ${titleStr}`, size: 28, font: Y_FONT })], spacing: { after: 300 } }),
+            new Paragraph({ children: [new TextRun({ text: `2. 총용역부기금액 : ${phaseData.price}`, size: 28, font: Y_FONT })], spacing: { after: 300 } }),
+            new Paragraph({ children: [new TextRun({ text: `3. 계약년월일 : ${D.common.d_con}`, size: 28, font: Y_FONT })], spacing: { after: 300 } }),
+            new Paragraph({ children: [new TextRun({ text: `4. 착수 년월일 : ${D.common.d_str}`, size: 28, font: Y_FONT })], spacing: { after: 300 } }),
+            new Paragraph({ children: [new TextRun({ text: `5. 준공(예정)년월일 : ${phaseData.d_end} (착수일부터 ${phaseData.days}일)`, size: 28, font: Y_FONT })], spacing: { after: 800 } }),
+            centerLine("상기와 같이 건설사업관리용역을 착수하고자 착수계를 제출합니다.", 28),
+            ...createFooter(D, dateLong),
+            new Paragraph({ children: [new PageBreak()] })
+        ];
+    };
+
+    // 지정 신고서 생성기 
+    const createDesignationPage = (D, phaseData, titleSuffix, techList, dateLong) => {
+        const titleStr = D.baseName + (titleSuffix ? ` (${titleSuffix})` : "");
+        return [
+            centerLine("건설사업관리기술인 지정 신고서", 44, true), addSpacer(400),
+            new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                    new TableRow({ height:{value:500, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("용 역 명")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pTxt(titleStr)], verticalAlign:VerticalAlign.CENTER, columnSpan:3 }) ] }),
+                    new TableRow({ height:{value:500, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("계약금액")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pTxt(phaseData.price)], verticalAlign:VerticalAlign.CENTER, columnSpan:3 }) ] }),
+                    new TableRow({ height:{value:500, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("용역기간")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pTxt(`${D.common.d_str} ~ ${phaseData.d_end} (${phaseData.days}일)`)], verticalAlign:VerticalAlign.CENTER, columnSpan:3 }) ] })
+                ]
+            }),
+            new Paragraph({ children:[new TextRun({ text: "\n위 용역에 대한 상주 및 기술지원기술인을 아래와 같이 지정 신고합니다.", font: Y_FONT })], spacing:{after:400} }),
+            new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                    new TableRow({ height:{value:400, rule:HeightRule.EXACT}, children: ["구분", "분야", "성명", "등급", "소속"].map(h => new TableCell({ children: [pCen(h)], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER })) }),
+                    ...techList.map(t => new TableRow({
+                        children: [ (t.type==='책임'?'상주(책임)':(t.type==='분야'?'상주(분야)':'기술지원')), t.field, t.name, t.grade, t.comp ].map(v => new TableCell({ children: [pCen(v)], verticalAlign:VerticalAlign.CENTER }))
+                    }))
+                ]
+            }),
+            ...createFooter(D, dateLong),
+            new Paragraph({ children: [new PageBreak()] })
+        ];
+    };
+
+    async function generateDocx() {
+        const D = getFormData();
+        
+        let rawDate = D.common.d_str.trim();
+        let parts = rawDate.split(/[\.\-\s]+/).filter(p => p.length > 0);
+        let year = parts[0] || "    ";
+        let month = parts[1] ? parseInt(parts[1], 10) : NaN;
+        let day = parts[2] ? parseInt(parts[2], 10) : NaN;
+        let monthStr = isNaN(month) ? "   " : month.toString();
+        let dayStr = isNaN(day) ? "   " : day.toString();
+
+        const dateLong = `${year}년 ${monthStr}월 ${dayStr}일`;
+        const children = [];
+
+        // 1. 표지
+        children.push(addSpacer(2000), centerLine(D.baseName, 44, true), addSpacer(200), centerLine("건설사업관리용역", 44, true), addSpacer(1500), centerLine("착 수 계", 90, true), addSpacer(3000), centerLine(D.common.d_con.substring(0,8), 36, true));
+        children.push(addSpacer(800), centerLine("DemoCompany", 90, true));
+        children.push(new Paragraph({ children: [new PageBreak()] }));
+
+        // 2. 착수계 (전체분)
+        const totalSuffix = D.has1st ? "전체분" : "";
+        children.push(...createInitiationPage(D, D.total, totalSuffix, dateLong));
+
+        // 3. 착수계 (1차분)
+        if (D.has1st && D.first) {
+            children.push(...createInitiationPage(D, D.first, "1차분", dateLong));
+        }
+
+        // 4. 목차
+        const mergedTitleSuffix = D.has1st ? "(전체분, 1차분)" : "";
+        const indexItems = [
+            "1. 건설사업관리기술인 지정 신고서", 
+            "2. 책임건설사업관리기술인 선임계", 
+            "3. 책임건설사업관리기술인 인감계", 
+            "4. 예정공정표", 
+            "5. 건설사업관리 조직표", 
+            "6. 참여기술인 명단", 
+            "7. 참여기술인 담당업무", 
+            "8. 참여기술인 재직증명서", 
+            "9. 참여기술인 경력확인서", 
+            "10. 보안각서", 
+            "11. 건설사업관리비산출내역서(도급내역서)"
+        ];
+        children.push(centerLine("목      차", 50, true), addSpacer(800), ...indexItems.map(txt => new Paragraph({ children: [new TextRun({ text: txt, size: 26, font: Y_FONT })], spacing: { after: 400 }, indent: { size: 1440, type: WidthType.DXA } })), new Paragraph({ children: [new PageBreak()] }));
+
+        // 5. 지정신고서 (전체분)
+        const totalTechs = D.techs; 
+        children.push(...createDesignationPage(D, D.total, totalSuffix, totalTechs, dateLong));
+
+        // 6. 지정신고서 (1차분)
+        if (D.has1st && D.first) {
+            const firstTechs = D.techs.filter(t => t.is1st);
+            children.push(...createDesignationPage(D, D.first, "1차분", firstTechs, dateLong));
+        }
+
+        // 7. 선임계 (통합)
+        const leader = D.techs.find(t=>t.type==='책임') || {name:"", birth:"", field:"", grade:"", comp:"", cert:""};
+        children.push(centerLine("책임건설사업관리기술인 선임계", 50, true), addSpacer(800),
+            new Paragraph({ children:[new TextRun({ text: `• 용 역 명 : ${D.baseName} ${mergedTitleSuffix}`, size: 24, bold: true, font: Y_FONT })], spacing:{after:400} }),
+            new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                    new TableRow({ height:{value:1000, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("성 명")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen(leader.name)], verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen("생년월일")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen(leader.birth)], verticalAlign:VerticalAlign.CENTER }) ] }),
+                    new TableRow({ height:{value:1000, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("자격종목")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen(leader.cert || leader.field)], verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen("기술등급")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pCen(leader.grade)], verticalAlign:VerticalAlign.CENTER }) ] }),
+                    new TableRow({ height:{value:1000, rule:HeightRule.EXACT}, children:[ new TableCell({ children:[pCen("주 소")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }), new TableCell({ children:[pTxt(D.common.leader_addr)], verticalAlign:VerticalAlign.CENTER, columnSpan:3 }) ] })
+                ]
+            }),
+            centerLine("\n상기인을 본 용역의 책임건설사업관리기술인으로 선임하여 제출합니다.", 28),
+            ...createFooter(D, dateLong),
+            new Paragraph({ children: [new PageBreak()] })
+        );
+
+        // 8. 인감계 (통합)
+        children.push(centerLine("책임건설사업관리기술인 인감계", 50, true), addSpacer(600),
+            new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                    new TableRow({ height:{value:800, rule:HeightRule.AT_LEAST}, children: [
+                        new TableCell({ children:[pCen("용 역 명")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER, width:{size:20, type:WidthType.PERCENTAGE} }),
+                        new TableCell({ children:[pTxt(`${D.baseName} ${mergedTitleSuffix}`)], verticalAlign:VerticalAlign.CENTER, width:{size:50, type:WidthType.PERCENTAGE} }),
+                        new TableCell({ children:[pCen("사 용 인 감", true)], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER, width:{size:30, type:WidthType.PERCENTAGE} })
+                    ]}),
+                    new TableRow({ height:{value:800, rule:HeightRule.AT_LEAST}, children: [
+                        new TableCell({ children:[pCen("주 소")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }),
+                        new TableCell({ children:[pTxt(D.common.leader_addr)], verticalAlign:VerticalAlign.CENTER }),
+                        new TableCell({ children:[pTxt("")], verticalAlign:VerticalAlign.CENTER, rowSpan:3 })
+                    ]}),
+                    new TableRow({ height:{value:800, rule:HeightRule.AT_LEAST}, children: [
+                        new TableCell({ children:[pCen("생년월일")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }),
+                        new TableCell({ children:[pTxt(leader.birth)], verticalAlign:VerticalAlign.CENTER })
+                    ]}),
+                    new TableRow({ height:{value:800, rule:HeightRule.AT_LEAST}, children: [
+                        new TableCell({ children:[pCen("성 명")], shading:{fill:"F2F2F2"}, verticalAlign:VerticalAlign.CENTER }),
+                        new TableCell({ children:[pTxt(leader.name)], verticalAlign:VerticalAlign.CENTER })
+                    ]})
+                ]
+            }),
+            centerLine("\n위와 같이 건설사업관리용역을 시행함에 있어 책임건설사업관리기술인 사용 인감계를 제출합니다.", 28),
+            ...createFooter(D, dateLong),
+            new Paragraph({ children: [new PageBreak()] })
+        );
+
+        // 9. 예정공정표 (전체분)
+        children.push(centerLine(`예정공정표${totalSuffix ? " (전체분)" : ""}`, 44, true), addSpacer(600));
+        children.push(new Paragraph({ children: [new TextRun({ text: `• 용 역 명 : ${D.baseName}${totalSuffix ? " (전체분)" : ""}`, size: 24, font: Y_FONT })], spacing: { after: 200 } }));
+        children.push(new Paragraph({ children: [new TextRun({ text: `• 기    간 : ${D.common.d_str} ~ ${D.total.d_end} (${D.total.days}일)`, size: 24, font: Y_FONT })] }));
+        const ganttTotal = document.getElementById('img_gantt_total').files[0];
+        if (ganttTotal) {
+            const buf = await ganttTotal.arrayBuffer();
+            children.push(new Paragraph({ children: [new ImageRun({ data: buf, transformation: { width: 580, height: 400 } })], alignment: AlignmentType.CENTER, spacing:{before:400} }));
+        }
+        children.push(...createFooter(D, dateLong), new Paragraph({ children: [new PageBreak()] }));
+
+        // 10. 예정공정표 (1차분)
+        if (D.has1st && D.first) {
+            children.push(centerLine("예정공정표 (1차분)", 44, true), addSpacer(600));
+            children.push(new Paragraph({ children: [new TextRun({ text: `• 용 역 명 : ${D.baseName} (1차분)`, size: 24, font: Y_FONT })], spacing: { after: 200 } }));
+            children.push(new Paragraph({ children: [new TextRun({ text: `• 기    간 : ${D.common.d_str} ~ ${D.first.d_end} (${D.first.days}일)`, size: 24, font: Y_FONT })] }));
+            const gantt1st = document.getElementById('img_gantt_1st').files[0];
+            if (gantt1st) {
+                const buf = await gantt1st.arrayBuffer();
+                children.push(new Paragraph({ children: [new ImageRun({ data: buf, transformation: { width: 580, height: 400 } })], alignment: AlignmentType.CENTER, spacing:{before:400} }));
+            }
+            children.push(...createFooter(D, dateLong), new Paragraph({ children: [new PageBreak()] }));
+        }
+
+        // 11. 조직표
+        const createOrgChart = (suffix, techs) => {
+            const titleStr = D.baseName + (suffix ? ` (${suffix})` : "");
+            const bTechs = techs.filter(t => t.type === '분야');
+            const sTechs = techs.filter(t => t.type === '기술지원');
+
+            const leaderCard = new Table({
+                width: { size: 50, type: WidthType.PERCENTAGE },
+                alignment: AlignmentType.CENTER,
+                borders: {
+                    top: { style: BorderStyle.SINGLE, size: 12, color: "1E40AF" },
+                    bottom: { style: BorderStyle.SINGLE, size: 12, color: "1E40AF" },
+                    left: { style: BorderStyle.SINGLE, size: 12, color: "1E40AF" },
+                    right: { style: BorderStyle.SINGLE, size: 12, color: "1E40AF" },
+                },
+                rows: [
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                shading: { fill: "1E40AF" },
+                                children: [new Paragraph({ children: [new TextRun({ text: "책임건설사업관리기술인", color: "FFFFFF", bold: true, size: 24, font: Y_FONT })], alignment: AlignmentType.CENTER })],
+                                verticalAlign: VerticalAlign.CENTER,
+                                margins: { top: 120, bottom: 120 }
+                            })
+                        ]
+                    }),
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                children: [
+                                    new Paragraph({ children: [new TextRun({ text: `${leader.name} `, bold: true, size: 28, font: Y_FONT }), new TextRun({ text: leader.grade ? `(${leader.grade})` : '', size: 22, font: Y_FONT })], alignment: AlignmentType.CENTER, spacing: { before: 150, after: 80 } }),
+                                    new Paragraph({ children: [new TextRun({ text: leader.comp, size: 20, color: "475569", font: Y_FONT })], alignment: AlignmentType.CENTER, spacing: { after: 150 } })
+                                ],
+                                verticalAlign: VerticalAlign.CENTER
+                            })
+                        ]
+                    })
+                ]
+            });
+
+            const createTechRow = (t) => {
+                return new TableRow({
+                    height: { value: 600, rule: HeightRule.AT_LEAST },
+                    children: [
+                        new TableCell({
+                            children: [new Paragraph({ children:[new TextRun({text: t.field, bold: true, size: 20, font: Y_FONT})], alignment: AlignmentType.CENTER, spacing:{after: 40} }), new Paragraph({ children:[new TextRun({text: t.grade ? `(${t.grade})` : '', size: 18, color: "64748B", font: Y_FONT})], alignment: AlignmentType.CENTER })],
+                            verticalAlign: VerticalAlign.CENTER,
+                            width: { size: 35, type: WidthType.PERCENTAGE },
+                            shading: { fill: "F8FAFC" }
+                        }),
+                        new TableCell({
+                            children: [new Paragraph({ children:[new TextRun({text: t.name, bold: true, size: 22, font: Y_FONT})], alignment: AlignmentType.CENTER, spacing:{after: 50} }), new Paragraph({ children:[new TextRun({text: t.comp, size: 18, color: "475569", font: Y_FONT})], alignment: AlignmentType.CENTER })],
+                            verticalAlign: VerticalAlign.CENTER,
+                            width: { size: 65, type: WidthType.PERCENTAGE }
+                        })
+                    ]
+                });
+            };
+
+            const createSubTable = (title, techList) => {
+                const rows = [
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                columnSpan: 2,
+                                shading: { fill: "EFF6FF" },
+                                borders: { bottom: { style: BorderStyle.SINGLE, size: 12, color: "3B82F6" } },
+                                children: [new Paragraph({ children:[new TextRun({ text: title, bold: true, size: 22, color: "1E3A8A", font: Y_FONT })], alignment: AlignmentType.CENTER })],
+                                margins: { top: 150, bottom: 150 }
+                            })
+                        ]
+                    })
+                ];
+                techList.forEach(t => rows.push(createTechRow(t)));
+                if(techList.length === 0) {
+                    rows.push(new TableRow({ children: [new TableCell({ columnSpan: 2, children: [pCen("해당사항 없음", false, 20)], margins: { top: 200, bottom: 200 } })] }));
+                }
+                return new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: rows, borders: { top: { style: BorderStyle.SINGLE, size: 4, color: "CBD5E1" }, bottom: { style: BorderStyle.SINGLE, size: 4, color: "CBD5E1" }, left: { style: BorderStyle.SINGLE, size: 4, color: "CBD5E1" }, right: { style: BorderStyle.SINGLE, size: 4, color: "CBD5E1" }, insideHorizontal: { style: BorderStyle.SINGLE, size: 4, color: "E2E8F0" }, insideVertical: { style: BorderStyle.SINGLE, size: 4, color: "E2E8F0" } } });
+            };
+
+            const layoutTable = new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE }, insideVertical: { style: BorderStyle.NONE }, insideHorizontal: { style: BorderStyle.NONE } },
+                rows: [
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [createSubTable("분야별 건설사업관리기술인", bTechs)], width: { size: 48, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.TOP }),
+                            new TableCell({ children: [pTxt("")], width: { size: 4, type: WidthType.PERCENTAGE } }),
+                            new TableCell({ children: [createSubTable("기술지원기술인", sTechs)], width: { size: 48, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.TOP })
+                        ]
+                    })
+                ]
+            });
+
+            children.push(
+                centerLine("건설사업관리 조직표", 44, true), 
+                new Paragraph({ children:[new TextRun({ text:`■ 용 역 명 : ${titleStr}`, bold:true, size:22, font: Y_FONT })], spacing:{before:400, after:600} }),
+                leaderCard,
+                new Paragraph({ children:[new TextRun({ text: "▼", size: 28, color: "94A3B8", font: Y_FONT })], alignment: AlignmentType.CENTER, spacing: { before: 100, after: 100 } }),
+                layoutTable,
+                new Paragraph({ children: [new PageBreak()] })
+            );
+        };
+
+        createOrgChart(totalSuffix, D.techs);
+        if(D.has1st && D.first) createOrgChart("1차분", D.techs.filter(t=>t.is1st));
+
+        // 12. 명단
+        const createMemberList = (suffix, techs, phaseData) => {
+            const titleStr = D.baseName + (suffix ? ` (${suffix})` : "");
+            const sorted = [...techs].sort((a,b) => (a.type==='책임'?1:a.type==='분야'?2:3) - (b.type==='책임'?1:b.type==='분야'?2:3));
+            children.push(centerLine("참여 기술인 명단", 44, true), 
+                new Paragraph({ children:[new TextRun({ text:`■ 용 역 명 : ${titleStr}`, bold:true, size:22, font: Y_FONT })], spacing:{before:300} }),
+                new Paragraph({ children:[new TextRun({ text:`■ 용역기간 : ${D.common.d_str} ~ ${phaseData.d_end} (${phaseData.days}일)`, bold:true, size:22, font: Y_FONT })], spacing:{after:400} }),
+                new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                        new TableRow({ children:["구분","참여업무내용","참여등급","성명","생년월일","자격증","소속"].map(h=>new TableCell({children:[pCen(h)],shading:{fill:"F2F2F2"}})) }),
+                        ...sorted.map(t => new TableRow({ children:[t.type, t.type+"기술인("+t.field+")", t.grade, t.name, t.birth, t.cert, t.comp].map(v=>new TableCell({children:[pCen(v)]})) }))
+                    ]
+                }), new Paragraph({ children: [new PageBreak()] })
+            );
+        };
+        createMemberList(totalSuffix, D.techs, D.total);
+        if(D.has1st && D.first) createMemberList("1차분", D.techs.filter(t=>t.is1st), D.first);
+
+        // 13. 담당업무
+        const allTechsSorted = [...D.techs].sort((a,b) => (a.type==='책임'?1:a.type==='분야'?2:3) - (b.type==='책임'?1:b.type==='분야'?2:3));
+        const nonSup = allTechsSorted.filter(t => t.type !== '기술지원');
+        const sup = allTechsSorted.filter(t => t.type === '기술지원');
+        const dutyRows = [ new TableRow({ children:["구분","등급","성명","담당업무","비고"].map(h=>new TableCell({children:[pCen(h)],shading:{fill:"F2F2F2"}})) }) ];
+
+        nonSup.forEach(t => {
+            dutyRows.push(new TableRow({ children: [ new TableCell({children:[pCen(t.type)]}), new TableCell({children:[pCen(t.grade)]}), new TableCell({children:[pCen(t.name)]}), new TableCell({children:t.duty.split('\n').map(l=>pTxt(l, AlignmentType.LEFT, false, 16))}), new TableCell({children:[pCen(t.comp)]}) ] }));
+        });
+        if (sup.length > 0) {
+            sup.forEach((t, i) => {
+                dutyRows.push(new TableRow({ 
+                    children: [
+                        new TableCell({ children: [pCen("기술지원")], verticalMerge: i === 0 ? VerticalMergeType.RESTART : VerticalMergeType.CONTINUE, verticalAlign: VerticalAlign.CENTER }),
+                        new TableCell({ children: [pCen(t.grade)] }),
+                        new TableCell({ children: [pCen(t.name)] }),
+                        new TableCell({ children: SUPPORT_DEFAULT_DUTY.split('\n').map(l=>pTxt(l, AlignmentType.LEFT, false, 16)), verticalMerge: i === 0 ? VerticalMergeType.RESTART : VerticalMergeType.CONTINUE, verticalAlign: VerticalAlign.CENTER }),
+                        new TableCell({ children: [pCen(t.comp)] })
+                    ] 
+                }));
+            });
+        }
+        children.push(centerLine("참여 기술인 담당업무", 44, true), 
+            new Paragraph({ children:[new TextRun({ text:`■ 용 역 명 : ${D.baseName} ${mergedTitleSuffix}`, bold:true, size:22, font: Y_FONT })], spacing:{before:300, after:400} }),
+            new Table({ width:{size:100, type:WidthType.PERCENTAGE}, rows: dutyRows }), new Paragraph({ children: [new PageBreak()] })
+        );
+
+        // 14. 보안각서
+        children.push(addSpacer(), centerLine("참여기술인 재직증명서", 60, true), new Paragraph({ children:[new PageBreak()] }));
+        children.push(addSpacer(), centerLine("참여기술인 경력확인서", 60, true), new Paragraph({ children:[new PageBreak()] }));
+
+        const clientName = D.common.client || "";
+        let orgSuffix = "기관과";
+        if (clientName.includes("구청")) orgSuffix = "구와";
+        else if (clientName.includes("시장") || clientName.includes("시청") || clientName.includes("특별시") || clientName.includes("광역시")) orgSuffix = "시와";
+        else if (clientName.includes("군수") || clientName.includes("군청")) orgSuffix = "군과";
+        else if (clientName.includes("도지사") || clientName.includes("도청")) orgSuffix = "도와";
+        else if (clientName.includes("청장")) orgSuffix = "청과";
+        else if (clientName.includes("공사")) orgSuffix = "공사와";
+        else if (clientName.includes("공단")) orgSuffix = "공단과";
+
+        const createPledge = (role, name, comp, isCEO) => {
+            const bodyLines = isCEO ? [
+                "1. 본인은 본 용역을 시행함에 있어 계약서 및 과업지시서 상의 제반 보안사항을 철저히 이행할 것임은 물론 용역과업 수행 전에 용역 참여자 전원에 대하여 보안교육을 실시하고 보안 각서를 징구하여 용역 시행부서에 제출 할 것임.",
+                "",
+                "2. 본인은 물론 당회사 직원이 보안 사항을 외부에 누설시켜 중대한 문제점을 야기시켰을 경우에는 누설자가 보안관계 제 법규에 의거 처벌받음은 물론 회사에 대한 용역업의 등록취소, 부정당업자의 입찰참가 자격제한 등 어떠한 제재조치를 취하여도 이의를 제기하지 않을 것임."
+            ] : [
+                "1. 본인은 본 용역을 시행함에 있어 계약서 및 과업지시서 상의 제반 보안사항을 철저히 이행하겠음.",
+                "",
+                "2. 보안 사항을 외부에 누설시켜 중대한 문제점을 야기시켰을 경우에는 보안관계 제 법규에 의거 처벌받음은 물론 어떠한 제재조치를 취하여도 이의를 제기하지 않을 것임."
+            ];
+            
+            const bodyParagraphs = bodyLines.map(line => new Paragraph({ children:[new TextRun({ text:line, size:24, font: Y_FONT })] }));
+
+            children.push(centerLine("보 안 각 서", 50, true), addSpacer(800), new Paragraph({ children:[new TextRun({ text:`본인은 ${dateLong} 귀 ${orgSuffix} 계약 체결한 "${D.baseName}"을 시행함에 있어 다음 사항을 준수할 것을 각서로 제출합니다.`, size:24, font: Y_FONT })] }), addSpacer(1200), ...bodyParagraphs, addSpacer(1200), centerLine(dateLong, 28), new Paragraph({ children:[new TextRun({text:"소 속 : "+comp, size:24, font: Y_FONT})], alignment:AlignmentType.RIGHT }), new Paragraph({ children:[new TextRun({text:"직 위 : "+role, size:24, font: Y_FONT})], alignment:AlignmentType.RIGHT }), new Paragraph({ children:[new TextRun({text:"성 명 : "+name+" (인)", size:24, font: Y_FONT})], alignment:AlignmentType.RIGHT }), new Paragraph({ children:[new TextRun({text:D.common.client+" 귀하", bold:true, size:28, font: Y_FONT})] }), new Paragraph({ children:[new PageBreak()] }));
+        };
+        
+        createPledge("대표이사", D.common.ceo, D.common.co, true);
+        allTechsSorted.forEach(t => createPledge(t.type==='책임'?'책임건설사업관리기술인':(t.type==='분야'?'분야별건설사업관리기술인':'기술지원기술인'), t.name, t.comp, false));
+
+        children.push(addSpacer(), centerLine("건설사업관리비 산출내역서", 60, true));
+
+        const doc = new Document({ 
+            styles: {
+                default: {
+                    document: {
+                        run: {
+                            font: {
+                                ascii: "DemoCompany",
+                                cs: "DemoCompany",
+                                eastAsia: "DemoCompany",
+                                hAnsi: "DemoCompany",
+                            }
+                        }
+                    }
+                }
+            },
+            sections:[{ 
+                properties:{ page:{ margin:{ top:1200, bottom:1200, left:1440, right:1440 } } }, 
+                children 
+            }] 
+        });
+        const blob = await Packer.toBlob(doc);
+        saveAs(blob, `착수계_${D.baseName.replace(/\s/g,'_')}.docx`);
+    }
+    
+    window.onload = () => { toggleFirstPhase(); addTechRow(); };
+</script>
+
+</body>
+</html>

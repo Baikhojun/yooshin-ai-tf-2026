@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수금 실적 분석기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background-color: #f3f4f6; }
+        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #3b82f6; font-weight: bold; }
+    </style>
+</head>
+<body class="p-6 text-gray-800">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <!-- 헤더 -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">수금 실적 분석 및 검증 프로그램</h1>
+                <p class="text-sm text-gray-500 mt-1">회사 시스템에서 다운로드한 엑셀(CSV) 파일을 선택해주세요.</p>
+            </div>
+            
+            <div class="flex flex-col gap-2 w-full md:w-auto">
+                <input type="file" id="csvFileInput" accept=".csv" class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100 cursor-pointer border rounded-md p-1" />
+            </div>
+        </div>
+
+        <!-- 컨트롤 패널 -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-end mb-4">
+                <h2 class="text-lg font-semibold">조회 기간 설정 (최종수금일 기준)</h2>
+            </div>
+            
+            <!-- 연도별 빠른 선택 (자동 생성됨) -->
+            <div class="mb-4 flex flex-wrap items-center gap-2" id="yearButtonsContainer">
+                <span class="text-sm text-gray-400">파일을 업로드하면 이곳에 연도별 빠른 선택 버튼이 나타납니다.</span>
+            </div>
+
+            <div class="flex flex-wrap items-end gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">시작일</label>
+                    <input type="date" id="startDate" class="border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                </div>
+                <div class="text-gray-500 pb-2">~</div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">종료일</label>
+                    <input type="date" id="endDate" class="border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                </div>
+                <button id="analyzeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-sm ml-auto">
+                    분석 및 검증하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 결과 표시 영역 -->
+        <div id="resultsArea" class="hidden space-y-6">
+            
+            <!-- 데이터 검증 패널 (New!) -->
+            <div id="validationArea" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">데이터 무결성 검증 결과 <span class="text-xs font-normal text-gray-500">(원본 요약본과 비교)</span></h2>
+                <div class="flex flex-col md:flex-row gap-6">
+                    
+                    <!-- 건수 검증 -->
+                    <div class="flex-1 p-5 rounded-lg border transition-colors" id="valCountCard">
+                        <div class="text-sm text-gray-500 mb-1">총 사업건수 검증</div>
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-2xl font-bold" id="valCountStatus"></span>
+                        </div>
+                        <div class="text-sm text-gray-700 space-y-1 bg-white/50 p-2 rounded">
+                            <div>계산된 총 건수: <span id="calcCount" class="font-bold text-gray-900"></span>건 <span class="text-xs text-gray-500">(국내+해외+미입력)</span></div>
+                            <div>엑셀 하단 건수: <span id="exCount" class="font-bold text-gray-900"></span>건</div>
+                        </div>
+                        <div id="valCountMsg" class="text-sm mt-3 font-medium"></div>
+                    </div>
+
+                    <!-- 금액 검증 -->
+                    <div class="flex-1 p-5 rounded-lg border transition-colors" id="valAmountCard">
+                        <div class="text-sm text-gray-500 mb-1">전체 수금액 합계 검증</div>
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-2xl font-bold" id="valAmountStatus"></span>
+                        </div>
+                        <div class="text-sm text-gray-700 space-y-1 bg-white/50 p-2 rounded">
+                            <div>계산된 총 금액: <span id="calcAmount" class="font-bold text-gray-900"></span></div>
+                            <div>엑셀 하단 금액: <span id="exAmount" class="font-bold text-gray-900"></span></div>
+                        </div>
+                        <div id="valAmountMsg" class="text-sm mt-3 font-medium"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors shadow-sm flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    선택 기간 수금내역 엑셀 다운로드
+                </button>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 선택 기간 수금 실적 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-blue-200 ring-1 ring-blue-50">
+                    <h2 class="text-lg font-bold text-blue-800 border-b pb-2 mb-4">선택 기간 수금 실적</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium text-gray-600">국내 용역</span>
+                            <span id="periodDomesticSum" class="text-xl font-bold text-gray-900">0 원</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium text-gray-600">해외 용역</span>
+                            <span id="periodOverseasSum" class="text-xl font-bold text-gray-900">0 원</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <span class="font-bold text-blue-900">합계 (선택 기간)</span>
+                            <span id="periodTotalSum" class="text-2xl font-black text-blue-700">0 원</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 전체 데이터 수금 실적 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">전체 파일 수금 실적 <span class="text-xs font-normal text-gray-500">(기간 무관)</span></h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium text-gray-600">국내 용역</span>
+                            <span id="totalDomesticSum" class="text-xl font-bold text-gray-900">0 원</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium text-gray-600">해외 용역</span>
+                            <span id="totalOverseasSum" class="text-xl font-bold text-gray-900">0 원</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-gray-100 rounded-lg border border-gray-200">
+                            <span class="font-bold text-gray-900">합계 (전체)</span>
+                            <span id="totalAllSum" class="text-2xl font-black text-gray-800">0 원</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 용역 목록 탭 -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex border-b overflow-x-auto whitespace-nowrap">
+                    <button class="tab-btn active flex-1 py-3 px-4 text-center text-sm font-medium focus:outline-none" onclick="switchTab('domestic')">
+                        국내 수금 완료 (<span id="domesticCount">0</span>건)
+                    </button>
+                    <button class="tab-btn flex-1 py-3 px-4 text-center text-sm font-medium text-gray-500 focus:outline-none" onclick="switchTab('overseas')">
+                        해외 수금 완료 (<span id="overseasCount">0</span>건)
+                    </button>
+                    <button class="tab-btn flex-1 py-3 px-4 text-center text-sm font-medium text-red-500 focus:outline-none" onclick="switchTab('uncollected')">
+                        수금 누락/미입력 (<span id="uncollectedCount">0</span>건)
+                    </button>
+                </div>
+                
+                <div class="p-6 max-h-96 overflow-y-auto">
+                    <ul id="domesticList" class="space-y-2 text-sm text-gray-700">
+                        <!-- 국내 목록 -->
+                    </ul>
+                    <ul id="overseasList" class="hidden space-y-2 text-sm text-gray-700">
+                        <!-- 해외 목록 -->
+                    </ul>
+                    <ul id="uncollectedList" class="hidden space-y-2 list-disc list-inside text-sm text-red-600">
+                        <!-- 누락 목록 -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let parsedData = [];
+        let exportData = []; 
+        let analyzedRows = []; // 분석된 데이터를 저장하여 이동 시 재계산에 활용
+        let excelTotalCount = null;
+        let excelTotalAmount = null;
+        let currentStartDate = '';
+        let currentEndDate = '';
+
+        const formatMoney = (amount) => {
+            return new Intl.NumberFormat('ko-KR').format(amount) + ' 원';
+        };
+
+        const isDomestic = (projectName) => {
+            if (!projectName) return true;
+            if (projectName.includes('미군기지이전 종합사업관리용역')) return true;
+
+            const overseasKeywords = [
+                '해외', '글로벌', 'ODA', 'EDCF', 
+                '베트남', '필리핀', '인도네시아', '캄보디아', '방글라데시', '스리랑카', '미얀마', '라오스',
+                '인도', '네팔', '파키스탄', '우즈베키스탄', '카자흐스탄', '몽골', 
+                '탄자니아', '케냐', '르완다', '우간다', '에티오피아', '가나', '세네갈',
+                '페루', '콜롬비아', '볼리비아', '니카라과', '사우디', '알제리', '이집트'
+            ];
+
+            for (let word of overseasKeywords) {
+                if (projectName.includes(word)) return false;
+            }
+            return true;
+        };
+
+        // 날짜 파싱 엔진 초강력 업그레이드 (어떤 기호가 섞여도 표준 YYYY-MM-DD로 변환)
+        const normalizeDate = (dateRaw) => {
+            if (!dateRaw) return null;
+            // 모든 숫자 이외의 문자를 하이픈(-)으로 강제 통일
+            let str = dateRaw.toString().trim().replace(/[^\d]+/g, '-').replace(/^-|-$/g, '');
+            
+            // 1. YYYY-MM-DD 형식 (예: 2026-5-20)
+            let match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (match) return `${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
+            
+            // 2. MM-DD-YYYY 또는 DD-MM-YYYY 형식 (예: 5-20-2026)
+            match = str.match(/^(\d{1,2})-(\d{1,2})-(\d{4})/);
+            if (match) return `${match[3]}-${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}`;
+
+            // 3. YY-MM-DD 형식 (예: 26-05-20)
+            match = str.match(/^(\d{2})-(\d{1,2})-(\d{1,2})/);
+            if (match) return `20${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
+            
+            // 4. YYYYMMDD 기호 없는 형식 (예: 20260520)
+            if (str.length === 8 && /^\d{8}$/.test(str)) {
+                return `${str.substring(0,4)}-${str.substring(4,6)}-${str.substring(6,8)}`;
+            }
+
+            // 5. 엑셀 내부 일련번호 날짜 (예: 45797)
+            if (/^\d{5}$/.test(str)) {
+                const excelDate = parseInt(str, 10);
+                const dateObj = new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+                if (!isNaN(dateObj)) return dateObj.toISOString().split('T')[0];
+            }
+            return null;
+        };
+
+        const extractYearsAndRender = (data) => {
+            const yearSet = new Set();
+            data.forEach(row => {
+                let dateRaw = '';
+                for(let k in row) {
+                    if (k.replace(/[\s\uFEFF]+/g,'').includes('수금일')) {
+                        dateRaw = row[k];
+                        break;
+                    }
+                }
+                const nDate = normalizeDate(dateRaw);
+                if (nDate) {
+                    yearSet.add(nDate.substring(0, 4));
+                }
+            });
+
+            const container = document.getElementById('yearButtonsContainer');
+            container.innerHTML = '<span class="text-sm font-medium text-gray-700 mr-2">연도 빠른 선택:</span>';
+            
+            if (yearSet.size === 0) {
+                container.innerHTML += '<span class="text-sm text-gray-500">감지된 연도가 없습니다.</span>';
+                return;
+            }
+
+            const sortedYears = Array.from(yearSet).sort((a, b) => b - a);
+            sortedYears.forEach(year => {
+                const btn = document.createElement('button');
+                btn.className = "px-4 py-1.5 bg-white border border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 font-medium text-sm rounded-full shadow-sm transition-all";
+                btn.innerText = year + "년";
+                btn.onclick = () => {
+                    document.getElementById('startDate').value = `${year}-01-01`;
+                    document.getElementById('endDate').value = `${year}-12-31`;
+                };
+                container.appendChild(btn);
+            });
+        };
+
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const readerEuc = new FileReader();
+            readerEuc.onload = function(evt) {
+                const text = evt.target.result;
+                if (text.includes('사업') || text.includes('수금') || text.includes('금액') || text.includes('부서') || text.includes('용역')) {
+                    parseCSVText(text);
+                } else {
+                    const readerUtf = new FileReader();
+                    readerUtf.onload = function(evt2) {
+                        parseCSVText(evt2.target.result);
+                    };
+                    readerUtf.readAsText(file, 'utf-8');
+                }
+            };
+            readerEuc.readAsText(file, 'euc-kr');
+        });
+
+        function parseCSVText(text) {
+            Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    parsedData = results.data;
+                    extractYearsAndRender(parsedData);
+                    alert('데이터를 정상적으로 읽었습니다! [분석 및 검증하기]를 눌러주세요.');
+                },
+                error: function(err) {
+                    alert('파일을 읽는 중 오류가 발생했습니다.');
+                }
+            });
+        }
+
+        // 목록 내 이동 버튼 클릭 이벤트 위임
+        document.getElementById('resultsArea').addEventListener('click', function(e) {
+            if (e.target.closest('.move-btn')) {
+                const btn = e.target.closest('.move-btn');
+                const pName = btn.getAttribute('data-name');
+                const targetCat = btn.getAttribute('data-target');
+                
+                // 동일한 사업명을 가진 모든 건의 카테고리를 찾아 변경
+                analyzedRows.forEach(row => {
+                    if (row.projectName === pName && row.category !== 'uncollected') {
+                        row.category = targetCat;
+                    }
+                });
+
+                // UI 및 합계 즉시 재계산
+                calculateAndRender();
+            }
+        });
+
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            if (parsedData.length === 0) {
+                alert('먼저 엑셀 파일을 선택해주세요.');
+                return;
+            }
+
+            // 입력된 기준일도 확실하게 YYYY-MM-DD로 포맷팅하여 비교 오류 원천 차단
+            currentStartDate = normalizeDate(document.getElementById('startDate').value); 
+            currentEndDate = normalizeDate(document.getElementById('endDate').value);     
+
+            excelTotalCount = null;
+            excelTotalAmount = null;
+            analyzedRows = [];
+            const validDataRows = [];
+
+            // 1단계: 요약 데이터(맨 하단 합계행) 분리 및 엑셀 원본 기재값 추출
+            parsedData.forEach(row => {
+                const normRow = {};
+                for (let key in row) {
+                    const cleanKey = key.replace(/[\s\uFEFF]+/g, '');
+                    normRow[cleanKey] = row[key];
+                }
+
+                const rawValuesStr = Object.values(normRow).map(v => (v||'').toString().replace(/[\s\uFEFF]+/g, '')).join('');
+                const valsArray = Object.values(normRow).map(v => (v||'').toString().replace(/[\s\uFEFF]+/g, ''));
+                
+                // 완벽한 글자 '합계'가 있거나, '총사업건수' 등의 키워드가 포함된 행을 요약(푸터)행으로 간주
+                const isSummary = valsArray.some(v => v === '합계' || v.includes('총사업건수') || v.includes('총건수') || v.includes('총사업'));
+
+                if (isSummary) {
+                    // 건수 추출
+                    const countMatch = rawValuesStr.match(/(?:총사업건수|총건수|총\s*사업|건수).*?(\d+)/);
+                    if (countMatch) {
+                        excelTotalCount = parseInt(countMatch[1], 10);
+                    } else {
+                        for(let i=0; i<valsArray.length; i++) {
+                            if(valsArray[i].includes('건수') || valsArray[i].includes('사업')) {
+                                const match = valsArray[i].match(/\d+/);
+                                if(match) excelTotalCount = parseInt(match[0], 10);
+                                else if (i+1 < valsArray.length && /^\d+$/.test(valsArray[i+1])) {
+                                    excelTotalCount = parseInt(valsArray[i+1], 10);
+                                }
+                            }
+                        }
+                    }
+
+                    // 수금액 추출
+                    let amountRaw = normRow['수금액'];
+                    if (amountRaw === undefined) {
+                        const aKey = Object.keys(normRow).find(k => k.includes('수금액') && !k.includes('이전') && !k.includes('계획') && !k.includes('목표'));
+                        if (aKey) amountRaw = normRow[aKey];
+                    }
+                    if (amountRaw !== undefined && amountRaw !== null) {
+                        // 마이너스 부호 허용
+                        const numStr = amountRaw.toString().replace(/[^0-9-]/g, '');
+                        if (numStr) {
+                            const parsedAmt = parseInt(numStr, 10);
+                            // 금액 검증 - 마이너스 값도 유효한 합계로 인정
+                            if (!isNaN(parsedAmt)) excelTotalAmount = parsedAmt;
+                        }
+                    }
+                } else {
+                    // 요약행이 아니면 정상 데이터로 배열에 수집
+                    if (rawValuesStr.length > 0) {
+                        validDataRows.push(normRow);
+                    }
+                }
+            });
+
+            // 2단계: 정상 데이터 속성 분석 후 글로벌 배열(analyzedRows)에 저장
+            validDataRows.forEach(normRow => {
+                let projectName = normRow['사업명'] || normRow['용역명'];
+                if (!projectName) { 
+                    const pKey = Object.keys(normRow).find(k => k.includes('사업명') || k.includes('용역명'));
+                    if (pKey) projectName = normRow[pKey];
+                }
+
+                let amountRaw = normRow['수금액'];
+                if (amountRaw === undefined) {
+                    const aKey = Object.keys(normRow).find(k => k.includes('수금액') && !k.includes('이전') && !k.includes('계획'));
+                    if (aKey) amountRaw = normRow[aKey];
+                }
+
+                let dateRaw = normRow['최종수금일'] || normRow['수금일'];
+                if (dateRaw === undefined) {
+                    const dKey = Object.keys(normRow).find(k => k.includes('수금일') || (k.includes('수금') && (k.includes('날짜') || k.includes('일자'))));
+                    if (dKey) dateRaw = normRow[dKey];
+                }
+
+                let dept = normRow['주관부서'] || '';
+                let projNum = normRow['사업번호'] || '';
+
+                if (!projectName) return; 
+
+                const displayName = projNum ? `[${projNum}] ${projectName}` : projectName;
+
+                let amount = 0;
+                if (amountRaw !== undefined && amountRaw !== null) {
+                    const numStr = amountRaw.toString().replace(/[^0-9-]/g, '');
+                    if (numStr) amount = parseInt(numStr, 10);
+                }
+
+                let category = 'domestic';
+                // 수정: 금액이 정확히 0이거나 유효하지 않은 숫자일 때만 미입력으로 처리 (마이너스 제외)
+                if (amount === 0 || isNaN(amount)) {
+                    category = 'uncollected';
+                } else if (!isDomestic(projectName)) {
+                    category = 'overseas';
+                }
+
+                // 분석된 데이터를 배열에 보관
+                analyzedRows.push({
+                    projectName: projectName,
+                    displayName: displayName,
+                    amount: amount,
+                    category: category,
+                    dateRaw: dateRaw,
+                    normDate: normalizeDate(dateRaw),
+                    dept: dept,
+                    projNum: projNum
+                });
+            });
+
+            // 3단계: 화면 렌더링 호출
+            calculateAndRender();
+        });
+
+        // 렌더링 및 합계 계산을 전담하는 함수 (이동 버튼 클릭시에도 재사용됨)
+        function calculateAndRender() {
+            let periodDomestic = 0, periodOverseas = 0;
+            let totalDomestic = 0, totalOverseas = 0;
+            exportData = [];
+
+            const domesticProjectsUI = [];
+            const overseasProjectsUI = [];
+            const uncollectedProjectsUI = [];
+
+            let overallDomesticCount = 0;
+            let overallOverseasCount = 0;
+            let overallUncollectedCount = 0;
+
+            analyzedRows.forEach(row => {
+                // 전체 데이터에 대한 카운트 (무결성 검증을 위해 항상 계산)
+                if (row.category === 'uncollected') overallUncollectedCount++;
+                else if (row.category === 'domestic') overallDomesticCount++;
+                else if (row.category === 'overseas') overallOverseasCount++;
+
+                if (row.category === 'uncollected') {
+                    uncollectedProjectsUI.push(`<li>${row.displayName}</li>`);
+                    return; 
+                }
+                
+                let isInPeriod = true;
+                if (currentStartDate || currentEndDate) {
+                    if (!row.normDate) {
+                        isInPeriod = false; 
+                    } else {
+                        // 문자열 비교가 완벽하게 작동하도록 철저히 정제된 YYYY-MM-DD 상태에서 비교
+                        if (currentStartDate && row.normDate < currentStartDate) isInPeriod = false;
+                        if (currentEndDate && row.normDate > currentEndDate) isInPeriod = false;
+                    }
+                }
+
+                if (row.category === 'domestic') {
+                    totalDomestic += row.amount;
+                    if (isInPeriod) {
+                        periodDomestic += row.amount;
+                        exportData.push({ '주관부서': row.dept, '사업번호': row.projNum, '사업명': row.projectName, '구분': '국내', '수금액': row.amount, '최종수금일': row.dateRaw });
+                        // 기간 내에 포함된 항목만 화면 리스트에 추가 (기존엔 필터 상관없이 다 추가됐었음)
+                        domesticProjectsUI.push(`
+                            <li class="flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
+                                <span class="flex-1 truncate pr-2" title="${row.displayName}">${row.displayName}</span>
+                                <button class="move-btn flex-shrink-0 text-xs bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 px-3 py-1.5 rounded-md shadow-sm font-medium transition-all" data-name="${row.projectName.replace(/"/g, '&quot;')}" data-target="overseas">
+                                    해외로 이동 ➔
+                                </button>
+                            </li>
+                        `);
+                    }
+                } else if (row.category === 'overseas') {
+                    totalOverseas += row.amount;
+                    if (isInPeriod) {
+                        periodOverseas += row.amount;
+                        exportData.push({ '주관부서': row.dept, '사업번호': row.projNum, '사업명': row.projectName, '구분': '해외', '수금액': row.amount, '최종수금일': row.dateRaw });
+                        // 기간 내에 포함된 항목만 화면 리스트에 추가
+                        overseasProjectsUI.push(`
+                            <li class="flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
+                                <span class="flex-1 truncate pr-2" title="${row.displayName}">${row.displayName}</span>
+                                <button class="move-btn flex-shrink-0 text-xs bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 px-3 py-1.5 rounded-md shadow-sm font-medium transition-all" data-name="${row.projectName.replace(/"/g, '&quot;')}" data-target="domestic">
+                                    ➔ 국내로 이동
+                                </button>
+                            </li>
+                        `);
+                    }
+                }
+            });
+
+            // --- 무결성 검증 UI 업데이트 ---
+            // 전체 원본 파일 기반 건수 합산
+            const calcTotalCount = overallDomesticCount + overallOverseasCount + overallUncollectedCount;
+            const calcTotalAmount = totalDomestic + totalOverseas;
+
+            document.getElementById('calcCount').innerText = calcTotalCount;
+            document.getElementById('exCount').innerText = (excelTotalCount !== null) ? excelTotalCount : '식별불가';
+            
+            document.getElementById('calcAmount').innerText = formatMoney(calcTotalAmount);
+            document.getElementById('exAmount').innerText = (excelTotalAmount !== null) ? formatMoney(excelTotalAmount) : '식별불가';
+
+            const countCard = document.getElementById('valCountCard');
+            const countStatus = document.getElementById('valCountStatus');
+            const countMsg = document.getElementById('valCountMsg');
+
+            if (excelTotalCount !== null) {
+                if (calcTotalCount === excelTotalCount) {
+                    countCard.className = 'flex-1 p-5 rounded-lg border border-green-200 bg-green-50 transition-colors duration-300';
+                    countStatus.innerHTML = '<span class="text-green-600">✅ 일치 (정상)</span>';
+                    countMsg.className = 'text-sm mt-3 font-medium text-green-700';
+                    countMsg.innerText = '계산된 건수와 엑셀 하단의 건수가 완벽히 일치합니다.';
+                } else {
+                    countCard.className = 'flex-1 p-5 rounded-lg border border-red-300 bg-red-50 transition-colors duration-300';
+                    countStatus.innerHTML = '<span class="text-red-600">🚨 불일치</span>';
+                    countMsg.className = 'text-sm mt-3 font-medium text-red-700';
+                    const diff = Math.abs(calcTotalCount - excelTotalCount);
+                    countMsg.innerText = `건수가 ${diff}건 차이납니다. 엑셀 원본에 이상이 없는지 확인해주세요!`;
+                }
+            } else {
+                countCard.className = 'flex-1 p-5 rounded-lg border border-gray-200 bg-gray-50';
+                countStatus.innerHTML = '<span class="text-gray-500">❓ 엑셀 요약본 확인불가</span>';
+                countMsg.className = 'text-sm mt-3 font-medium text-gray-500';
+                countMsg.innerText = '엑셀 맨 하단에서 "총 사업건수"를 찾을 수 없습니다.';
+            }
+
+            const amountCard = document.getElementById('valAmountCard');
+            const amountStatus = document.getElementById('valAmountStatus');
+            const amountMsg = document.getElementById('valAmountMsg');
+
+            if (excelTotalAmount !== null) {
+                if (calcTotalAmount === excelTotalAmount) {
+                    amountCard.className = 'flex-1 p-5 rounded-lg border border-green-200 bg-green-50 transition-colors duration-300';
+                    amountStatus.innerHTML = '<span class="text-green-600">✅ 일치 (정상)</span>';
+                    amountMsg.className = 'text-sm mt-3 font-medium text-green-700';
+                    amountMsg.innerText = '모든 수금액 계산이 엑셀 합계와 완벽히 일치합니다.';
+                } else {
+                    amountCard.className = 'flex-1 p-5 rounded-lg border border-red-300 bg-red-50 transition-colors duration-300';
+                    amountStatus.innerHTML = '<span class="text-red-600">🚨 불일치</span>';
+                    amountMsg.className = 'text-sm mt-3 font-medium text-red-700';
+                    const diff = Math.abs(calcTotalAmount - excelTotalAmount);
+                    amountMsg.innerText = `수금액이 ${formatMoney(diff)} 차이납니다. 확인이 필요합니다!`;
+                }
+            } else {
+                amountCard.className = 'flex-1 p-5 rounded-lg border border-gray-200 bg-gray-50';
+                amountStatus.innerHTML = '<span class="text-gray-500">❓ 엑셀 요약본 확인불가</span>';
+                amountMsg.className = 'text-sm mt-3 font-medium text-gray-500';
+                amountMsg.innerText = '엑셀 맨 하단에서 "합계 금액"을 찾을 수 없습니다.';
+            }
+
+            // --- 4단계: 실적 UI 업데이트 ---
+            document.getElementById('periodDomesticSum').innerText = formatMoney(periodDomestic);
+            document.getElementById('periodOverseasSum').innerText = formatMoney(periodOverseas);
+            document.getElementById('periodTotalSum').innerText = formatMoney(periodDomestic + periodOverseas);
+
+            document.getElementById('totalDomesticSum').innerText = formatMoney(totalDomestic);
+            document.getElementById('totalOverseasSum').innerText = formatMoney(totalOverseas);
+            document.getElementById('totalAllSum').innerText = formatMoney(totalDomestic + totalOverseas);
+
+            // 리스트 렌더링
+            document.getElementById('domesticList').innerHTML = domesticProjectsUI.sort().join('');
+            document.getElementById('overseasList').innerHTML = overseasProjectsUI.sort().join('');
+            document.getElementById('uncollectedList').innerHTML = uncollectedProjectsUI.sort().join('');
+
+            document.getElementById('domesticCount').innerText = domesticProjectsUI.length;
+            document.getElementById('overseasCount').innerText = overseasProjectsUI.length;
+            document.getElementById('uncollectedCount').innerText = uncollectedProjectsUI.length;
+
+            document.getElementById('resultsArea').classList.remove('hidden');
+        }
+
+        // 엑셀(CSV) 다운로드
+        document.getElementById('downloadExcelBtn').addEventListener('click', function() {
+            if (exportData.length === 0) {
+                alert('추출할 데이터가 없습니다.');
+                return;
+            }
+
+            const headers = ['주관부서', '사업번호', '사업명', '구분', '수금액', '최종수금일'];
+            let csvContent = '\uFEFF' + headers.join(',') + '\n';
+
+            // 국내와 해외 데이터를 분리
+            const domesticData = exportData.filter(item => item['구분'] === '국내');
+            const overseasData = exportData.filter(item => item['구분'] === '해외');
+
+            let domSum = 0;
+            let ovsSum = 0;
+
+            // 1. 국내 데이터 작성 (상단 배치)
+            if (domesticData.length > 0) {
+                domesticData.forEach(row => {
+                    domSum += row['수금액'];
+                    csvContent += `"${row['주관부서']}","${row['사업번호']}","${row['사업명'].replace(/"/g, '""')}","${row['구분']}",${row['수금액']},"${row['최종수금일']}"\n`;
+                });
+                // 국내 소계 추가 (하단 빈 줄 추가로 깔끔하게)
+                csvContent += `"","","[ 국내 수금액 합계 ]","",${domSum},""\n\n`;
+            }
+
+            // 2. 해외 데이터 작성 (하단 배치)
+            if (overseasData.length > 0) {
+                overseasData.forEach(row => {
+                    ovsSum += row['수금액'];
+                    csvContent += `"${row['주관부서']}","${row['사업번호']}","${row['사업명'].replace(/"/g, '""')}","${row['구분']}",${row['수금액']},"${row['최종수금일']}"\n`;
+                });
+                // 해외 소계 추가
+                csvContent += `"","","[ 해외 수금액 합계 ]","",${ovsSum},""\n\n`;
+            }
+
+            // 3. 전체 합계 작성 (최하단)
+            const totalSum = domSum + ovsSum;
+            csvContent += `"","","[ 총 수금액 전체 합계 ]","",${totalSum},""\n`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `수금실적_기간조회본_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.classList.remove('active', 'text-blue-600', 'text-red-500', 'font-bold');
+                tab.classList.add('text-gray-500');
+            });
+
+            document.getElementById('domesticList').classList.add('hidden');
+            document.getElementById('overseasList').classList.add('hidden');
+            document.getElementById('uncollectedList').classList.add('hidden');
+
+            if (type === 'domestic') {
+                tabs[0].classList.add('active', 'text-blue-600', 'font-bold');
+                tabs[0].classList.remove('text-gray-500');
+                document.getElementById('domesticList').classList.remove('hidden');
+            } else if (type === 'overseas') {
+                tabs[1].classList.add('active', 'text-blue-600', 'font-bold');
+                tabs[1].classList.remove('text-gray-500');
+                document.getElementById('overseasList').classList.remove('hidden');
+            } else if (type === 'uncollected') {
+                tabs[2].classList.add('active', 'text-red-500', 'font-bold');
+                tabs[2].classList.remove('text-gray-500');
+                document.getElementById('uncollectedList').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

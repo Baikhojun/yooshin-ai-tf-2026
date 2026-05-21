@@ -87,9 +87,22 @@ class: text-center
 
 </div>
 
-<div class="mt-10 text-center text-lg opacity-90">
-9시간 뒤, 교육생분 한 분 한 분의 손에<br>
-<span class="text-2xl font-bold text-blue-500">본인 업무를 대신해주는 AI 한 개</span>가 쥐어집니다.
+<div class="mt-8 text-center">
+<span class="text-lg opacity-90">9시간 뒤, 교육생분 한 분 한 분의 손에<br>
+<span class="text-2xl font-bold text-blue-500">본인 업무를 대신해주는 AI 한 개</span>가 쥐어집니다.</span>
+
+<div class="mt-6 text-sm opacity-80">💡 <span class="font-bold">미리보기 — 이런 HTML 도구를 직접 만듭니다</span> (클릭하면 새 탭에서 열립니다)</div>
+
+<div class="grid grid-cols-3 gap-2 mt-3 text-xs max-w-3xl mx-auto">
+<a href="./tools/01-chaksu.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">📄 착수계 자동 작성</a>
+<a href="./tools/02-bid-winner.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">🎯 낙찰자 계산기</a>
+<a href="./tools/03-collection.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">💰 수금액 정리</a>
+<a href="./tools/04-contacts.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">📞 통합 연락처</a>
+<a href="./tools/05-self-eval.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">📊 자체평가 산출기</a>
+<a href="./tools/06-bank-transfer.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">🏦 은행 이체 정리</a>
+</div>
+
+<div class="mt-3 text-xs opacity-60">⚠ 위 예시는 <span class="font-bold">교육용 가공 데이터</span>로만 동작합니다 (개인정보·실거래정보 0건)</div>
 </div>
 
 ---
