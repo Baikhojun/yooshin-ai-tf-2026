@@ -30,7 +30,7 @@ layout: cover
 
 </div>
 
-<div class="text-xl opacity-70 mt-12">
+<div class="text-xl opacity-70 mt-4">
 
 LLM 원리 + <span class="text-yellow-300 font-bold">MD 프롬프트 파일</span>
 
@@ -54,7 +54,7 @@ class: text-center
 
 # 시작 전, 가볍게 손 들어 봅시다 ✋
 
-<div class="text-left mx-auto max-w-2xl mt-8 text-lg">
+<div class="text-left mx-auto mt-3 text-lg">
 
 <v-clicks>
 
@@ -70,7 +70,7 @@ class: text-center
 
 </div>
 
-<div v-click class="mt-10 text-base opacity-80">
+<div v-click class="mt-3 text-base opacity-80">
 ④에 손 든 사람이 0~1명이라면 — <span class="text-yellow-500 font-bold">이 교육이 바로 여러분을 위한 것</span>입니다.
 </div>
 
@@ -88,13 +88,13 @@ class: text-center
 
 </div>
 
-<div class="mt-8 text-center">
+<div class="mt-3 text-center">
 <span class="text-lg opacity-90">9시간 뒤, 교육생분 한 분 한 분의 손에<br>
 <span class="text-2xl font-bold text-blue-500">본인 업무를 대신해주는 AI 한 개</span>가 쥐어집니다.</span>
 
 <div class="mt-6 text-sm opacity-80">💡 <span class="font-bold">미리보기 — 이런 HTML 도구를 직접 만듭니다</span> (클릭하면 새 탭에서 열립니다)</div>
 
-<div class="grid grid-cols-3 gap-2 mt-3 text-xs max-w-3xl mx-auto">
+<div class="grid grid-cols-3 gap-2 mt-2 text-xs mx-auto">
 <a href="./tools/01-chaksu.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">📄 착수계 자동 작성</a>
 <a href="./tools/02-bid-winner.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">🎯 낙찰자 계산기</a>
 <a href="./tools/03-collection.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">💰 수금액 정리</a>
@@ -110,7 +110,7 @@ class: text-center
 
 # 본 교육이 *하지 않는* 일 🚫
 
-<div class="grid grid-cols-1 gap-4 mt-8 text-lg">
+<div class="grid grid-cols-1 gap-3 mt-3 text-lg">
 
 <v-clicks>
 
@@ -152,22 +152,20 @@ class: text-center
 
 </div>
 
-<div class="mt-8 text-center text-lg">
+<div class="mt-3 text-center text-lg">
 모두 <span class="text-blue-500 font-bold">이미 갖고 계시거나 무료로 쓸 수 있는 것</span>.<br>
 <span class="opacity-70 text-base">새 프로그램 설치 없음. 카톡으로 사진 보내는 것보다 쉬워요.</span>
 </div>
 
 ---
-layout: center
----
 
 # ⭐ 1회차 목표 — 오늘 끝나면 이걸 할 수 있다
 
-<div class="grid grid-cols-2 gap-4 mt-8 max-w-5xl">
+<div class="grid grid-cols-2 gap-3 mt-2">
 
 <v-clicks>
 
-<div class="p-5 rounded-xl bg-blue-50 border-2 border-blue-300">
+<div class="p-4 rounded-xl bg-blue-50 border-2 border-blue-300">
 
 **① AI가 왜 그런 답을 하는지 *설명할 수 있다*** 💡
 
@@ -175,7 +173,7 @@ layout: center
 
 </div>
 
-<div class="p-5 rounded-xl bg-purple-50 border-2 border-purple-300">
+<div class="p-4 rounded-xl bg-purple-50 border-2 border-purple-300">
 
 **② AI에게 줄 글을 *마크다운으로* 정리** ✍️
 
@@ -183,7 +181,7 @@ layout: center
 
 </div>
 
-<div class="p-5 rounded-xl bg-yellow-50 border-2 border-yellow-400">
+<div class="p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400">
 
 **③ ⭐ 본인 업무용 *MD 프롬프트 파일* 뼈대** 📂
 
@@ -191,7 +189,7 @@ layout: center
 
 </div>
 
-<div class="p-5 rounded-xl bg-green-50 border-2 border-green-300">
+<div class="p-4 rounded-xl bg-green-50 border-2 border-green-300">
 
 **④ 본인 업무에서 *자동화 후보 3개*** 🎯
 
@@ -204,13 +202,12 @@ layout: center
 </div>
 
 ---
-layout: center
 class: text-center
 ---
 
 # 1회차의 진짜 성공 장면 🎬
 
-<div class="text-left bg-gray-900 text-green-300 p-6 rounded-xl font-mono text-sm leading-relaxed max-w-2xl mx-auto mt-6">
+<div class="text-left bg-gray-900 text-green-300 p-4 rounded-xl font-mono text-sm leading-relaxed mx-auto mt-2">
 
 ```
 🗓 다음 달 첫 출근일 아침 9시
@@ -273,7 +270,7 @@ layout: statement
 
 </div>
 
-<div class="mt-10 text-base opacity-80">
+<div class="mt-3 text-base opacity-80">
 강사가 시연할 때 <span class="font-bold">교육생분도 같이 클릭</span>해 보는 것이 가장 빠른 학습입니다.<br>
 가만히 듣기만 하면 — *내일 출근하면 다 잊습니다*.
 </div>
@@ -313,7 +310,7 @@ layout: section
 
 </div>
 
-<div class="mt-8 text-center text-xl">
+<div class="mt-3 text-center text-xl">
 같은 사진이라도 <span class="text-blue-500 font-bold">설명(맥락)이 달라지면</span><br>AI의 추측이 완전히 달라져요 — 상품은 없어요 😄
 </div>
 
@@ -321,7 +318,7 @@ layout: section
 
 # 🐟 A 사물 — 이건 뭘까요?
 
-<div class="grid grid-cols-2 gap-5 mt-2 items-stretch">
+<div class="grid grid-cols-2 gap-3 mt-2 items-stretch">
 
 <div class="flex items-center">
 <img src="/icebreaker-fish.jpg" class="icebreaker-img rounded-xl shadow-2xl" />
@@ -351,7 +348,7 @@ layout: section
 
 # 🌊 B 사물 — 이건 뭘까요?
 
-<div class="grid grid-cols-2 gap-5 mt-2 items-stretch">
+<div class="grid grid-cols-2 gap-3 mt-2 items-stretch">
 
 <div class="flex items-center">
 <img src="/icebreaker-bridge.jpg" class="icebreaker-img rounded-xl shadow-2xl" />
@@ -421,26 +418,25 @@ layout: section
 
 
 ---
-layout: center
 class: text-center
 ---
 
 # 🤖 AI는 다음 단어를 예측하는 자동완성 엔진
 
-<div class="text-2xl mt-12 leading-relaxed">
+<div class="text-2xl mt-3 leading-relaxed">
 
 AI는 *의미를 이해해서 답하는 것*이 <span class="text-red-500">아닙니다</span>.
 
 </div>
 
-<div class="text-2xl mt-6 leading-relaxed">
+<div class="text-2xl mt-3 leading-relaxed">
 
 여러분이 쓴 글의<br>
 **다음에 올 가장 그럴듯한 단어를 예측해서 이어 붙이는 엔진**이에요.
 
 </div>
 
-<div class="text-2xl mt-8 leading-relaxed">
+<div class="text-2xl mt-3 leading-relaxed">
 🎯 그래서 — <span class="text-blue-500 font-bold">앞에 뭘 써 주느냐</span>가 모든 것을 결정합니다.
 </div>
 
@@ -744,26 +740,25 @@ AI는 단어를 **별자리**처럼 본다<br>
 </div>
 
 ---
-layout: center
 class: text-center
 ---
 
 # ✨ AI는 단어를 별자리로 본다
 
-<div class="text-xl mt-10 leading-relaxed max-w-3xl mx-auto">
+<div class="text-xl mt-3 leading-relaxed mx-auto">
 
 엑셀의 **VLOOKUP**은 글자가 *완벽히 일치*해야 매칭합니다.
 
 </div>
 
-<div class="text-xl mt-6 leading-relaxed max-w-3xl mx-auto">
+<div class="text-xl mt-3 leading-relaxed mx-auto">
 
 AI는 다릅니다.<br>
 AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅니다.
 
 </div>
 
-<div class="text-lg mt-8 opacity-90 max-w-3xl mx-auto">
+<div class="text-lg mt-3 opacity-90 mx-auto">
 비슷한 의미는 <span class="text-yellow-500 font-bold">가까이</span>, 다른 의미는 <span class="text-gray-500 font-bold">멀리</span><br>
 글자 하나가 달라도 **같은 무리**로 인식.
 </div>
@@ -772,7 +767,7 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 # 🎮 함께 체험 — "꼬맨틀" (의미 거리 게임)
 
-<div class="grid grid-cols-[1fr_1fr] gap-6 mt-3 items-center">
+<div class="grid grid-cols-[1fr_1fr] gap-4 mt-2 items-center">
 
 <div class="text-lg">
 
@@ -815,7 +810,7 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="text-center mt-2 text-base opacity-80">"휴가" 주변에 어떤 단어들이 모여 있을까요?</div>
 
-<div class="font-mono text-sm bg-gray-900 text-green-300 p-6 rounded-xl mt-6 leading-loose">
+<div class="font-mono text-sm bg-gray-900 text-green-300 p-4 rounded-xl mt-3 leading-loose">
 
 ```
                   📚 휴직
@@ -908,7 +903,7 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="text-base opacity-80 mb-4">교육생분이 자주 빠지는 함정 №1</div>
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-3">
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
@@ -1088,29 +1083,28 @@ AI는 **새 대화창을 열 때마다**<br>
 </div>
 
 ---
-layout: center
 class: text-center
 ---
 
 # 👶 AI는 매일 첫!! 출근하는 신입사원
 
-<div class="text-xl mt-8 leading-relaxed max-w-3xl mx-auto">
+<div class="text-xl mt-3 leading-relaxed mx-auto">
 
 어제 AI에게 **우리 회사 회의록 양식**을 알려줬어도,
 
 </div>
 
-<div class="text-xl mt-5 leading-relaxed max-w-3xl mx-auto">
+<div class="text-xl mt-2 leading-relaxed mx-auto">
 
 오늘 **새 대화창**을 열면 — AI는 <span class="text-red-500 font-bold">하나도 기억 못 합니다</span>.
 
 </div>
 
-<div class="text-2xl mt-8 font-bold">
+<div class="text-2xl mt-3 font-bold">
 어제 알려준 것 = 전부 사라짐 🌬️
 </div>
 
-<div class="text-lg mt-8 opacity-80">
+<div class="text-lg mt-3 opacity-80">
 → 그래서 우리는 <span class="text-blue-500 font-bold">"MD 파일"</span>이라는 도구를 만듭니다 (3교시 핵심)
 </div>
 
@@ -1125,7 +1119,7 @@ class: text-center
 | ✅ 발언자 표기 규칙 알려줌 | ❌ 규칙 없음 |
 | → **완벽한 회의록** 결과 | → *위키백과처럼 어색한* 결과 |
 
-<div class="mt-8 text-center text-xl">
+<div class="mt-3 text-center text-xl">
 🧠 AI가 *바보가 된 게* 아닙니다.<br>
 <span class="text-blue-500 font-bold">그냥 어제의 기억이 통째로 사라진 것</span>.
 </div>
@@ -1134,7 +1128,7 @@ class: text-center
 
 # 자주 하는 착각 — "어제는 잘 됐는데?" 🤔
 
-<div class="text-center text-2xl mt-10 leading-relaxed space-y-5">
+<div class="text-center text-2xl mt-3 leading-relaxed space-y-3">
 
 <v-clicks>
 
@@ -1150,7 +1144,7 @@ class: text-center
 
 </div>
 
-<div v-click class="mt-12 p-6 rounded-xl bg-yellow-50 border-2 border-yellow-400 text-center">
+<div v-click class="mt-4 p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400 text-center">
 
 → 아닙니다. **새 채팅을 여셨거나, 시간이 너무 지났거나, 다른 대화에서 작업한 것**입니다.<br>
 → AI의 *기억력*은 본인 머리로 따라가지 마세요. <span class="font-bold">항상 0이라고 가정</span>하세요.
@@ -1213,7 +1207,7 @@ class: text-center
 
 # 📋 클립보드 워크플로우 — 이번 교육의 *기본기*
 
-<div class="font-mono bg-gray-900 text-green-300 p-6 rounded-xl mt-6 text-lg leading-loose text-center">
+<div class="font-mono bg-gray-900 text-green-300 p-4 rounded-xl mt-3 text-lg leading-loose text-center">
 
 ```
 1️⃣  원본 데이터를 클립보드에 복사
@@ -1227,7 +1221,7 @@ class: text-center
 
 </div>
 
-<div class="mt-8 text-center text-lg">
+<div class="mt-3 text-center text-lg">
 도구가 ChatGPT든 Gemini든 — <span class="text-blue-500 font-bold">이 4단계는 살아남습니다</span>
 </div>
 
@@ -1264,26 +1258,25 @@ layout: section
 </div>
 
 ---
-layout: center
 class: text-center
 ---
 
 # 🎯 MD 파일은 *AI에게 같은 일을 매번 시키는 도구*
 
-<div class="text-xl mt-10 leading-relaxed max-w-3xl mx-auto">
+<div class="text-xl mt-3 leading-relaxed mx-auto">
 
 한 번 만들어 두면 —
 
 </div>
 
-<div class="text-2xl mt-6 leading-relaxed max-w-3xl mx-auto font-bold">
+<div class="text-2xl mt-3 leading-relaxed mx-auto font-bold">
 
 다음 달도, 그 다음 달도,<br>
 다음 분기도, 부서 이동을 해도
 
 </div>
 
-<div class="text-3xl mt-8 font-bold">
+<div class="text-3xl mt-3 font-bold">
 🎉 <span class="text-blue-500">복사 한 번에 같은 결과</span>
 </div>
 
@@ -1601,7 +1594,7 @@ class: text-center
 
 </div>
 
-<div class="mt-8 text-center text-lg">
+<div class="mt-3 text-center text-lg">
 📸 이 한 장의 표가 1회차에서 <span class="text-blue-500 font-bold">교육생분이 가져가는 가장 큰 인사이트</span>
 </div>
 
@@ -1759,7 +1752,7 @@ layout: section
 
 </div>
 
-<div v-click class="mt-8 text-center text-lg">
+<div v-click class="mt-3 text-center text-lg">
 🧳 손에는 **MD 파일 2개**(업무 1 + 개인 1) — 다음 회차로 가져가는 첫 자산
 </div>
 
