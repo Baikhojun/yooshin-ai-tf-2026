@@ -93,3 +93,45 @@
   font-size: 1.1em;
   line-height: 1.6;
 }
+
+/* 아이스브레이커 이미지 — 슬라이드 높이에 맞춤 */
+.slidev-layout img.icebreaker-img {
+  width: 100%;
+  height: min(52vh, 420px);
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 좋은 프롬프트 슬라이드 — 코드·결과 한 줄 배치 */
+.slidev-layout .prompt-row {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 0.75rem;
+  align-items: stretch;
+  margin-top: 0.5rem;
+}
+
+.slidev-layout .prompt-row pre {
+  font-size: 0.62em !important;
+  line-height: 1.35 !important;
+  padding: 0.6em 0.8em !important;
+  margin: 0 !important;
+  max-height: min(58vh, 480px);
+  overflow: hidden;
+}
+
+.slidev-layout .prompt-result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  background: #ecfdf5;
+  border-left: 4px solid #22c55e;
+  font-size: 0.95em;
+  line-height: 1.45;
+}
+
+.dark .slidev-layout .prompt-result {
+  background: #14532d;
+}
