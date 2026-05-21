@@ -1,9 +1,9 @@
-/* Slidev 전역 스타일 — 폰트 크기 ↑ · 여백 ↓ */
+/* Slidev 전역 스타일 — 폰트 크기 ↑↑ · 여백 ↓ */
 
 /* 기본 본문 폰트 크기 키우기 (default 슬라이드 기준) */
 .slidev-layout {
-  font-size: 1.15em;
-  padding: 2rem 3rem !important;
+  font-size: 1.35em;
+  padding: 1.4rem 2.4rem !important;
 }
 
 /* cover/section/statement는 그대로 (이미 큰 글씨) */
@@ -11,41 +11,51 @@
 .slidev-layout.section,
 .slidev-layout.statement,
 .slidev-layout.center {
-  padding: 2rem 3rem !important;
+  padding: 1.6rem 2.8rem !important;
 }
 
 /* 헤딩 좀 더 크게 */
 .slidev-layout h1 {
-  font-size: 2.4em;
-  line-height: 1.2;
-  margin-bottom: 0.5em;
+  font-size: 2.6em;
+  line-height: 1.15;
+  margin-bottom: 0.45em;
 }
 
 .slidev-layout h2 {
-  font-size: 1.8em;
-  line-height: 1.25;
+  font-size: 1.95em;
+  line-height: 1.2;
+  margin-top: 0.6em;
+  margin-bottom: 0.35em;
 }
 
 .slidev-layout h3 {
-  font-size: 1.4em;
-  line-height: 1.3;
+  font-size: 1.5em;
+  line-height: 1.25;
+  margin-top: 0.5em;
+  margin-bottom: 0.3em;
 }
 
 /* 표 폰트 크기 ↑ */
 .slidev-layout table {
-  font-size: 1em;
+  font-size: 1.05em;
 }
 
 .slidev-layout table th,
 .slidev-layout table td {
-  padding: 0.5em 0.7em;
+  padding: 0.45em 0.65em;
 }
 
 /* 목록 줄 간격 ↓ */
 .slidev-layout ul li,
 .slidev-layout ol li {
-  margin: 0.2em 0;
+  margin: 0.15em 0;
   line-height: 1.45;
+}
+
+/* 단락 줄 간격 살짝 압축 */
+.slidev-layout p {
+  margin: 0.4em 0;
+  line-height: 1.5;
 }
 
 /* 코드블록 폰트 살짝만 키움 (너무 크면 줄이 잘림) */
@@ -56,19 +66,30 @@
 }
 
 /* mt 유틸 클래스 압축 */
-.slidev-layout .mt-12 { margin-top: 1.5rem !important; }
-.slidev-layout .mt-10 { margin-top: 1.2rem !important; }
-.slidev-layout .mt-8 { margin-top: 1rem !important; }
-.slidev-layout .mt-6 { margin-top: 0.8rem !important; }
-.slidev-layout .mt-4 { margin-top: 0.6rem !important; }
+.slidev-layout .mt-12 { margin-top: 1.2rem !important; }
+.slidev-layout .mt-10 { margin-top: 1.0rem !important; }
+.slidev-layout .mt-8 { margin-top: 0.8rem !important; }
+.slidev-layout .mt-6 { margin-top: 0.6rem !important; }
+.slidev-layout .mt-4 { margin-top: 0.45rem !important; }
+.slidev-layout .mt-3 { margin-top: 0.35rem !important; }
+.slidev-layout .mt-2 { margin-top: 0.25rem !important; }
 
 /* 강조 박스(p-4·p-5) 여백 축소 */
-.slidev-layout .p-5 { padding: 0.8rem !important; }
-.slidev-layout .p-4 { padding: 0.7rem !important; }
-.slidev-layout .p-3 { padding: 0.5rem !important; }
+.slidev-layout .p-5 { padding: 0.7rem !important; }
+.slidev-layout .p-4 { padding: 0.6rem !important; }
+.slidev-layout .p-3 { padding: 0.45rem !important; }
+
+/* 텍스트 유틸 크기 (Tailwind 보강) */
+.slidev-layout .text-xs { font-size: 0.85em !important; }
+.slidev-layout .text-sm { font-size: 0.95em !important; }
+.slidev-layout .text-base { font-size: 1.05em !important; }
+.slidev-layout .text-lg { font-size: 1.2em !important; }
+.slidev-layout .text-xl { font-size: 1.35em !important; }
+.slidev-layout .text-2xl { font-size: 1.6em !important; }
+.slidev-layout .text-3xl { font-size: 1.9em !important; }
 
 /* 발표자 모드 노트 본문 폰트 ↑ */
 .slidev-presenter-notes {
-  font-size: 1.05em;
-  line-height: 1.55;
+  font-size: 1.1em;
+  line-height: 1.6;
 }
