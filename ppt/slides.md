@@ -1153,45 +1153,45 @@ class: text-center slide-hero
 
 # 대응 전략 3가지 ⚙️
 
-<div class="slide-fill">
+<div class="slide-fill slide-strategy-fill">
 
-<div class="grid grid-cols-1 gap-3 mt-2">
+<div class="slide-strategy-list mt-2">
 
 <v-clicks>
 
-<div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500">
+<div class="slide-strategy-card p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500">
 
 ① 자주 쓰는 맥락을 텍스트 파일로 저장 ← <span class="text-red-500 font-bold">이게 곧 MD 프롬프트 파일!</span>
 
-<div class="text-sm opacity-80 mt-1">3교시 본론에서 정식 다룸 — 본 교육의 핵심</div>
+<div class="slide-strategy-sub opacity-80 mt-1">3교시 본론에서 정식 다룸 — 본 교육의 핵심</div>
 
 </div>
 
-<div class="p-3 rounded-lg bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500">
+<div class="slide-strategy-card slide-strategy-card-tall p-3 rounded-lg bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500">
 
 ② AI 도구에 맥락을 등록 (요즘 무료로 가능)
 
-<div class="text-sm opacity-80 mt-1 grid grid-cols-2 gap-2">
+<div class="slide-strategy-sub opacity-80 mt-1 grid grid-cols-2 gap-2">
 
 <div>
 🔵 <span class="font-bold">Gemini Gems</span> (제미나이)<br>
-<span class="text-xs">→ "회의록 정리 전용 봇" 등으로 미리 만들어 두기</span>
+<span class="slide-strategy-note">→ "회의록 정리 전용 봇" 등으로 미리 만들어 두기</span>
 </div>
 
 <div>
 🟢 <span class="font-bold">ChatGPT GPTs</span> (GPT)<br>
-<span class="text-xs">→ 본인 전용 맞춤 GPT를 만들어 동료에게도 공유 가능</span>
+<span class="slide-strategy-note">→ 본인 전용 맞춤 GPT를 만들어 동료에게도 공유 가능</span>
 </div>
 
 </div>
 
 </div>
 
-<div class="p-3 rounded-lg bg-green-50 dark:bg-green-900 border-l-4 border-green-500">
+<div class="slide-strategy-card p-3 rounded-lg bg-green-50 dark:bg-green-900 border-l-4 border-green-500">
 
 ③ 재사용 가능한 프롬프트 한 덩어리 만들기
 
-<div class="text-sm opacity-80 mt-1">회사 맥락 + 역할 + 출력 형식 = 한 번에 묶어서 복사 (=MD 프롬프트)</div>
+<div class="slide-strategy-sub opacity-80 mt-1">회사 맥락 + 역할 + 출력 형식 = 한 번에 묶어서 복사 (=MD 프롬프트)</div>
 
 </div>
 
@@ -1199,7 +1199,7 @@ class: text-center slide-hero
 
 </div>
 
-<div v-click class="slide-fill-bottom text-center text-base">
+<div v-click class="slide-fill-bottom slide-strategy-foot text-center text-base">
 🔮 ①번 = 오늘의 핵심. ②번은 익숙해진 다음에 천천히 도전하세요.
 </div>
 
