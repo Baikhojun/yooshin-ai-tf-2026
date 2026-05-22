@@ -18,7 +18,14 @@ const dots = computed(() => {
   const total = props.config.total ?? 0
   const step = props.config.step ?? 0
   if (!total || !step) return ''
-  return Array.from({ length: total }, (_, i) => (i + 1 === step ? '●' : '○')).join(' ')
+  return Array.from({ length: total }, (_, i) => (i + 1 === step ? '●' : '○')).join('')
+})
+
+const stepLabel = computed(() => {
+  const total = props.config.total ?? 0
+  const step = props.config.step ?? 0
+  if (!total || !step) return ''
+  return `${step}/${total}`
 })
 </script>
 
@@ -34,6 +41,7 @@ const dots = computed(() => {
     </div>
     <div v-if="config.topic" class="slide-nav-right">
       <span class="slide-nav-topic">{{ config.topic }}</span>
+      <span v-if="config.total" class="slide-nav-step">{{ stepLabel }}</span>
       <span v-if="config.total" class="slide-nav-dots">{{ dots }}</span>
     </div>
   </nav>

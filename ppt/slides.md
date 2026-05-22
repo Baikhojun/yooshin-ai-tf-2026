@@ -1159,7 +1159,9 @@ class: text-center slide-hero
 
 # 대응 전략 3가지 ⚙️
 
-<div class="grid grid-cols-1 gap-3 mt-3">
+<div class="slide-fill">
+
+<div class="grid grid-cols-1 gap-3 mt-2">
 
 <v-clicks>
 
@@ -1203,15 +1205,19 @@ class: text-center slide-hero
 
 </div>
 
-<div v-click class="mt-4 text-center text-base">
+<div v-click class="slide-fill-bottom text-center text-base">
 🔮 **①번 = 오늘의 핵심**. ②번은 익숙해진 다음에 천천히 도전하세요.
+</div>
+
 </div>
 
 ---
 
 # 📋 클립보드 워크플로우 — 이번 교육의 *기본기*
 
-<div class="font-mono bg-gray-900 text-green-300 p-4 rounded-xl mt-3 text-lg leading-loose text-center">
+<div class="slide-fill">
+
+<div class="font-mono bg-gray-900 text-green-300 p-4 rounded-xl mt-2 text-lg leading-loose text-center">
 
 ```
 1️⃣  원본 데이터를 클립보드에 복사
@@ -1229,8 +1235,10 @@ class: text-center slide-hero
 도구가 ChatGPT든 Gemini든 — <span class="text-blue-500 font-bold">이 4단계는 살아남습니다</span>
 </div>
 
-<div class="mt-4 text-center text-sm opacity-70">
+<div class="slide-fill-bottom text-center text-sm opacity-70">
 ⚠️ 교육생분의 70%는 *2단계*에서 *맥락*을 빼먹습니다. 오늘 그 습관을 고치는 게 목표.
+</div>
+
 </div>
 
 ---
@@ -1418,7 +1426,9 @@ class: text-center slide-hero
 
 # ⭐ 6개 영역 — 표준 템플릿
 
-<div class="grid grid-cols-2 gap-3 mt-2 text-sm">
+<div class="slide-fill">
+
+<div class="grid grid-cols-2 gap-3 mt-1 text-sm">
 
 <div>
 
@@ -1461,11 +1471,12 @@ class: text-center slide-hero
 | **[예시]** | *모범 답안* |
 | **[데이터]** | *오늘치 입력* |
 
-<div class="mt-4 p-2 bg-blue-50 rounded text-xs">
-💡 6칸을 한 번만 잘 채워두면<br>
-[데이터]만 갈아 끼우는 일이 <span class="font-bold">평생 반복</span>됩니다
 </div>
 
+</div>
+
+<div class="slide-fill-bottom p-2 bg-blue-50 dark:bg-blue-900 rounded text-center text-sm">
+💡 6칸을 한 번만 잘 채워두면 [데이터]만 갈아 끼우는 일이 <span class="font-bold">평생 반복</span>됩니다
 </div>
 
 </div>
@@ -1559,7 +1570,9 @@ class: text-center slide-hero
 
 # 교육생분이 빠지기 쉬운 *함정 3가지* 🪤
 
-<div class="grid grid-cols-1 gap-3 mt-6">
+<div class="slide-fill">
+
+<div class="grid grid-cols-1 gap-3 mt-2">
 
 <v-clicks>
 
@@ -1591,11 +1604,15 @@ class: text-center slide-hero
 
 </div>
 
+</div>
+
 ---
 
 # 💎 1회차에서 가져가는 *가장 중요한 표*
 
-<div class="mt-4">
+<div class="slide-fill">
+
+<div class="mt-2">
 
 | 비교 항목 | 평범한 메모 | **MD 프롬프트 파일** |
 |---------|-----------|---------------------|
@@ -1607,8 +1624,10 @@ class: text-center slide-hero
 
 </div>
 
-<div class="mt-3 text-center text-lg">
+<div class="slide-fill-bottom text-center text-lg">
 📸 이 한 장의 표가 1회차에서 <span class="text-blue-500 font-bold">교육생분이 가져가는 가장 큰 인사이트</span>
+</div>
+
 </div>
 
 ---
