@@ -250,7 +250,7 @@
 
 /* 2p 아이스브레이커 — 목록이 길어 화면에 맞게 조금 더 작게 */
 .slidev-layout.center:has(.slide-q-list) h1 {
-  font-size: 2.45em !important;
+  font-size: 2.2em !important;
   margin-bottom: 0.25em !important;
 }
 
@@ -258,7 +258,7 @@
 .slidev-layout.center .slide-q-list p {
   display: inline-block;
   text-align: left;
-  font-size: 1.42em !important;
+  font-size: 1.2em !important;
   line-height: 1.46 !important;
   max-width: 820px;
   margin: 0 auto;
