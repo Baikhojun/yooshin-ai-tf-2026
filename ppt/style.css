@@ -374,6 +374,48 @@
   font-size: 0.95em !important;
 }
 
+/* 6p 1회차 목표 — ①~④ 세로 4칸·높이 2배·글자 확대 */
+[data-slidev-no="6"] .slidev-layout h1 {
+  font-size: 1.35em !important;
+  margin-bottom: 0.1em !important;
+}
+
+.slidev-layout .slide-goals-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+  margin-top: 0.25rem !important;
+  font-size: 1.18em !important;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slidev-layout .slide-goals-list > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+  width: 100%;
+}
+
+.slidev-layout .slide-goals-list .slide-goals-card {
+  padding: 1.1rem 1.45rem !important;
+  min-height: 6.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.1em !important;
+  line-height: 1.44 !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.slidev-layout .slide-goals-list .slide-goals-sub {
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+  margin-top: 0.35em !important;
+}
+
 /* 2p 아이스브레이커 — ①~④(1.05em) 대비 하단 안내 80% 통일 */
 .slidev-layout.center.slide-icebreaker:not(.break-slide):not(.thanks-slide),
 .slidev-layout.center:has(.slide-q-list):not(.break-slide):not(.thanks-slide) {

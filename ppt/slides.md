@@ -175,39 +175,39 @@ class: text-center slide-icebreaker
 
 # ⭐ 1회차 목표 — 오늘 끝나면 이걸 할 수 있다
 
-<div class="grid grid-cols-2 gap-3 mt-2">
+<div class="slide-goals-list mt-2">
 
 <v-clicks>
 
-<div class="p-4 rounded-xl bg-blue-50 border-2 border-blue-300">
+<div class="slide-goals-card p-4 rounded-xl bg-blue-50 border-2 border-blue-300">
 
 **① AI가 왜 그런 답을 하는지 설명할 수 있다** 💡
 
-<div class="text-xs opacity-70 mt-2">친구가 "ChatGPT 별 거 없던데?" → "맥락을 안 줘서 그래" 한 마디</div>
+<div class="slide-goals-sub opacity-70 mt-2">친구가 "ChatGPT 별 거 없던데?" → "맥락을 안 줘서 그래" 한 마디</div>
 
 </div>
 
-<div class="p-4 rounded-xl bg-purple-50 border-2 border-purple-300">
+<div class="slide-goals-card p-4 rounded-xl bg-purple-50 border-2 border-purple-300">
 
 **② AI에게 줄 글을 마크다운으로 정리** ✍️
 
-<div class="text-xs opacity-70 mt-2">`#`, `-`, `**`, 표, 코드블록 — 5분이면 배움</div>
+<div class="slide-goals-sub opacity-70 mt-2">`#`, `-`, `**`, 표, 코드블록 — 5분이면 배움</div>
 
 </div>
 
-<div class="p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400">
+<div class="slide-goals-card p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400">
 
 **③ ⭐ 본인 업무용 MD 프롬프트 파일 뼈대** 📂
 
-<div class="text-xs opacity-70 mt-2">`회의록_정리.md` 같은 파일 1개 — 다음 달에도 **복사** 한 번</div>
+<div class="slide-goals-sub opacity-70 mt-2">`회의록_정리.md` 같은 파일 1개 — 다음 달에도 **복사** 한 번</div>
 
 </div>
 
-<div class="p-4 rounded-xl bg-green-50 border-2 border-green-300">
+<div class="slide-goals-card p-4 rounded-xl bg-green-50 border-2 border-green-300">
 
 **④ 본인 업무에서 자동화 후보 3개** 🎯
 
-<div class="text-xs opacity-70 mt-2">2회차에 도구로 만들 **재료**</div>
+<div class="slide-goals-sub opacity-70 mt-2">2회차에 도구로 만들 **재료**</div>
 
 </div>
 
