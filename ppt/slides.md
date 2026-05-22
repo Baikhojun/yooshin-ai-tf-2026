@@ -49,29 +49,43 @@ LLM 원리 + <span class="cover-accent">MD 프롬프트 파일</span>
 
 ---
 layout: center
-class: text-center
+class: text-center slide-icebreaker
 ---
 
 # 시작 전, 가볍게 손 들어 봅시다 ✋
 
-<div class="text-left mx-auto mt-3 text-lg">
+<div class="slide-q-list">
 
 <v-clicks>
 
-**①** 오늘 아침까지 **ChatGPT 또는 Gemini를 켜 본 분?**
+**①** 오늘 아침까지 **ChatGPT 또는 Gemini를 켜 본 분?** — *손 들어 보세요*
 
-**②** AI에게 시킬 때 *"어떻게 물어야 잘 답할까"* 를 **5초 이상 고민해 본 분?**
+**②** AI에게 시킬 때 *"어떻게 물어야 잘 답할까"* 를 **5초 이상 고민해 본 분?** — *손 들어 보세요*
 
-**③** AI 답변이 *마음에 안 들어서* **그냥 창을 닫아본 분?**
+**③** AI 답변이 *마음에 안 들어서* **그냥 창을 닫아본 분?** — *손 들어 보세요*
 
-**④** **본인 업무에 AI를 *매일* 쓰고 있는 분?**
+**④** **본인 업무에 AI를 *매일* 쓰고 있는 분?** — *손 들어 보세요*
 
 </v-clicks>
 
 </div>
 
-<div v-click class="mt-3 text-base opacity-80">
-④에 손 든 사람이 0~1명이라면 — <span class="text-yellow-500 font-bold">이 교육이 바로 여러분을 위한 것</span>입니다.
+<div v-click class="slide-focus-note">
+
+💡 **오늘 교육 대상을 가르는 건 ④번뿐** — "업무에 AI를 *매일* 쓰고 있나요?"
+
+<div class="slide-focus-sub mt-3">
+
+**④에 손을 <span class="font-bold">안 든 분</span>이 대부분**이면 → <span class="text-yellow-500 font-bold">이 교육은 바로 여러분을 위한 것</span>입니다.
+
+</div>
+
+<div class="slide-focus-sub mt-2 opacity-90">
+
+①~③은 손 든 분·안 든 분 **모두 환영** — AI를 써 본 적이 있어도 오늘 배울 게 있습니다.
+
+</div>
+
 </div>
 
 ---
@@ -253,25 +267,26 @@ class: text-center slide-hero
 
 ---
 layout: statement
+class: text-center slide-statement
 ---
 
 # 두 가지 부탁 🙏
 
-<div class="text-xl mt-6 leading-relaxed">
+<div class="slide-statement-block">
 
-📵 **스마트폰**은 <span class="text-yellow-400 font-bold">가방 안</span>에,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;반드시 <span class="text-yellow-400 font-bold">무음·진동 OFF</span>로 부탁드립니다.
-
-</div>
-
-<div class="text-xl mt-6 leading-relaxed">
-
-💻 **실습용 PC**는 <span class="text-yellow-400 font-bold">전원 ON · 브라우저 열기</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;손에 <span class="text-yellow-400 font-bold">마우스를 쥔 채로</span> 들어주세요.
+📵 **스마트폰**은 <span class="text-yellow-500 font-bold">가방 안</span>에,<br>
+반드시 <span class="text-yellow-500 font-bold">무음·진동 OFF</span>로 부탁드립니다.
 
 </div>
 
-<div class="mt-3 text-base opacity-80">
+<div class="slide-statement-block">
+
+💻 **실습용 PC**는 <span class="text-yellow-500 font-bold">전원 ON · 브라우저 열기</span>,<br>
+손에 <span class="text-yellow-500 font-bold">마우스를 쥔 채로</span> 들어주세요.
+
+</div>
+
+<div class="slide-statement-note">
 강사가 시연할 때 <span class="font-bold">교육생분도 같이 클릭</span>해 보는 것이 가장 빠른 학습입니다.<br>
 가만히 듣기만 하면 — *내일 출근하면 다 잊습니다*.
 </div>
@@ -717,14 +732,14 @@ class: text-center break-slide
 
 # ☕ 휴식 10분
 
-<div class="text-xl mt-10 opacity-90 leading-relaxed">
+<div class="slide-break-body">
 
 2교시 예고<br>
 **별자리처럼 분류(의미공간)** + **대화마다 리셋되는 기억**
 
 </div>
 
-<div class="text-6xl mt-12">⏰</div>
+<div class="slide-break-icon">⏰</div>
 
 ---
 layout: section
@@ -1248,14 +1263,14 @@ class: text-center break-slide
 
 # ☕ 휴식 10분
 
-<div class="text-xl mt-12 opacity-80">
+<div class="slide-break-body">
 
 3교시: 오늘의 진짜 클라이맥스 ⭐<br>
 **나만의 MD 프롬프트 파일** 만들기
 
 </div>
 
-<div class="text-6xl mt-12">⏰</div>
+<div class="slide-break-icon">⏰</div>
 
 ---
 layout: section
@@ -1857,19 +1872,19 @@ class: text-center thanks-slide
 
 # 감사합니다 🎉
 
-<div class="text-xl mt-10 opacity-90">
+<div class="slide-thanks-body">
 
 질문은 <span class="text-blue-500 font-bold">정보시스템실 상시 문의 채널</span>로
 
 </div>
 
-<div class="text-base mt-12 opacity-70">
+<div class="slide-thanks-quote">
 
 *"오늘 못 다 들으신 부분이 있어도 2회차 시작 5분 복습에서 다시 짚어 드립니다."*
 
 </div>
 
-<div class="text-base mt-2 opacity-60">
+<div class="slide-thanks-foot">
 부담 없이 가세요 😊
 </div>
 

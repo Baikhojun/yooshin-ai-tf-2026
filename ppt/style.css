@@ -132,39 +132,191 @@
   margin-bottom: 0.35em;
 }
 
-/* hero — 중앙 정렬 + 큰 글자 (43p 등) */
+/* ── 중앙 정렬 슬라이드 (center / section / statement / hero / break / thanks) ── */
+.slidev-layout.center:not(.cover),
+.slidev-layout.section,
+.slidev-layout.statement {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  min-height: 100vh !important;
+  padding-top: calc(var(--slide-nav-h, 5.7rem) + 0.75rem) !important;
+  padding-bottom: 1.25rem !important;
+  box-sizing: border-box !important;
+}
+
+.slidev-layout.break-slide,
+.slidev-layout.thanks-slide {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  min-height: 100vh !important;
+  padding: 2rem 2.4rem !important;
+  box-sizing: border-box !important;
+}
+
+.slidev-layout.center:not(.cover) > *,
+.slidev-layout.section > *,
+.slidev-layout.statement > *,
+.slidev-layout.break-slide > *,
+.slidev-layout.thanks-slide > * {
+  width: 100%;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 2p 아이스브레이커 */
+.slidev-layout.slide-icebreaker h1 {
+  font-size: 2.65em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.slidev-layout.slide-icebreaker .slide-q-list {
+  display: inline-block;
+  text-align: left;
+  font-size: 1.32em;
+  line-height: 1.55;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.slidev-layout.slide-icebreaker .slide-focus-note {
+  font-size: 1.22em;
+  line-height: 1.5;
+  margin-top: 1.1rem;
+  max-width: 760px;
+}
+
+.slidev-layout.slide-icebreaker .slide-focus-sub {
+  font-size: 0.95em;
+  line-height: 1.45;
+}
+
+/* statement — 두 가지 부탁 */
+.slidev-layout.slide-statement h1 {
+  font-size: 2.85em !important;
+  margin-bottom: 0.55em !important;
+}
+
+.slidev-layout.slide-statement .slide-statement-block {
+  font-size: 1.55em;
+  line-height: 1.5;
+  margin: 0.65em 0;
+}
+
+.slidev-layout.slide-statement .slide-statement-note {
+  font-size: 1.15em;
+  line-height: 1.45;
+  margin-top: 0.85em;
+  opacity: 0.88;
+}
+
+/* section — 교시 구간 제목 */
+.slidev-layout.section h1 {
+  font-size: 2.65em !important;
+  line-height: 1.12;
+  margin-bottom: 0.35em !important;
+}
+
+.slidev-layout.section .text-4xl {
+  font-size: 2.85em !important;
+  line-height: 1.15;
+  margin: 0.25em 0 0.35em !important;
+}
+
+.slidev-layout.section .text-xl,
+.slidev-layout.section .opacity-80,
+.slidev-layout.section .opacity-60 {
+  font-size: 1.45em !important;
+  line-height: 1.45;
+  margin-top: 0.35em !important;
+}
+
+/* hero — 핵심 메시지 */
 .slidev-layout.center.slide-hero {
   justify-content: center !important;
-  min-height: calc(100vh - var(--slide-nav-h, 5.7rem));
-  padding-top: calc(0.5rem + var(--slide-nav-h, 5.7rem)) !important;
+  min-height: 100vh !important;
+  padding-top: calc(var(--slide-nav-h, 5.7rem) + 0.75rem) !important;
 }
 
 .slidev-layout.center.slide-hero h1 {
-  font-size: 2.35em !important;
+  font-size: 2.65em !important;
   line-height: 1.12;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.45em;
+  max-width: 900px;
 }
 
 .slidev-layout.center.slide-hero .text-xl {
-  font-size: 1.5em !important;
+  font-size: 1.55em !important;
+  line-height: 1.45;
+  margin-top: 0.45em !important;
 }
 
 .slidev-layout.center.slide-hero .text-2xl {
   font-size: 1.75em !important;
+  line-height: 1.4;
+  margin-top: 0.45em !important;
 }
 
 .slidev-layout.center.slide-hero .text-3xl {
-  font-size: 2em !important;
+  font-size: 2.05em !important;
+  line-height: 1.35;
+  margin-top: 0.45em !important;
 }
 
-/* section 구간 제목 — 중앙 + 약간 크게 */
-.slidev-layout.section h1 {
-  font-size: 2.2em !important;
+.slidev-layout.center.slide-hero .text-lg {
+  font-size: 1.35em !important;
+  line-height: 1.4;
+  margin-top: 0.45em !important;
 }
 
-.slidev-layout.section .text-lg,
-.slidev-layout.section .opacity-80 {
-  font-size: 1.25em !important;
+/* 휴식 */
+.slidev-layout.break-slide h1 {
+  font-size: 3em !important;
+  margin-bottom: 0.45em !important;
+}
+
+.slidev-layout.break-slide .slide-break-body {
+  font-size: 1.55em;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+.slidev-layout.break-slide .slide-break-icon {
+  font-size: 4.5em;
+  line-height: 1;
+  margin-top: 0.55em;
+}
+
+/* 감사합니다 */
+.slidev-layout.thanks-slide h1 {
+  font-size: 3em !important;
+  margin-bottom: 0.45em !important;
+}
+
+.slidev-layout.thanks-slide .slide-thanks-body {
+  font-size: 1.45em;
+  line-height: 1.45;
+  margin-top: 0.35em;
+}
+
+.slidev-layout.thanks-slide .slide-thanks-quote {
+  font-size: 1.15em;
+  line-height: 1.45;
+  margin-top: 0.85em;
+  opacity: 0.82;
+  max-width: 680px;
+}
+
+.slidev-layout.thanks-slide .slide-thanks-foot {
+  font-size: 1.1em;
+  margin-top: 0.65em;
+  opacity: 0.75;
 }
 
 .slidev-layout h1 {
