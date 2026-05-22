@@ -1013,31 +1013,12 @@ layout: section
 
 ---
 
-# 🎬 라이브 시연 — `homework-interviewer-prompt.md`
-
-<div class="text-sm mt-1 leading-snug">
-
-1. `homework-interviewer-prompt.md` 강사 화면에 띄우기 — 마법의 부적이 아니라 부탁의 글
-2. ChatGPT 새 대화 → 전체 복사·붙여넣기 → Enter
-3. AI 첫 질문: "어떤 부서에서 어떤 역할을…"
-4. 한 줄 답변 → AI 후속 질문 1~2턴 더
-5. 끝나면 업무 맥락 문서 (A~E 영역) 받기
-
-</div>
-
-<div class="slide-banner mt-2 bg-green-50 dark:bg-green-900">
-🏠 오늘 저녁 본인 업무로 그대로 하시면 됩니다 — 그게 과제
-</div>
-
----
-
-# 인터뷰 프롬프트 — 3회차까지 이어짐 🏗
+# 인터뷰 프롬프트 — 2회차까지 이어짐 🏗
 
 | 회차 | 프롬프트 | 결과물 |
 |:---:|:---|:---|
 | 1회차 | `homework-interviewer-prompt.md` | 업무 맥락 정의서 |
-| 2회차 | 업무 흐름도용 | Mermaid 흐름도 |
-| 3회차 | `micro-tool-interviewer.md` | HTML 도구 사양서 |
+| 2회차 | 업무 흐름도용 + `micro-tool-interviewer.md` | Mermaid 업무 흐름도 · HTML 도구 사양서 |
 
 <div class="slide-banner mt-2 bg-blue-50 dark:bg-blue-900">
 💎 9시간 뒤 — 일반 MD 여러 개 + 인터뷰 MD 1~2개 = 본인 자산
@@ -1078,8 +1059,6 @@ layout: section
 <div class="mt-2 font-mono text-xs bg-gray-100 dark:bg-gray-900 p-2 rounded">
 A 역할 / B 업무 / C 병목 / D 도구 / E 기타
 </div>
-
-<div class="mt-2 text-xs opacity-80">⏰ 시간 부족 시 5~7번 질문만 OK</div>
 
 </div>
 
@@ -1166,7 +1145,7 @@ class: text-center slide-hero
 <div v-click class="mt-4 p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400 text-center">
 
 → 아닙니다. 새 채팅을 여셨거나, 시간이 너무 지났거나, 다른 대화에서 작업한 것입니다.<br>
-→ AI의 기억력은 본인 머리로 따라가지 마세요. <span class="font-bold">항상 0이라고 가정</span>하세요.
+→ AI의 기억을 사람 두뇌처럼 생각하지 마세요. 대화를 시작할 때마다 <span class="font-bold">기억은 0부터</span>라고 가정하세요.
 
 </div>
 
@@ -1222,36 +1201,6 @@ class: text-center slide-hero
 
 <div v-click class="slide-fill-bottom text-center text-base">
 🔮 ①번 = 오늘의 핵심. ②번은 익숙해진 다음에 천천히 도전하세요.
-</div>
-
-</div>
-
----
-
-# 📋 클립보드 워크플로우 — 이번 교육의 기본기
-
-<div class="slide-fill">
-
-<div class="font-mono bg-gray-900 text-green-300 p-4 rounded-xl mt-2 text-lg leading-loose text-center">
-
-```
-1️⃣  원본 데이터를 클립보드에 복사
-         ↓
-2️⃣  AI에게 맥락과 함께 붙여 요청
-         ↓
-3️⃣  결과를 다시 복사
-         ↓
-4️⃣  엑셀 / HWP / 메일창에 붙여넣기
-```
-
-</div>
-
-<div class="mt-3 text-center text-lg">
-도구가 ChatGPT든 Gemini든 — <span class="text-blue-500 font-bold">이 4단계는 살아남습니다</span>
-</div>
-
-<div class="slide-fill-bottom text-center text-sm opacity-70">
-⚠️ 교육생분의 70%는 2단계에서 맥락을 빼먹습니다. 오늘 그 습관을 고치는 게 목표.
 </div>
 
 </div>

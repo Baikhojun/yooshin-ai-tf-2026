@@ -42,51 +42,49 @@ export default {
 
   29: { type: 'section', section: 2, topic: '인터뷰 프롬프트' },
 
-  // ── 인터뷰 (5) ──
-  30: { type: 'dense', section: 2, topic: '인터뷰어로', step: 1, total: 5 },
-  31: { type: 'dense', section: 2, topic: 'MD 두 종류', step: 2, total: 5 },
-  32: { type: 'dense', section: 2, topic: '라이브 시연', step: 3, total: 5 },
-  33: { type: 'dense', section: 2, topic: '3회차까지', step: 4, total: 5 },
-  34: { type: 'dense', section: 2, topic: '실습 ②', step: 5, total: 5 },
+  // ── 인터뷰 (4) ──
+  30: { type: 'dense', section: 2, topic: '인터뷰어로', step: 1, total: 4 },
+  31: { type: 'dense', section: 2, topic: 'MD 두 종류', step: 2, total: 4 },
+  32: { type: 'dense', section: 2, topic: '2회차까지', step: 3, total: 4 },
+  33: { type: 'dense', section: 2, topic: '실습 ②', step: 4, total: 4 },
 
-  35: { type: 'section', section: 2, topic: '핵심 원리 3 · 작업기억' },
+  34: { type: 'section', section: 2, topic: '핵심 원리 3 · 작업기억' },
 
-  // ── 작업기억 (5) ──
-  36: { type: 'hero', section: 2, topic: '신입사원 비유', step: 1, total: 5 },
-  37: { type: 'dense', section: 2, topic: '새 대화 = 리셋', step: 2, total: 5 },
-  38: { type: 'dense', section: 2, topic: '어제는 됐는데?', step: 3, total: 5 },
-  39: { type: 'dense', section: 2, topic: '대응 3가지', step: 4, total: 5 },
-  40: { type: 'dense', section: 2, topic: '클립보드', step: 5, total: 5 },
+  // ── 작업기억 (4) ──
+  35: { type: 'hero', section: 2, topic: '신입사원 비유', step: 1, total: 4 },
+  36: { type: 'dense', section: 2, topic: '새 대화 = 리셋', step: 2, total: 4 },
+  37: { type: 'dense', section: 2, topic: '어제는 됐는데?', step: 3, total: 4 },
+  38: { type: 'dense', section: 2, topic: '대응 3가지', step: 4, total: 4 },
 
-  41: { type: 'break' },
+  39: { type: 'break' },
 
-  42: { type: 'section', section: 3, topic: '3교시 · MD 파일' },
+  40: { type: 'section', section: 3, topic: '3교시 · MD 파일' },
 
   // ── MD 파일 (9) ──
-  43: { type: 'hero', section: 3, topic: 'MD 파일이란?', step: 1, total: 9 },
-  44: { type: 'dense', section: 3, topic: '텍스트 3가지 표기', step: 2, total: 9 },
-  45: { type: 'dense', section: 3, topic: 'Markdown 5문법', step: 3, total: 9 },
-  46: { type: 'dense', section: 3, topic: 'MD 파일이 뭐예요?', step: 4, total: 9 },
-  47: { type: 'dense', section: 3, topic: '6개 영역', step: 5, total: 9 },
-  48: { type: 'dense', section: 3, topic: '표준 템플릿', step: 6, total: 9 },
-  49: { type: 'dense', section: 3, topic: '일상 MD 3종', step: 7, total: 9 },
-  50: { type: 'dense', section: 3, topic: '함정 3가지', step: 8, total: 9 },
-  51: { type: 'dense', section: 3, topic: '핵심 비교표', step: 9, total: 9 },
+  41: { type: 'hero', section: 3, topic: 'MD 파일이란?', step: 1, total: 9 },
+  42: { type: 'dense', section: 3, topic: '텍스트 3가지 표기', step: 2, total: 9 },
+  43: { type: 'dense', section: 3, topic: 'Markdown 5문법', step: 3, total: 9 },
+  44: { type: 'dense', section: 3, topic: 'MD 파일이 뭐예요?', step: 4, total: 9 },
+  45: { type: 'dense', section: 3, topic: '6개 영역', step: 5, total: 9 },
+  46: { type: 'dense', section: 3, topic: '표준 템플릿', step: 6, total: 9 },
+  47: { type: 'dense', section: 3, topic: '일상 MD 3종', step: 7, total: 9 },
+  48: { type: 'dense', section: 3, topic: '함정 3가지', step: 8, total: 9 },
+  49: { type: 'dense', section: 3, topic: '핵심 비교표', step: 9, total: 9 },
 
-  52: { type: 'section', section: 3, topic: '자동화 후보' },
+  50: { type: 'section', section: 3, topic: '자동화 후보' },
 
   // ── 자동화 (4) ──
-  53: { type: 'dense', section: 3, topic: '후보 정리', step: 1, total: 4 },
-  54: { type: 'dense', section: 3, topic: '4가지 조건', step: 2, total: 4 },
-  55: { type: 'dense', section: 3, topic: '관리부 사례', step: 3, total: 4 },
-  56: { type: 'dense', section: 3, topic: '실습 ③', step: 4, total: 4 },
+  51: { type: 'dense', section: 3, topic: '후보 정리', step: 1, total: 4 },
+  52: { type: 'dense', section: 3, topic: '4가지 조건', step: 2, total: 4 },
+  53: { type: 'dense', section: 3, topic: '관리부 사례', step: 3, total: 4 },
+  54: { type: 'dense', section: 3, topic: '실습 ③', step: 4, total: 4 },
 
-  57: { type: 'section', section: 3, topic: '마무리' },
+  55: { type: 'section', section: 3, topic: '마무리' },
 
   // ── 마무리 (3) ──
-  58: { type: 'dense', section: 3, topic: '5줄 정리', step: 1, total: 3 },
-  59: { type: 'dense', section: 3, topic: '과제 안내', step: 2, total: 3 },
-  60: { type: 'dense', section: 3, topic: '2회차 예고', step: 3, total: 3 },
+  56: { type: 'dense', section: 3, topic: '5줄 정리', step: 1, total: 3 },
+  57: { type: 'dense', section: 3, topic: '과제 안내', step: 2, total: 3 },
+  58: { type: 'dense', section: 3, topic: '2회차 예고', step: 3, total: 3 },
 
-  61: { type: 'thanks' },
+  59: { type: 'thanks' },
 }
