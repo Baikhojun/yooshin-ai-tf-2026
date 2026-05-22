@@ -26,7 +26,7 @@ layout: cover
 
 <div class="cover-sub">
 
-2차 TF · **Session 01**
+2차 TF · Session 01
 
 </div>
 
@@ -58,13 +58,13 @@ class: text-center slide-icebreaker
 
 <v-clicks>
 
-**①** 오늘 아침까지 **ChatGPT 또는 Gemini를 켜 본 분?** — **손 들어 보세요**
+① 오늘 아침까지 ChatGPT 또는 Gemini를 켜 본 분? — 손 들어 보세요
 
-**②** AI에게 시킬 때 "어떻게 물어야 잘 답할까" 를 **5초 이상 고민해 본 분?** — **손 들어 보세요**
+② AI에게 시킬 때 "어떻게 물어야 잘 답할까" 를 5초 이상 고민해 본 분? — 손 들어 보세요
 
-**③** AI 답변이 마음에 안 들어서 **그냥 창을 닫아본 분?** — **손 들어 보세요**
+③ AI 답변이 마음에 안 들어서 그냥 창을 닫아본 분? — 손 들어 보세요
 
-**④** **본인 업무에 AI를 매일 쓰고 있는 분?** — **손 들어 보세요**
+④ 본인 업무에 AI를 매일 쓰고 있는 분? — 손 들어 보세요
 
 </v-clicks>
 
@@ -72,17 +72,17 @@ class: text-center slide-icebreaker
 
 <div v-click class="slide-focus-note">
 
-💡 **오늘 교육 대상을 가르는 건 ④번뿐** — "업무에 AI를 **매일** 쓰고 있나요?"
+💡 오늘 교육 대상을 가르는 건 ④번뿐 — "업무에 AI를 매일 쓰고 있나요?"
 
 <div class="slide-focus-sub mt-3">
 
-**④에 손을 <span class="font-bold">안 든 분</span>이 대부분**이면 → <span class="text-yellow-500 font-bold">이 교육은 바로 여러분을 위한 것</span>입니다.
+④에 손을 <span class="font-bold">안 든 분</span>이 대부분이면 → <span class="text-yellow-500 font-bold">이 교육은 바로 여러분을 위한 것</span>입니다.
 
 </div>
 
 <div class="slide-focus-sub mt-2 opacity-90">
 
-①~③은 손 든 분·안 든 분 **모두 환영** — AI를 써 본 적이 있어도 오늘 배울 게 있습니다.
+①~③은 손 든 분·안 든 분 모두 환영 — AI를 써 본 적이 있어도 오늘 배울 게 있습니다.
 
 </div>
 
@@ -96,9 +96,9 @@ class: text-center slide-icebreaker
 
 | 회차 | 일자 | 주제 | 회차 끝나면 내 손에 |
 |:---:|:---:|:---|:---|
-| **1회차 <span class="text-red-500">(오늘)</span>** | 5/26 (화) | LLM 원리 + **MD 프롬프트** | 업무 맥락 정의서 + 자동화 후보 3개 |
+| 1회차 <span class="text-red-500">(오늘)</span> | 5/26 (화) | LLM 원리 + MD 프롬프트 | 업무 맥락 정의서 + 자동화 후보 3개 |
 | 2회차 | 6/2 (화) | 출력 형식 (Mermaid) + 업무 대행 AI 컨셉 | 업무 흐름도 + 업무 대행 AI 컨셉 1건 |
-| 3회차 | 6/9 (화) | 바이브 코딩 + 업무 대행 AI 완성 | **본인만의 HTML 업무 대행 AI v1** ✨ |
+| 3회차 | 6/9 (화) | 바이브 코딩 + 업무 대행 AI 완성 | 본인만의 HTML 업무 대행 AI v1 ✨ |
 
 </div>
 
@@ -122,7 +122,7 @@ class: text-center slide-icebreaker
 
 ---
 
-# 본 교육이 **하지 않는** 일 🚫
+# 본 교육이 하지 않는 일 🚫
 
 <div class="grid grid-cols-1 gap-3 mt-3 text-lg slide-not-cards">
 
@@ -130,20 +130,20 @@ class: text-center slide-icebreaker
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
-❌ **코딩** — 교육생분이 키보드로 코드를 짤 일은 **없습니다**.<br>
-<span class="text-sm opacity-70">3회차에 AI에게 **시키기만** 합니다.</span>
+❌ 코딩 — 교육생분이 키보드로 코드를 짤 일은 없습니다.<br>
+<span class="text-sm opacity-70">3회차에 AI에게 시키기만 합니다.</span>
 
 </div>
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
-❌ **새 솔루션 도입 결정** — **"○○ AI 도구 사야 할까요?"** 는 본 교육 범위가 아닙니다.
+❌ 새 솔루션 도입 결정 — "○○ AI 도구 사야 할까요?" 는 본 교육 범위가 아닙니다.
 
 </div>
 
 <div class="p-4 rounded-lg bg-green-50 border-l-4 border-green-500">
 
-✅ **우리가 하는 일**: 이미 손에 쥔 **ChatGPT / Gemini를 매일 매일 쓸 수 있는 사람으로** 만들기.
+✅ 우리가 하는 일: 이미 손에 쥔 ChatGPT / Gemini를 매일 매일 쓸 수 있는 사람으로 만들기.
 
 </div>
 
@@ -159,10 +159,10 @@ class: text-center slide-icebreaker
 
 | 도구 | 용도 | 비용 |
 |:---:|:---|:---:|
-| 💬 **ChatGPT** | 대화·프롬프트 실행 | Plus 권장 (Free도 가능) |
-| 💎 **Gemini** | 대화·프롬프트 실행 (대체) | Advanced 권장 |
-| 📝 **메모장** | MD 파일 만들기 | **0원** |
-| 🌐 **markdownlivepreview.com** | MD 미리보기 | **0원** |
+| 💬 ChatGPT | 대화·프롬프트 실행 | Plus 권장 (Free도 가능) |
+| 💎 Gemini | 대화·프롬프트 실행 (대체) | Advanced 권장 |
+| 📝 메모장 | MD 파일 만들기 | 0원 |
+| 🌐 markdownlivepreview.com | MD 미리보기 | 0원 |
 
 </div>
 
@@ -181,7 +181,7 @@ class: text-center slide-icebreaker
 
 <div class="slide-goals-card p-4 rounded-xl bg-blue-50 border-2 border-blue-300">
 
-**① AI가 왜 그런 답을 하는지 설명할 수 있다** 💡
+① AI가 왜 그런 답을 하는지 설명할 수 있다 💡
 
 <div class="slide-goals-sub opacity-70 mt-2">친구가 "ChatGPT 별 거 없던데?" → "맥락을 안 줘서 그래" 한 마디</div>
 
@@ -189,7 +189,7 @@ class: text-center slide-icebreaker
 
 <div class="slide-goals-card p-4 rounded-xl bg-purple-50 border-2 border-purple-300">
 
-**② AI에게 줄 글을 마크다운으로 정리** ✍️
+② AI에게 줄 글을 마크다운으로 정리 ✍️
 
 <div class="slide-goals-sub opacity-70 mt-2">`#`, `-`, `**`, 표, 코드블록 — 5분이면 배움</div>
 
@@ -197,17 +197,17 @@ class: text-center slide-icebreaker
 
 <div class="slide-goals-card p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400">
 
-**③ ⭐ 본인 업무용 MD 프롬프트 파일 뼈대** 📂
+③ ⭐ 본인 업무용 MD 프롬프트 파일 뼈대 📂
 
-<div class="slide-goals-sub opacity-70 mt-2">`회의록_정리.md` 같은 파일 1개 — 다음 달에도 **복사** 한 번</div>
+<div class="slide-goals-sub opacity-70 mt-2">`회의록_정리.md` 같은 파일 1개 — 다음 달에도 복사 한 번</div>
 
 </div>
 
 <div class="slide-goals-card p-4 rounded-xl bg-green-50 border-2 border-green-300">
 
-**④ 본인 업무에서 자동화 후보 3개** 🎯
+④ 본인 업무에서 자동화 후보 3개 🎯
 
-<div class="slide-goals-sub opacity-70 mt-2">2회차에 도구로 만들 **재료**</div>
+<div class="slide-goals-sub opacity-70 mt-2">2회차에 도구로 만들 재료</div>
 
 </div>
 
@@ -256,11 +256,11 @@ class: text-center slide-hero slide-success-scene
 
 | 교시 | 시간 | 큰 주제 | 한 줄 |
 |:---:|:---:|:---|:---|
-| **1교시** | 13:00 ~ 13:50 | AI가 답을 만드는 방식 · **자동완성** | "AI는 다음 단어를 예측하는 자동완성 엔진이에요" |
+| 1교시 | 13:00 ~ 13:50 | AI가 답을 만드는 방식 · 자동완성 | "AI는 다음 단어를 예측하는 자동완성 엔진이에요" |
 | ☕ | 13:50 ~ 14:00 | 휴식 10분 | — |
-| **2교시** | 14:00 ~ 14:50 | AI가 단어를 분류하는 방식 · **의미공간** + 매번 잊는 **작업기억** + 인터뷰 프롬프트 | "단어는 별자리로, 대화마다 기억은 리셋" |
+| 2교시 | 14:00 ~ 14:50 | AI가 단어를 분류하는 방식 · 의미공간 + 매번 잊는 작업기억 + 인터뷰 프롬프트 | "단어는 별자리로, 대화마다 기억은 리셋" |
 | ☕ | 14:50 ~ 15:00 | 휴식 10분 | — |
-| **3교시 ⭐** | 15:00 ~ 15:50 | **MD 프롬프트 파일 만들기** + 자동화 후보 정리 | "내 업무를 MD 파일로 박아두면 다음에도 똑같이 쓸 수 있어요" |
+| 3교시 ⭐ | 15:00 ~ 15:50 | MD 프롬프트 파일 만들기 + 자동화 후보 정리 | "내 업무를 MD 파일로 박아두면 다음에도 똑같이 쓸 수 있어요" |
 | 마무리 | 15:50 | 종료 — 정리·과제·예고·Q&A | — |
 
 </div>
@@ -274,21 +274,21 @@ class: text-center slide-statement
 
 <div class="slide-statement-block">
 
-📵 **스마트폰**은 <span class="text-yellow-500 font-bold">가방 안</span>에,<br>
+📵 스마트폰은 <span class="text-yellow-500 font-bold">가방 안</span>에,<br>
 반드시 <span class="text-yellow-500 font-bold">무음·진동 OFF</span>로 부탁드립니다.
 
 </div>
 
 <div class="slide-statement-block">
 
-💻 **실습용 PC**는 <span class="text-yellow-500 font-bold">전원 ON · 브라우저 열기</span>,<br>
+💻 실습용 PC는 <span class="text-yellow-500 font-bold">전원 ON · 브라우저 열기</span>,<br>
 손에 <span class="text-yellow-500 font-bold">마우스를 쥔 채로</span> 들어주세요.
 
 </div>
 
 <div class="slide-statement-note">
 강사가 시연할 때 <span class="font-bold">교육생분도 같이 클릭</span>해 보는 것이 가장 빠른 학습입니다.<br>
-가만히 듣기만 하면 — **내일 출근하면 다 잊습니다**.
+가만히 듣기만 하면 — 내일 출근하면 다 잊습니다.
 </div>
 
 ---
@@ -314,15 +314,15 @@ layout: section
 ## 규칙
 
 - ChatGPT 또는 Gemini 자유 사용 (PC로)
-- **사진 업로드 금지** — 본인이 직접 글로 설명만
-- **8분** — A 먼저 진행 후 B 진행, **둘 다** 완료해서 정체를 찾기
+- 사진 업로드 금지 — 본인이 직접 글로 설명만
+- 8분 — A 먼저 진행 후 B 진행, 둘 다 완료해서 정체를 찾기
 
 ## 진행
 
-1. 사진을 보고 떠오르는 단어를 **많이** 적어서, 사진 속 이미지의 정체를 찾습니다.
+1. 사진을 보고 떠오르는 단어를 많이 적어서, 사진 속 이미지의 정체를 찾습니다.
 2. ChatGPT 또는 Gemini에 "이건 뭘까요?" 와 함께 적은 단어들을 입력
 3. AI가 정답 단어를 말하면 손 들기 ✋
-4. 가장 먼저 맞힌 분이 **어떤 단어들을 썼는지** 공유
+4. 가장 먼저 맞힌 분이 어떤 단어들을 썼는지 공유
 
 </div>
 
@@ -342,9 +342,9 @@ layout: section
 
 <div class="flex flex-col justify-center text-lg">
 
-**힌트는 없습니다.**
+힌트는 없습니다.
 
-떠오르는 단어를 **마음껏** 적어, AI에게 물어보세요.
+떠오르는 단어를 마음껏 적어, AI에게 물어보세요.
 
 <div class="mt-3 p-3 bg-gray-100 dark:bg-gray-800 rounded text-base opacity-90">
 예시 입력:<br>
@@ -353,7 +353,7 @@ layout: section
 </div>
 
 <div class="mt-3">
-같은 사진이지만 어떤 단어를 고르느냐로<br>AI 답이 **완전히 갈립니다**.
+같은 사진이지만 어떤 단어를 고르느냐로<br>AI 답이 완전히 갈립니다.
 </div>
 
 </div>
@@ -372,9 +372,9 @@ layout: section
 
 <div class="flex flex-col justify-center text-lg">
 
-**힌트는 없습니다.**
+힌트는 없습니다.
 
-가능한 **모든 정보**를 단어로 적어, AI에게 물어보세요.
+가능한 모든 정보를 단어로 적어, AI에게 물어보세요.
 
 <div class="mt-3 p-3 bg-gray-100 dark:bg-gray-800 rounded text-base opacity-90">
 예시 입력:<br>
@@ -383,7 +383,7 @@ layout: section
 </div>
 
 <div class="mt-3">
-단어를 **계속 넣으며 유추**해서<br>이미지 속 정체를 맞춰 보세요.
+단어를 계속 넣으며 유추해서<br>이미지 속 정체를 맞춰 보세요.
 </div>
 
 </div>
@@ -400,8 +400,8 @@ layout: section
    - 영문: "Blue Dragon", "Glaucus atlanticus"
 
 ▶ 왜 어려운가:
-   - 한국인 대부분 **처음 보는 생물** (희귀한 해양 무척추동물)
-   - "물고기처럼 보이지만 실은 **민달팽이**" → 직관과 어긋남
+   - 한국인 대부분 처음 보는 생물 (희귀한 해양 무척추동물)
+   - "물고기처럼 보이지만 실은 민달팽이" → 직관과 어긋남
    - 사람들이 "외계 생물", "산호", "물고기" 같은 단어로 시작하면 AI도 헤맴
 
 ▶ 정답 유도 키워드 (교육생분이 이런 단어를 쓰면 AI가 빨리 맞힘):
@@ -428,8 +428,8 @@ layout: section
 ═══ 게임 종료 후 강사 멘트 ═══
 
 ▶ "같은 사진인데, '바다 민달팽이' 또는 '다리 위에 물'처럼 단어를 많이 넣으니 AI가 맞혔죠?"
-▶ "이게 오늘의 첫 단어 — **맥락(context)**. AI는 사진을 본 게 아니라, 여러분이 쓴 글의 **다음 단어**를 예측한 거예요."
-▶ "맞히기 어려운 단어일수록, **맥락 한 줄**이 어마어마하게 큰 차이를 만듭니다."
+▶ "이게 오늘의 첫 단어 — 맥락(context). AI는 사진을 본 게 아니라, 여러분이 쓴 글의 다음 단어를 예측한 거예요."
+▶ "맞히기 어려운 단어일수록, 맥락 한 줄이 어마어마하게 큰 차이를 만듭니다."
 -->
 
 
@@ -442,14 +442,14 @@ class: text-center slide-hero
 
 <div class="text-2xl mt-3 leading-relaxed">
 
-AI는 **의미를 이해해서 답하는 것**이 <span class="text-red-500">아닙니다</span>.
+AI는 의미를 이해해서 답하는 것이 <span class="text-red-500">아닙니다</span>.
 
 </div>
 
 <div class="text-2xl mt-3 leading-relaxed">
 
 여러분이 쓴 글의<br>
-**다음에 올 가장 그럴듯한 단어를 예측해서 이어 붙이는 엔진**이에요.
+다음에 올 가장 그럴듯한 단어를 예측해서 이어 붙이는 엔진이에요.
 
 </div>
 
@@ -556,11 +556,11 @@ AI는 **의미를 이해해서 답하는 것**이 <span class="text-red-500">아
 </div>
 
 <div class="exercise-note">
-**같은 빈칸** → 앞에 <span class="text-blue-500 font-bold">"거래처 부장님께 메일"</span> 한 줄 추가 → **반말체가 아닌 격식체**로 답이 바뀜
+같은 빈칸 → 앞에 <span class="text-blue-500 font-bold">"거래처 부장님께 메일"</span> 한 줄 추가 → 반말체가 아닌 격식체로 답이 바뀜
 </div>
 
 <div class="exercise-tip opacity-85">
-🪄 마법이 아니라 **확률**입니다. AI는 "부장님께 메일" 뒤에 "말씀드리려"가 흔하다는 통계를 외울 뿐.
+🪄 마법이 아니라 확률입니다. AI는 "부장님께 메일" 뒤에 "말씀드리려"가 흔하다는 통계를 외울 뿐.
 </div>
 
 ---
@@ -590,13 +590,13 @@ AI는 **의미를 이해해서 답하는 것**이 <span class="text-red-500">아
 
 <div class="exercise-outcome bad">
 
-**AI 결과**: 어색한 표 + 행동 항목 누락 + 담당자 모호
+AI 결과: 어색한 표 + 행동 항목 누락 + 담당자 모호
 
 </div>
 
 <div class="exercise-outcome neutral">
 
-**교육생분 반응**: "음... 별로네" → 창 닫음 → **다시 손으로 정리** 😩
+교육생분 반응: "음... 별로네" → 창 닫음 → 다시 손으로 정리 😩
 
 </div>
 
@@ -638,11 +638,11 @@ AI는 **의미를 이해해서 답하는 것**이 <span class="text-red-500">아
 
 <div class="prompt-result-bar">
 
-<span class="prompt-result-label">✅ **결과**</span>
+<span class="prompt-result-label">✅ 결과</span>
 
-<span>사내 결재용 회의록에 **그대로 붙여넣을** 수준</span>
+<span>사내 결재용 회의록에 그대로 붙여넣을 수준</span>
 
-<span class="prompt-result-tip">→ MD 파일로 저장하면 다음 회의 때 **메모만 갈아 끼우면** 됩니다</span>
+<span class="prompt-result-tip">→ MD 파일로 저장하면 다음 회의 때 메모만 갈아 끼우면 됩니다</span>
 
 </div>
 
@@ -684,7 +684,7 @@ AI는 **의미를 이해해서 답하는 것**이 <span class="text-red-500">아
 
 # ⏱ 실습 ① — 법인카드 사용내역 정리
 
-<div class="exercise-instruction">**15분 · 다 같이** — 같은 데이터, 다른 프롬프트로 결과를 비교합니다.</div>
+<div class="exercise-instruction">15분 · 다 같이 — 같은 데이터, 다른 프롬프트로 결과를 비교합니다.</div>
 
 <div class="exercise-card exercise-lab">
 
@@ -735,7 +735,7 @@ class: text-center break-slide
 <div class="slide-break-body">
 
 2교시 예고<br>
-**별자리처럼 분류(의미공간)** + **대화마다 리셋되는 기억**
+별자리처럼 분류(의미공간) + 대화마다 리셋되는 기억
 
 </div>
 
@@ -751,7 +751,7 @@ layout: section
 
 <div class="opacity-80 mt-6 text-xl leading-relaxed">
 
-AI는 단어를 **별자리**처럼 본다<br>
+AI는 단어를 별자리처럼 본다<br>
 — 같은 동네에 모이는 비슷한 의미들
 
 </div>
@@ -765,7 +765,7 @@ class: text-center slide-hero
 
 <div class="text-xl mt-3 leading-relaxed mx-auto">
 
-엑셀의 **VLOOKUP**은 글자가 **완벽히 일치**해야 매칭합니다.
+엑셀의 VLOOKUP은 글자가 완벽히 일치해야 매칭합니다.
 
 </div>
 
@@ -778,7 +778,7 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="text-lg mt-3 opacity-90 mx-auto">
 비슷한 의미는 <span class="text-yellow-500 font-bold">가까이</span>, 다른 의미는 <span class="text-gray-500 font-bold">멀리</span><br>
-글자 하나가 달라도 **같은 무리**로 인식.
+글자 하나가 달라도 같은 무리로 인식.
 </div>
 
 ---
@@ -789,7 +789,7 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="text-lg">
 
-**꼬맨틀** = 정답 단어와 **의미상 얼마나 가까운지** 점수로 보여주는 게임
+꼬맨틀 = 정답 단어와 의미상 얼마나 가까운지 점수로 보여주는 게임
 
 <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded">
 👉 <a href="https://semantle-ko.newsjel.ly/" target="_blank" class="text-blue-600 dark:text-blue-300 font-bold underline">semantle-ko.newsjel.ly</a> 열기
@@ -798,8 +798,8 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 ## 진행 방법
 
 1. 각자 휴대폰·PC로 사이트 열기
-2. 떠오르는 **단어 2개**씩 말로 외쳐 보기
-3. **누가 가장 점수 높은 단어**를 찾았는지 공유
+2. 떠오르는 단어 2개씩 말로 외쳐 보기
+3. 누가 가장 점수 높은 단어를 찾았는지 공유
 4. 상품은 없습니다 😄
 
 </div>
@@ -808,14 +808,14 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 ## 왜 이 게임이 의미공간일까?
 
-- 정답이 "**바다**"라면<br>
-  → "물" → **80점** (가까움)<br>
-  → "사과" → **2점** (먼 동네)
+- 정답이 "바다"라면<br>
+  → "물" → 80점 (가까움)<br>
+  → "사과" → 2점 (먼 동네)
 
-- 이게 바로 **의미공간**에서<br>"단어 사이 거리"를 재는 방식
+- 이게 바로 의미공간에서<br>"단어 사이 거리"를 재는 방식
 
 <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900 rounded text-sm">
-💡 AI는 **수십만 차원**에서<br>이런 거리를 계산합니다 (사람은 3차원까지가 한계)
+💡 AI는 수십만 차원에서<br>이런 거리를 계산합니다 (사람은 3차원까지가 한계)
 </div>
 
 </div>
@@ -850,18 +850,18 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="mt-4 text-base">
 
-→ AI는 "휴가 / 연차 / 반차 / 연가 / 휴직 / 병가 / 경조 / 외출"을 **같은 동네 단어**로 인식<br>
-→ VLOOKUP은 "연차"와 "연가"가 **다른 글자**라서 매칭 실패
+→ AI는 "휴가 / 연차 / 반차 / 연가 / 휴직 / 병가 / 경조 / 외출"을 같은 동네 단어로 인식<br>
+→ VLOOKUP은 "연차"와 "연가"가 다른 글자라서 매칭 실패
 
 </div>
 
 <div class="mt-4 p-3 bg-purple-50 dark:bg-purple-900 rounded text-base">
-✨ **게다가 AI는 한 단어를 여러 동네에 동시에 둘 수 있습니다**<br>
-예: "**자녀 학교 행사로 휴가**" → ① 휴가 동네 ② 가족 동네 ③ 평일 외출 동네 — **세 태두리에 동시에 포함** (다차원 분류)
+✨ 게다가 AI는 한 단어를 여러 동네에 동시에 둘 수 있습니다<br>
+예: "자녀 학교 행사로 휴가" → ① 휴가 동네 ② 가족 동네 ③ 평일 외출 동네 — 세 태두리에 동시에 포함 (다차원 분류)
 </div>
 
 <div class="mt-3 text-lg text-center font-bold">
-💡 한 마디로: AI는 **글자**가 아니라 <span class="text-blue-500">**뜻**</span>을 봅니다.
+💡 한 마디로: AI는 글자가 아니라 <span class="text-blue-500">뜻</span>을 봅니다.
 </div>
 
 ---
@@ -872,17 +872,17 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 | 휴가 신청 사유 (원본) | VLOOKUP | AI (의미공간 — 2~3차원) |
 |:---|:---:|:---|
-| `강남세브란스 건강검진 (위·대장)` | ❌ | **의료** · **검진** |
-| `치과 스케일링 + 충치 2개 치료` | ❌ | **의료** · **치과** |
-| `둘째 B형 간염 2차 접종 병원 동행` | ❌ | **의료** · **가족** · **육아** |
-| `장인어른 70회 생신 잔치 (대구)` | ❌ | **경조사** · **가족** · **지방** |
-| `처형 딸 결혼식 (오전만)` | ❌ | **경조사** · **가족** |
-| `7/25 포장 이사 (1일)` | ❌ | **개인사정** · **이사** |
-| `초4 딸 학예회 (오후)` | ❌ | **가족** · **교육** · **육아** |
-| `8월 초 제주 3박4일 (가족)` | ❌ | **휴양** · **더위** · **섬** |
+| `강남세브란스 건강검진 (위·대장)` | ❌ | 의료 · 검진 |
+| `치과 스케일링 + 충치 2개 치료` | ❌ | 의료 · 치과 |
+| `둘째 B형 간염 2차 접종 병원 동행` | ❌ | 의료 · 가족 · 육아 |
+| `장인어른 70회 생신 잔치 (대구)` | ❌ | 경조사 · 가족 · 지방 |
+| `처형 딸 결혼식 (오전만)` | ❌ | 경조사 · 가족 |
+| `7/25 포장 이사 (1일)` | ❌ | 개인사정 · 이사 |
+| `초4 딸 학예회 (오후)` | ❌ | 가족 · 교육 · 육아 |
+| `8월 초 제주 3박4일 (가족)` | ❌ | 휴양 · 더위 · 섬 |
 
 <div class="mt-3 p-2 bg-purple-50 dark:bg-purple-900 rounded text-sm text-center">
-🤖 AI는 한 사유를 **여러 의미 동네**에 동시에 둡니다 — VLOOKUP은 글자 1개만 달라도 매칭 실패
+🤖 AI는 한 사유를 여러 의미 동네에 동시에 둡니다 — VLOOKUP은 글자 1개만 달라도 매칭 실패
 </div>
 
 <!--
@@ -900,24 +900,24 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 | 적요 (카드 내역) | 정답 처리 | 이유 |
 |---------------|:---|:---|
-| 거래처 부장과 점심 | **접대비** | 외부 인사 |
-| 협력업체와 견적 협의 | **회의비** | 업무 협의 |
-| 본사 임원과 식사 | **복리후생비** | 사내 |
-| 채용 후보자와 카페 | **채용 경비** | 채용 절차 |
-| `업무 미팅` (메모만) | ❓ 판단 불가 | **정보 부족** |
+| 거래처 부장과 점심 | 접대비 | 외부 인사 |
+| 협력업체와 견적 협의 | 회의비 | 업무 협의 |
+| 본사 임원과 식사 | 복리후생비 | 사내 |
+| 채용 후보자와 카페 | 채용 경비 | 채용 절차 |
+| `업무 미팅` (메모만) | ❓ 판단 불가 | 정보 부족 |
 
 <div class="mt-5 p-3 bg-red-50 dark:bg-red-900 rounded text-base">
-💡 **결론**: 의미공간이 강력해도 — 적요가 **너무 짧으면** AI도 답을 못 만듭니다.<br>
-→ 그래서 **누가·언제·어디서** 같은 **맥락 정보**를 같이 줘야 해요 (1교시 핵심)
+💡 결론: 의미공간이 강력해도 — 적요가 너무 짧으면 AI도 답을 못 만듭니다.<br>
+→ 그래서 누가·언제·어디서 같은 맥락 정보를 같이 줘야 해요 (1교시 핵심)
 </div>
 
 <div class="mt-6 text-center text-lg">
-🧠 AI는 **적요의 맥락**을 읽고 처리 — <span class="text-red-500 font-bold">엑셀 수식으론 절대 불가능</span>
+🧠 AI는 적요의 맥락을 읽고 처리 — <span class="text-red-500 font-bold">엑셀 수식으론 절대 불가능</span>
 </div>
 
 ---
 
-# 의미공간의 함정 — AI는 **계산기**가 아닙니다 ⚠️
+# 의미공간의 함정 — AI는 계산기가 아닙니다 ⚠️
 
 <div class="text-base opacity-80 mb-4">교육생분이 자주 빠지는 함정 №1</div>
 
@@ -925,20 +925,20 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
-**❌ 잘못된 사용**
+❌ 잘못된 사용
 
 > "이 영수증 30건의 합계를 구해줘"
 
-→ AI: **"대략 1,847,000원 정도"** (실제: 1,823,500원)<br>
-→ 교육생분: **"AI 거짓말이네!"** 😡
+→ AI: "대략 1,847,000원 정도" (실제: 1,823,500원)<br>
+→ 교육생분: "AI 거짓말이네!" 😡
 
 </div>
 
 <div class="p-4 rounded-lg bg-green-50 border-l-4 border-green-500">
 
-**✅ 올바른 사용**
+✅ 올바른 사용
 
-> "이 영수증 30건의 합계를 구하는 **엑셀 수식**을 만들어줘"
+> "이 영수증 30건의 합계를 구하는 엑셀 수식을 만들어줘"
 
 → AI: `=SUM(B2:B31)`<br>
 → 엑셀에 붙여넣기 → 정확 ✅
@@ -951,13 +951,13 @@ AI는 단어를 <span class="text-blue-500 font-bold">별자리처럼</span> 봅
 
 | 역할 | 누가 잘할까 |
 |------|:---|
-| 분류·판단·요약·다듬기 (의미공간 일) | 🤖 **AI** |
-| 정확한 계산·합계·평균 | 📊 **엑셀 / 코드** |
+| 분류·판단·요약·다듬기 (의미공간 일) | 🤖 AI |
+| 정확한 계산·합계·평균 | 📊 엑셀 / 코드 |
 
 </div>
 
 <div class="mt-4 text-center text-base font-bold">
-💡 AI는 <span class="text-blue-500">**연상 기계**</span>이지 <span class="text-red-500">**계산 기계**</span>가 아닙니다
+💡 AI는 <span class="text-blue-500">연상 기계</span>이지 <span class="text-red-500">계산 기계</span>가 아닙니다
 </div>
 
 ---
@@ -968,7 +968,7 @@ layout: section
 
 <div class="opacity-80 mt-4 text-lg">
 
-🎤 본인 머릿속 업무 지식을 **질문으로 끌어내는** 기술
+🎤 본인 머릿속 업무 지식을 질문으로 끌어내는 기술
 
 </div>
 
@@ -980,36 +980,36 @@ layout: section
 
 <div class="slide-card bg-gray-50 dark:bg-gray-800">
 
-**일반 MD 프롬프트** — 교육생분 → AI
+일반 MD 프롬프트 — 교육생분 → AI
 
-"이거 해주세요" → AI가 결과를 줌 (**1턴**)
+"이거 해주세요" → AI가 결과를 줌 (1턴)
 
 </div>
 
 <div class="slide-card bg-blue-50 dark:bg-blue-900">
 
-**인터뷰 MD 프롬프트** — AI → 교육생분
+인터뷰 MD 프롬프트 — AI → 교육생분
 
-"당신이 인터뷰어, 나에게 질문해" → **여러 턴** 대화
+"당신이 인터뷰어, 나에게 질문해" → 여러 턴 대화
 
 </div>
 
 </div>
 
 <div class="slide-banner mt-3 bg-yellow-50 dark:bg-yellow-900">
-🪞 답하다 보면 **본인도 몰랐던 업무 지도**가 완성됩니다
+🪞 답하다 보면 본인도 몰랐던 업무 지도가 완성됩니다
 </div>
 
 ---
 
 # 두 가지 MD 프롬프트 — 한눈에 비교
 
-| | 일반 MD | **인터뷰 MD** |
+| | 일반 MD | 인터뷰 MD |
 |:---|:---|:---|
 | 흐름 | 데이터 → AI → 결과 | AI 질문 ↔ 답 ↔ 다음 질문 |
-| 적합 | 데이터가 **이미 있을 때** | 데이터가 **머릿속에만 있을 때** |
+| 적합 | 데이터가 이미 있을 때 | 데이터가 머릿속에만 있을 때 |
 | 예시 | 회의록 정리, 휴가 분류 | 업무 정리, 도구 사양 |
-| 비유 | 담당자 · 분류기 | **신문기자 · 코치** |
+| 비유 | 담당자 · 분류기 | 신문기자 · 코치 |
 
 ---
 
@@ -1017,16 +1017,16 @@ layout: section
 
 <div class="text-sm mt-1 leading-snug">
 
-1. **`homework-interviewer-prompt.md`** 강사 화면에 띄우기 — 마법의 부적이 아니라 **부탁의 글**
-2. ChatGPT **새 대화** → 전체 복사·붙여넣기 → Enter
-3. AI **첫 질문**: "어떤 부서에서 어떤 역할을…"
-4. 한 줄 답변 → AI **후속 질문** 1~2턴 더
-5. 끝나면 **업무 맥락 문서** (A~E 영역) 받기
+1. `homework-interviewer-prompt.md` 강사 화면에 띄우기 — 마법의 부적이 아니라 부탁의 글
+2. ChatGPT 새 대화 → 전체 복사·붙여넣기 → Enter
+3. AI 첫 질문: "어떤 부서에서 어떤 역할을…"
+4. 한 줄 답변 → AI 후속 질문 1~2턴 더
+5. 끝나면 업무 맥락 문서 (A~E 영역) 받기
 
 </div>
 
 <div class="slide-banner mt-2 bg-green-50 dark:bg-green-900">
-🏠 오늘 저녁 본인 업무로 그대로 하시면 됩니다 — **그게 과제**
+🏠 오늘 저녁 본인 업무로 그대로 하시면 됩니다 — 그게 과제
 </div>
 
 ---
@@ -1035,31 +1035,31 @@ layout: section
 
 | 회차 | 프롬프트 | 결과물 |
 |:---:|:---|:---|
-| **1회차** | `homework-interviewer-prompt.md` | **업무 맥락 정의서** |
+| 1회차 | `homework-interviewer-prompt.md` | 업무 맥락 정의서 |
 | 2회차 | 업무 흐름도용 | Mermaid 흐름도 |
 | 3회차 | `micro-tool-interviewer.md` | HTML 도구 사양서 |
 
 <div class="slide-banner mt-2 bg-blue-50 dark:bg-blue-900">
-💎 9시간 뒤 — 일반 MD 여러 개 + **인터뷰 MD 1~2개** = 본인 자산
+💎 9시간 뒤 — 일반 MD 여러 개 + 인터뷰 MD 1~2개 = 본인 자산
 </div>
 
 ---
 
 # ⏱ 실습 ② — 인터뷰 프롬프트 직접 써보기 🎤
 
-<div class="slide-sub">**10분 · 1인 1대화창**</div>
+<div class="slide-sub">10분 · 1인 1대화창</div>
 
 <div class="grid grid-cols-2 gap-3">
 
 <div class="slide-card bg-gray-50 dark:bg-gray-800">
 
-**① 진행**
+① 진행
 
-1. ChatGPT/Gemini **새 대화** 열기
-2. **`homework-interviewer-prompt.md`** 전체 붙여넣기<br>
+1. ChatGPT/Gemini 새 대화 열기
+2. `homework-interviewer-prompt.md` 전체 붙여넣기<br>
    <a href="https://raw.githubusercontent.com/Baikhojun/yooshin-ai-tf-2026/main/demo-data/homework-interviewer-prompt.md" target="_blank" class="text-blue-500 underline text-xs">📄 파일 열기</a>
-3. AI **질문 1개**씩 → 솔직히 답하기
-4. **인터뷰 노트** 확인 → **업무 맥락 문서** (A~E) 받기
+3. AI 질문 1개씩 → 솔직히 답하기
+4. 인터뷰 노트 확인 → 업무 맥락 문서 (A~E) 받기
 
 <div class="mt-2 p-2 bg-blue-100 dark:bg-blue-950 rounded text-xs">
 부서·역할 → 반복 업무 → 도구 → 병목 → 자동화 후보
@@ -1069,11 +1069,11 @@ layout: section
 
 <div class="slide-card border border-gray-200 dark:border-gray-600">
 
-**② 손에 남는 것**
+② 손에 남는 것
 
-- **인터뷰 노트** (AI가 정리)
-- **업무 맥락 문서** (A4 2p 목표)
-- 3교시 MD의 **씨앗**
+- 인터뷰 노트 (AI가 정리)
+- 업무 맥락 문서 (A4 2p 목표)
+- 3교시 MD의 씨앗
 
 <div class="mt-2 font-mono text-xs bg-gray-100 dark:bg-gray-900 p-2 rounded">
 A 역할 / B 업무 / C 병목 / D 도구 / E 기타
@@ -1095,8 +1095,8 @@ layout: section
 
 <div class="opacity-80 mt-6 text-xl leading-relaxed">
 
-AI는 **새 대화창을 열 때마다**<br>
-어제 알려준 모든 걸 **0%부터 다시 배웁니다**
+AI는 새 대화창을 열 때마다<br>
+어제 알려준 모든 걸 0%부터 다시 배웁니다
 
 </div>
 
@@ -1109,13 +1109,13 @@ class: text-center slide-hero
 
 <div class="text-xl mt-3 leading-relaxed mx-auto">
 
-어제 AI에게 **우리 회사 회의록 양식**을 알려줬어도,
+어제 AI에게 우리 회사 회의록 양식을 알려줬어도,
 
 </div>
 
 <div class="text-xl mt-2 leading-relaxed mx-auto">
 
-오늘 **새 대화창**을 열면 — AI는 <span class="text-red-500 font-bold">하나도 기억 못 합니다</span>.
+오늘 새 대화창을 열면 — AI는 <span class="text-red-500 font-bold">하나도 기억 못 합니다</span>.
 
 </div>
 
@@ -1136,10 +1136,10 @@ class: text-center slide-hero
 | ✅ "당신은 회의록 담당자" 역할 부여 | ❌ 역할 없음 |
 | ✅ 우리 회사 양식 5문단 설명 | ❌ 양식 정보 없음 |
 | ✅ 발언자 표기 규칙 알려줌 | ❌ 규칙 없음 |
-| → **완벽한 회의록** 결과 | → **위키백과처럼 어색한** 결과 |
+| → 완벽한 회의록 결과 | → 위키백과처럼 어색한 결과 |
 
 <div class="mt-3 text-center text-xl">
-🧠 AI가 **바보가 된 게** 아닙니다.<br>
+🧠 AI가 바보가 된 게 아닙니다.<br>
 <span class="text-blue-500 font-bold">그냥 어제의 기억이 통째로 사라진 것</span>.
 </div>
 
@@ -1165,8 +1165,8 @@ class: text-center slide-hero
 
 <div v-click class="mt-4 p-4 rounded-xl bg-yellow-50 border-2 border-yellow-400 text-center">
 
-→ 아닙니다. **새 채팅을 여셨거나, 시간이 너무 지났거나, 다른 대화에서 작업한 것**입니다.<br>
-→ AI의 **기억력**은 본인 머리로 따라가지 마세요. <span class="font-bold">항상 0이라고 가정</span>하세요.
+→ 아닙니다. 새 채팅을 여셨거나, 시간이 너무 지났거나, 다른 대화에서 작업한 것입니다.<br>
+→ AI의 기억력은 본인 머리로 따라가지 마세요. <span class="font-bold">항상 0이라고 가정</span>하세요.
 
 </div>
 
@@ -1182,15 +1182,15 @@ class: text-center slide-hero
 
 <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500">
 
-**① 자주 쓰는 맥락을 텍스트 파일로 저장** ← <span class="text-red-500 font-bold">이게 곧 MD 프롬프트 파일!</span>
+① 자주 쓰는 맥락을 텍스트 파일로 저장 ← <span class="text-red-500 font-bold">이게 곧 MD 프롬프트 파일!</span>
 
-<div class="text-sm opacity-80 mt-1">3교시 본론에서 정식 다룸 — **본 교육의 핵심**</div>
+<div class="text-sm opacity-80 mt-1">3교시 본론에서 정식 다룸 — 본 교육의 핵심</div>
 
 </div>
 
 <div class="p-3 rounded-lg bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500">
 
-**② AI 도구에 맥락을 등록** (요즘 무료로 가능)
+② AI 도구에 맥락을 등록 (요즘 무료로 가능)
 
 <div class="text-sm opacity-80 mt-1 grid grid-cols-2 gap-2">
 
@@ -1210,7 +1210,7 @@ class: text-center slide-hero
 
 <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900 border-l-4 border-green-500">
 
-**③ 재사용 가능한 프롬프트 한 덩어리** 만들기
+③ 재사용 가능한 프롬프트 한 덩어리 만들기
 
 <div class="text-sm opacity-80 mt-1">회사 맥락 + 역할 + 출력 형식 = 한 번에 묶어서 복사 (=MD 프롬프트)</div>
 
@@ -1221,14 +1221,14 @@ class: text-center slide-hero
 </div>
 
 <div v-click class="slide-fill-bottom text-center text-base">
-🔮 **①번 = 오늘의 핵심**. ②번은 익숙해진 다음에 천천히 도전하세요.
+🔮 ①번 = 오늘의 핵심. ②번은 익숙해진 다음에 천천히 도전하세요.
 </div>
 
 </div>
 
 ---
 
-# 📋 클립보드 워크플로우 — 이번 교육의 **기본기**
+# 📋 클립보드 워크플로우 — 이번 교육의 기본기
 
 <div class="slide-fill">
 
@@ -1237,7 +1237,7 @@ class: text-center slide-hero
 ```
 1️⃣  원본 데이터를 클립보드에 복사
          ↓
-2️⃣  AI에게 **맥락과 함께** 붙여 요청
+2️⃣  AI에게 맥락과 함께 붙여 요청
          ↓
 3️⃣  결과를 다시 복사
          ↓
@@ -1251,7 +1251,7 @@ class: text-center slide-hero
 </div>
 
 <div class="slide-fill-bottom text-center text-sm opacity-70">
-⚠️ 교육생분의 70%는 **2단계**에서 **맥락**을 빼먹습니다. 오늘 그 습관을 고치는 게 목표.
+⚠️ 교육생분의 70%는 2단계에서 맥락을 빼먹습니다. 오늘 그 습관을 고치는 게 목표.
 </div>
 
 </div>
@@ -1266,7 +1266,7 @@ class: text-center break-slide
 <div class="slide-break-body">
 
 3교시: 오늘의 진짜 클라이맥스 ⭐<br>
-**나만의 MD 프롬프트 파일** 만들기
+나만의 MD 프롬프트 파일 만들기
 
 </div>
 
@@ -1280,7 +1280,7 @@ layout: section
 
 <div class="opacity-60 mt-4 text-xl">
 
-📂 내 업무를 **MD 파일로 박아두는** 시간
+📂 내 업무를 MD 파일로 박아두는 시간
 
 </div>
 
@@ -1289,7 +1289,7 @@ layout: center
 class: text-center slide-hero
 ---
 
-# 🎯 MD 파일은 **AI에게 같은 일을 매번 시키는 도구**
+# 🎯 MD 파일은 AI에게 같은 일을 매번 시키는 도구
 
 <div class="text-xl mt-3 leading-relaxed mx-auto">
 
@@ -1313,14 +1313,14 @@ class: text-center slide-hero
 # 텍스트도 다 같은 텍스트가 아니다 — 같은 글, 3가지 표기
 
 <div class="text-base opacity-80 mb-3 text-center">
-같은 한국어처럼 보여도, **글자를 담는 방식**(인코딩·서식)이 다르면 AI가 못 읽을 수도 있어요.
+같은 한국어처럼 보여도, 글자를 담는 방식(인코딩·서식)이 다르면 AI가 못 읽을 수도 있어요.
 </div>
 
 <div class="grid grid-cols-3 gap-3 mt-2">
 
 <div class="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300">
 
-**(A) 그냥 메모장**
+(A) 그냥 메모장
 
 ```
 2026년 5월 행사 안내
@@ -1329,23 +1329,23 @@ class: text-center slide-hero
 대상 전 임직원
 ```
 
-<div class="text-xs text-red-600 mt-2">😩 사람이 봐도 줄글, **구조 없음** — AI도 무엇이 표인지 모름</div>
+<div class="text-xs text-red-600 mt-2">😩 사람이 봐도 줄글, 구조 없음 — AI도 무엇이 표인지 모름</div>
 
 </div>
 
 <div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900 border border-yellow-400">
 
-**(B) 한글(HWP)·워드 표**
+(B) 한글(HWP)·워드 표
 
 <div class="text-sm">화려한 표<br>셀 색깔<br>중간 정렬<br>진한 글씨…</div>
 
-<div class="text-xs text-red-600 mt-4">🚫 보기엔 예쁘지만, **AI에 복사** → 서식·표 다 사라짐 (그냥 한 줄 텍스트)</div>
+<div class="text-xs text-red-600 mt-4">🚫 보기엔 예쁘지만, AI에 복사 → 서식·표 다 사라짐 (그냥 한 줄 텍스트)</div>
 
 </div>
 
 <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900 border-2 border-green-500">
 
-**(C) 마크다운** ⭐
+(C) 마크다운 ⭐
 
 ```markdown
 ## 2026년 5월 행사
@@ -1363,7 +1363,7 @@ class: text-center slide-hero
 </div>
 
 <div class="mt-5 p-3 bg-blue-50 dark:bg-blue-900 rounded text-center text-lg">
-💎 **마크다운 = AI와 사람이 같이 잘 읽는 공통어**<br>
+💎 마크다운 = AI와 사람이 같이 잘 읽는 공통어<br>
 <span class="text-sm opacity-80">(나라마다 말은 달라도 영어처럼 — AI 세상의 공통어가 마크다운)</span>
 </div>
 
@@ -1375,11 +1375,11 @@ class: text-center slide-hero
 
 | # | 문법 | 기호 (이름·발음) | 입력 예시 | 결과 |
 |:---:|:---:|:---|:---|:---|
-| 1 | **헤딩** | `#` — **샵 / 해시** | `# 큰 제목`<br>`## 중간`<br>`### 작은` | 글 위계 |
-| 2 | **목록** | `-` — **하이픈 / 대시** | `- 첫 항목`<br>`- 둘째 항목` | 글머리표 |
-| 3 | **굵게** | `**` — **별표 두 개 (애스터리스크)** | `**중요**` | **중요** |
-| 4 | **표** | `\|` — **버티컬 바 / 파이프** | `\| A \| B \|`<br>`\|---\|---\|` | 표 |
-| 5 | **코드** | ` ``` ` — **백틱 세 개** | ` ``` ` 위아래로 감싸기 | 데이터 영역 분리 |
+| 1 | 헤딩 | `#` — 샵 / 해시 | `# 큰 제목`<br>`## 중간`<br>`### 작은` | 글 위계 |
+| 2 | 목록 | `-` — 하이픈 / 대시 | `- 첫 항목`<br>`- 둘째 항목` | 글머리표 |
+| 3 | 굵게 | `**` — 별표 두 개 (애스터리스크) | `**중요**` | 중요 |
+| 4 | 표 | `\|` — 버티컬 바 / 파이프 | `\| A \| B \|`<br>`\|---\|---\|` | 표 |
+| 5 | 코드 | ` ``` ` — 백틱 세 개 | ` ``` ` 위아래로 감싸기 | 데이터 영역 분리 |
 
 </div>
 
@@ -1401,16 +1401,16 @@ class: text-center slide-hero
 
 <div>
 
-<div class="mb-2">PC 어딘가에 **잠들어 있다가**, 일이 생기면 **깨워 쓰는** 텍스트 파일</div>
+<div class="mb-2">PC 어딘가에 잠들어 있다가, 일이 생기면 깨워 쓰는 텍스트 파일</div>
 
 <div class="slide-card bg-blue-50 dark:bg-blue-900">
 
-**한 번 만들면** (4단계)
+한 번 만들면 (4단계)
 
-1. `회의록_정리.md` **전체 복사**
-2. ChatGPT **새 대화** 붙여넣기
-3. `[데이터]` 아래 **오늘 메모** 추가
-4. 🎉 **프롬프트 다시 쓸 필요 0**
+1. `회의록_정리.md` 전체 복사
+2. ChatGPT 새 대화 붙여넣기
+3. `[데이터]` 아래 오늘 메모 추가
+4. 🎉 프롬프트 다시 쓸 필요 0
 
 </div>
 
@@ -1432,7 +1432,7 @@ class: text-center slide-hero
 </div>
 
 <div class="slide-fill-bottom slide-banner bg-yellow-50 dark:bg-yellow-900 border border-yellow-400">
-✨ **1회차 핵심 산출물** — 오늘 실습 ③에서 **업무 1 + 개인 1** 만듭니다
+✨ 1회차 핵심 산출물 — 오늘 실습 ③에서 업무 1 + 개인 1 만듭니다
 </div>
 
 </div>
@@ -1479,12 +1479,12 @@ class: text-center slide-hero
 
 | 영역 | 비유 |
 |------|------|
-| **[역할]** | 신입사원에게 **명함** |
-| **[작업]** | 업무 **지시서** |
-| **[판단 기준]** | **판단 매뉴얼** |
-| **[출력 형식]** | **결재 양식지** |
-| **[예시]** | **모범 답안** |
-| **[데이터]** | **오늘치 입력** |
+| [역할] | 신입사원에게 명함 |
+| [작업] | 업무 지시서 |
+| [판단 기준] | 판단 매뉴얼 |
+| [출력 형식] | 결재 양식지 |
+| [예시] | 모범 답안 |
+| [데이터] | 오늘치 입력 |
 
 </div>
 
@@ -1503,7 +1503,7 @@ class: text-center slide-hero
 <div class="slide-fill">
 
 <div class="text-base opacity-80 mb-2">
-업무 외에도 — 일상에서 같은 MD 패턴이 똑같이 동작합니다. 다음 3개 중 **하나를 골라** 시연합니다.
+업무 외에도 — 일상에서 같은 MD 패턴이 똑같이 동작합니다. 다음 3개 중 하나를 골라 시연합니다.
 </div>
 
 <div class="grid grid-cols-3 gap-3 mt-1">
@@ -1517,7 +1517,7 @@ class: text-center slide-hero
 <div class="text-sm mt-2 opacity-80">
 가족이 "머리가 아파"라고 하면<br>
 → MD 붙여넣기 + 증상 메모<br>
-→ **확인 질문 → 자가 케어 안내 + 병원 방문 기준**
+→ 확인 질문 → 자가 케어 안내 + 병원 방문 기준
 </div>
 
 </div>
@@ -1531,7 +1531,7 @@ class: text-center slide-hero
 <div class="text-sm mt-2 opacity-80">
 "오늘 비, 미팅 3시"<br>
 → MD 붙여넣기 + 일정 메모<br>
-→ **상의·하의·신발·우산** 추천 표
+→ 상의·하의·신발·우산 추천 표
 </div>
 
 </div>
@@ -1545,7 +1545,7 @@ class: text-center slide-hero
 <div class="text-sm mt-2 opacity-80">
 "냉장고에 두부, 김치, 계란"<br>
 → MD 붙여넣기 + 재료 목록<br>
-→ **3가지 메뉴 + 5분 레시피**
+→ 3가지 메뉴 + 5분 레시피
 </div>
 
 </div>
@@ -1558,10 +1558,10 @@ class: text-center slide-hero
 
 <v-clicks>
 
-1. **메모장 열기** → MD 6칸 템플릿 붙여넣기 → 위 사례 중 1개로 6칸 채우기
-2. **다른 이름으로 저장** → `*.md` 확장자 (예: `저녁_메뉴_추천.md`)
-3. **ChatGPT 새 대화** → MD 전체 복사·붙여넣기 → 마지막 `[데이터]` 아래 실제 상황 1줄 추가
-4. ✨ 결과 — **AI가 정해진 형식으로 답함**
+1. 메모장 열기 → MD 6칸 템플릿 붙여넣기 → 위 사례 중 1개로 6칸 채우기
+2. 다른 이름으로 저장 → `*.md` 확장자 (예: `저녁_메뉴_추천.md`)
+3. ChatGPT 새 대화 → MD 전체 복사·붙여넣기 → 마지막 `[데이터]` 아래 실제 상황 1줄 추가
+4. ✨ 결과 — AI가 정해진 형식으로 답함
 5. 다른 상황으로 같은 파일 → 또 같은 형식 ✅
 
 </v-clicks>
@@ -1583,7 +1583,7 @@ class: text-center slide-hero
 
 ---
 
-# 교육생분이 빠지기 쉬운 **함정 3가지** 🪤
+# 교육생분이 빠지기 쉬운 함정 3가지 🪤
 
 <div class="slide-fill">
 
@@ -1593,25 +1593,25 @@ class: text-center slide-hero
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
-**함정 ①** ❌ **매번 새로 프롬프트를 쓴다**
+함정 ① ❌ 매번 새로 프롬프트를 쓴다
 
-→ MD 파일로 **한 번만** 쓰고 **복사 재사용**. 머리 안 굴려도 됨.
-
-</div>
-
-<div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
-
-**함정 ②** ❌ **AI 답변이 마음에 안 들면 답변을 다시 시킨다**
-
-→ 답변이 아니라 **MD의 [판단 기준]·[예시]를 수정해서 저장**. 다음에 또 같은 문제 안 생김.
+→ MD 파일로 한 번만 쓰고 복사 재사용. 머리 안 굴려도 됨.
 
 </div>
 
 <div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
 
-**함정 ③** ❌ **내 비법 프롬프트는 내 머릿속에 있음**
+함정 ② ❌ AI 답변이 마음에 안 들면 답변을 다시 시킨다
 
-→ MD 파일이면 **부서원에게 공유 가능**. 후임자 인수인계도 **파일 전송** 한 번.
+→ 답변이 아니라 MD의 [판단 기준]·[예시]를 수정해서 저장. 다음에 또 같은 문제 안 생김.
+
+</div>
+
+<div class="p-4 rounded-lg bg-red-50 border-l-4 border-red-400">
+
+함정 ③ ❌ 내 비법 프롬프트는 내 머릿속에 있음
+
+→ MD 파일이면 부서원에게 공유 가능. 후임자 인수인계도 파일 전송 한 번.
 
 </div>
 
@@ -1623,19 +1623,19 @@ class: text-center slide-hero
 
 ---
 
-# 💎 1회차에서 가져가는 **가장 중요한 표**
+# 💎 1회차에서 가져가는 가장 중요한 표
 
 <div class="slide-fill">
 
 <div class="mt-2">
 
-| 비교 항목 | 평범한 메모 | **MD 프롬프트 파일** |
+| 비교 항목 | 평범한 메모 | MD 프롬프트 파일 |
 |---------|-----------|---------------------|
-| 다음 달에 다시 쓸 수 있나? | "어떻게 썼더라..." 😵 | **파일 열면 끝** ✅ |
-| 동료에게 공유 가능? | 말로 설명 (10분) | **파일 전송 (3초)** 📨 |
-| AI 결과 품질 | **그때그때 다름** | **매번 같은 수준** 🎯 |
-| 개선 가능? | 머릿속에서 어림 | **파일을 고쳐서 저장** 🔧 |
-| 휴가·이직 시 인수인계 | "본인이 잘 해보세요" 😬 | **"이 폴더 통째로 드릴게요"** 🎁 |
+| 다음 달에 다시 쓸 수 있나? | "어떻게 썼더라..." 😵 | 파일 열면 끝 ✅ |
+| 동료에게 공유 가능? | 말로 설명 (10분) | 파일 전송 (3초) 📨 |
+| AI 결과 품질 | 그때그때 다름 | 매번 같은 수준 🎯 |
+| 개선 가능? | 머릿속에서 어림 | 파일을 고쳐서 저장 🔧 |
+| 휴가·이직 시 인수인계 | "본인이 잘 해보세요" 😬 | "이 폴더 통째로 드릴게요" 🎁 |
 
 </div>
 
@@ -1653,7 +1653,7 @@ layout: section
 
 <div class="opacity-80 mt-6 text-xl leading-relaxed">
 
-🎯 본 교육이 끝난 뒤, 내가 만들 **업무 대행 AI**는?
+🎯 본 교육이 끝난 뒤, 내가 만들 업무 대행 AI는?
 
 </div>
 
@@ -1665,23 +1665,23 @@ layout: section
 
 <div class="slide-card bg-green-50 dark:bg-green-900 border-l-4 border-green-500">
 
-**✅ MD 프롬프트가 빛나는 작업**
+✅ MD 프롬프트가 빛나는 작업
 
-- 매주·매월 **반복** 발생
-- 입·출력 **형식 정형화** 가능
-- **판단보다 처리**가 많음
-- 한 번 만들면 **나만 써도** 가치
+- 매주·매월 반복 발생
+- 입·출력 형식 정형화 가능
+- 판단보다 처리가 많음
+- 한 번 만들면 나만 써도 가치
 
 </div>
 
 <div class="slide-card bg-red-50 dark:bg-red-900 border-l-4 border-red-400">
 
-**❌ 적합하지 않은 작업**
+❌ 적합하지 않은 작업
 
-- 1년에 **1~2번**뿐
-- 매번 **양식이 완전히** 달라짐
-- **결정 권한·책임** 필요
-- **숫자 계산만** 하는 일
+- 1년에 1~2번뿐
+- 매번 양식이 완전히 달라짐
+- 결정 권한·책임 필요
+- 숫자 계산만 하는 일
 
 </div>
 
@@ -1691,34 +1691,34 @@ layout: section
 
 # 관리부서 자동화 사례 — 영감 얻기 💡
 
-<div class="text-sm opacity-80 mb-2">**"본인 업무에서 비슷한 게 떠오르는지 보세요"**</div>
+<div class="text-sm opacity-80 mb-2">"본인 업무에서 비슷한 게 떠오르는지 보세요"</div>
 
 | 부서 | 후보 예시 | MD 파일 이름 (가칭) | 시간 절감 |
 |:---:|:---|:---|:---:|
-| 총무 | 회의록 정리 | `회의록_정리.md` | 30분 → **3분** |
-| 인사 | 휴가 사유 분류·집계 | `휴가사유_분류.md` | 1시간 → **5분** |
-| 인사 | 채용 공고 문구 다듬기 | `채용공고_다듬기.md` | 2시간 → **15분** |
-| 구매 | 거래처 답신 메일 초안 | `거래처_메일_초안.md` | 20분 → **2분** |
-| 자산 | 자산 카드 분류 | `자산_분류.md` | 1시간 → **10분** |
-| 총무 | 안내 문자 작성 | `안내문자_작성.md` | 10분 → **1분** |
-| 일반 | 보고서 초안 다듬기 | `보고서_다듬기.md` | 1시간 → **15분** |
-| 일반 | 공문 톤앤매너 다듬기 | `공문_다듬기.md` | 30분 → **5분** |
+| 총무 | 회의록 정리 | `회의록_정리.md` | 30분 → 3분 |
+| 인사 | 휴가 사유 분류·집계 | `휴가사유_분류.md` | 1시간 → 5분 |
+| 인사 | 채용 공고 문구 다듬기 | `채용공고_다듬기.md` | 2시간 → 15분 |
+| 구매 | 거래처 답신 메일 초안 | `거래처_메일_초안.md` | 20분 → 2분 |
+| 자산 | 자산 카드 분류 | `자산_분류.md` | 1시간 → 10분 |
+| 총무 | 안내 문자 작성 | `안내문자_작성.md` | 10분 → 1분 |
+| 일반 | 보고서 초안 다듬기 | `보고서_다듬기.md` | 1시간 → 15분 |
+| 일반 | 공문 톤앤매너 다듬기 | `공문_다듬기.md` | 30분 → 5분 |
 
 <div class="mt-4 text-center text-base">
-🎯 **매월 **같은 일** 을 반복** 하고 있다 — 그게 <span class="font-bold text-blue-500">후보의 신호</span>
+🎯 매월 같은 일 을 반복 하고 있다 — 그게 <span class="font-bold text-blue-500">후보의 신호</span>
 </div>
 
 ---
 
 # ⏱ 실습 ③ — MD 파일 두 개 만들기 ⭐
 
-<div class="slide-sub">**15분 · 1인 2파일**</div>
+<div class="slide-sub">15분 · 1인 2파일</div>
 
 <div class="grid grid-cols-2 gap-3 text-sm">
 
 <div class="slide-card bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500">
 
-**🏢 업무용 MD 1개**
+🏢 업무용 MD 1개
 
 반복 업무 1가지 → MD 프롬프트 작성
 
@@ -1726,13 +1726,13 @@ layout: section
 - `법인카드_적요_분류.md`
 - `메일_답장_초안.md`
 
-<div class="mt-2 text-xs opacity-80">💡 다음 주 **그대로 다시 쓸** 파일</div>
+<div class="mt-2 text-xs opacity-80">💡 다음 주 그대로 다시 쓸 파일</div>
 
 </div>
 
 <div class="slide-card bg-pink-50 dark:bg-pink-900 border-l-4 border-pink-500">
 
-**🏠 개인용 MD 1개**
+🏠 개인용 MD 1개
 
 일상 반복 1가지 → MD 프롬프트 작성
 
@@ -1740,14 +1740,14 @@ layout: section
 - `자녀_숙제_도우미.md`
 - `여행_일정_정리.md`
 
-<div class="mt-2 text-xs opacity-80">💡 부담 없이 **재미있게**</div>
+<div class="mt-2 text-xs opacity-80">💡 부담 없이 재미있게</div>
 
 </div>
 
 </div>
 
 <div class="slide-banner mt-2 bg-yellow-50 dark:bg-yellow-900">
-🚀 오늘 끝나면 **MD 파일 2개** — 본 교육의 첫 자산
+🚀 오늘 끝나면 MD 파일 2개 — 본 교육의 첫 자산
 </div>
 
 ---
@@ -1772,27 +1772,27 @@ layout: section
 
 <div class="flex items-center gap-3">
 <span class="text-3xl">1️⃣</span>
-<div>**자동완성** — 맥락과 역할이 **모든 것을** 결정한다</div>
+<div>자동완성 — 맥락과 역할이 모든 것을 결정한다</div>
 </div>
 
 <div class="flex items-center gap-3">
 <span class="text-3xl">2️⃣</span>
-<div>**의미공간** — AI는 **별자리**로 단어를 본다 (계산은 약점)</div>
+<div>의미공간 — AI는 별자리로 단어를 본다 (계산은 약점)</div>
 </div>
 
 <div class="flex items-center gap-3">
 <span class="text-3xl">3️⃣</span>
-<div>**작업기억** — 매 대화는 **백지**, 매일 첫 출근하는 신입사원에게 알려주는 마음으로</div>
+<div>작업기억 — 매 대화는 백지, 매일 첫 출근하는 신입사원에게 알려주는 마음으로</div>
 </div>
 
 <div class="flex items-center gap-3">
 <span class="text-3xl">4️⃣</span>
-<div>**마크다운** — AI와 사람이 **모두 잘 읽는** 공통어</div>
+<div>마크다운 — AI와 사람이 모두 잘 읽는 공통어</div>
 </div>
 
 <div class="flex items-center gap-3">
 <span class="text-3xl">⭐</span>
-<div>**MD 프롬프트 파일** — 한 번 만들면 **평생 재사용**하는 업무 대행 AI 뼈대</div>
+<div>MD 프롬프트 파일 — 한 번 만들면 평생 재사용하는 업무 대행 AI 뼈대</div>
 </div>
 
 </v-clicks>
@@ -1800,47 +1800,47 @@ layout: section
 </div>
 
 <div v-click class="mt-3 text-center text-lg">
-🧳 손에는 **MD 파일 2개**(업무 1 + 개인 1) — 다음 회차로 가져가는 첫 자산
+🧳 손에는 MD 파일 2개(업무 1 + 개인 1) — 다음 회차로 가져가는 첫 자산
 </div>
 
 ---
 
 # 과제 안내 📚
 
-<div class="text-base opacity-80 mb-3">**기한**: 6. 2.(화) 오전 9시까지</div>
+<div class="text-base opacity-80 mb-3">기한: 6. 2.(화) 오전 9시까지</div>
 
 <div class="grid grid-cols-1 gap-3 mt-2 text-base">
 
 <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500">
 
-**과제 ① — 업무용 MD 파일 1개 완성** (필수)
+과제 ① — 업무용 MD 파일 1개 완성 (필수)
 
-오늘 실습 ③의 **업무용 MD 파일**을 다듬어 완성<br>
+오늘 실습 ③의 업무용 MD 파일을 다듬어 완성<br>
 <span class="text-sm opacity-80">→ 다음 주 월요일에 그대로 다시 쓸 수 있는 형태로</span>
 
 </div>
 
 <div class="p-3 rounded-lg bg-pink-50 dark:bg-pink-900 border-l-4 border-pink-500">
 
-**과제 ② — 개인용 MD 파일 1개 완성** (필수)
+과제 ② — 개인용 MD 파일 1개 완성 (필수)
 
-실습 ③의 **개인용 MD 파일**을 다듬어 완성<br>
+실습 ③의 개인용 MD 파일을 다듬어 완성<br>
 <span class="text-sm opacity-80">→ 부담 없이, 재미로 만들어도 OK</span>
 
 </div>
 
 <div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-500">
 
-**과제 ③ — 인터뷰 프롬프트로 본인 업무 정리** (선택·강력 권장)
+과제 ③ — 인터뷰 프롬프트로 본인 업무 정리 (선택·강력 권장)
 
-<a href="https://raw.githubusercontent.com/Baikhojun/yooshin-ai-tf-2026/main/demo-data/homework-interviewer-prompt.md" target="_blank" class="text-blue-500 underline">homework-interviewer-prompt.md</a> 로 **업무 맥락 문서**(A~E) 완성<br>
+<a href="https://raw.githubusercontent.com/Baikhojun/yooshin-ai-tf-2026/main/demo-data/homework-interviewer-prompt.md" target="_blank" class="text-blue-500 underline">homework-interviewer-prompt.md</a> 로 업무 맥락 문서(A~E) 완성<br>
 <span class="text-sm opacity-80">→ 2회차 Mermaid 흐름도 그릴 재료</span>
 
 </div>
 
 </div>
 
-<div class="mt-4 text-base">📨 **제출**: Google Forms (URL 별도 안내)</div>
+<div class="mt-4 text-base">📨 제출: Google Forms (URL 별도 안내)</div>
 
 ---
 
@@ -1848,21 +1848,21 @@ layout: section
 
 <div class="slide-card bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border border-blue-200 mt-2 text-sm">
 
-<div class="text-base font-bold mb-2">"AI에게 **그림**까지 그리게 한다"</div>
+<div class="text-base font-bold mb-2">"AI에게 그림까지 그리게 한다"</div>
 
 <div class="grid grid-cols-2 gap-x-4 gap-y-1">
 
-- 🎨 **Mermaid** — MD 안에서 순서도
-- 📐 본인 업무 **흐름도** 작성
+- 🎨 Mermaid — MD 안에서 순서도
+- 📐 본인 업무 흐름도 작성
 - 🧩 프롬프트 3요소 (Input / Instruction / Output)
-- ✨ **업무 대행 AI 1개** 컨셉 확정
+- ✨ 업무 대행 AI 1개 컨셉 확정
 
 </div>
 
 </div>
 
 <div class="slide-banner mt-3">
-다음 주 — **본인 업무가 그림으로** 보입니다. 그중 **도구로 만들 1부분**을 고릅니다.
+다음 주 — 본인 업무가 그림으로 보입니다. 그중 도구로 만들 1부분을 고릅니다.
 </div>
 
 ---
@@ -1880,7 +1880,7 @@ class: text-center thanks-slide
 
 <div class="slide-thanks-quote">
 
-**"오늘 못 다 들으신 부분이 있어도 2회차 시작 5분 복습에서 다시 짚어 드립니다."**
+"오늘 못 다 들으신 부분이 있어도 2회차 시작 5분 복습에서 다시 짚어 드립니다."
 
 </div>
 
