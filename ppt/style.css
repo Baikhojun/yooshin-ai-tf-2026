@@ -36,6 +36,18 @@
   font-family: 'D2Coding', Consolas, monospace !important;
 }
 
+/* 강조: *italic*(em) 제거 · **bold**(strong)만 사용 */
+.slidev-layout em,
+.slidev-layout i {
+  font-style: normal !important;
+  font-weight: inherit;
+}
+
+.slidev-layout strong,
+.slidev-layout b {
+  font-weight: 700 !important;
+}
+
 /* 1페이지 커버 — AI 학습 고급 히어로 */
 .slidev-layout.cover.cover-hero,
 .slidev-layout.cover.cover-hero .slidev-layout {
