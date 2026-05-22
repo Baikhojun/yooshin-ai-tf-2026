@@ -288,17 +288,17 @@
 
 .slidev-layout.center .slide-focus-note,
 .slidev-layout.center .slide-focus-note p {
-  font-size: 1.35em !important;
-  line-height: 1.44 !important;
-  margin-top: 0.65rem;
+  font-size: 1em !important;
+  line-height: 1.42 !important;
+  margin-top: 0.5rem;
   max-width: 800px;
   text-align: center;
 }
 
 .slidev-layout.center .slide-focus-sub,
 .slidev-layout.center .slide-focus-sub p {
-  font-size: 1.12em !important;
-  line-height: 1.4 !important;
+  font-size: 0.92em !important;
+  line-height: 1.38 !important;
 }
 
 /* 7p 성공 장면 — 코드 블록 포함, 위쪽부터 배치 */
