@@ -217,7 +217,7 @@ class: text-center slide-icebreaker
 
 ---
 layout: center
-class: text-center slide-hero
+class: text-center slide-hero slide-success-scene
 ---
 
 # 1회차의 진짜 성공 장면 🎬
