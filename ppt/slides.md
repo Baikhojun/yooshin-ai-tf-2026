@@ -24,19 +24,19 @@ layout: cover
 
 # AI-native로 가는 길
 
-<div class="text-2xl opacity-80 mt-4">
+<div class="cover-sub">
 
 2차 TF · **Session 01**
 
 </div>
 
-<div class="text-xl opacity-70 mt-4">
+<div class="cover-tagline">
 
-LLM 원리 + <span class="text-yellow-300 font-bold">MD 프롬프트 파일</span>
+LLM 원리 + <span class="cover-accent">MD 프롬프트 파일</span>
 
 </div>
 
-<div class="abs-bl mx-14 my-12 opacity-60 text-sm">
+<div class="abs-bl mx-14 my-12 cover-footer">
 정보시스템실 · 2026. 5. 26.
 </div>
 
