@@ -374,7 +374,7 @@
   font-size: 0.95em !important;
 }
 
-/* 2p 아이스브레이커 — ①~④(1.05em) 대비 하단 안내 50% 통일 */
+/* 2p 아이스브레이커 — ①~④(1.05em) 대비 하단 안내 80% 통일 */
 .slidev-layout.center.slide-icebreaker:not(.break-slide):not(.thanks-slide),
 .slidev-layout.center:has(.slide-q-list):not(.break-slide):not(.thanks-slide) {
   --ice-q-size: 1.05em;
@@ -403,7 +403,7 @@
 }
 
 .slidev-layout.center:has(.slide-q-list) .slide-focus-note {
-  font-size: calc(var(--ice-q-size) * 0.5) !important;
+  font-size: calc(var(--ice-q-size) * 0.8) !important;
   line-height: 1.36 !important;
   margin-top: 0.35rem !important;
   max-width: 760px;
