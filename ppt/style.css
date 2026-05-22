@@ -374,10 +374,10 @@
   font-size: 0.95em !important;
 }
 
-/* 2p 아이스브레이커 — center 1.35em 배율 제거, 화면 안에 전부 들어오게 */
-.slidev-layout.center.slide-icebreaker,
-.slidev-layout.center:has(.slide-q-list) {
-  font-size: 1em !important;
+/* 2p 아이스브레이커 — ①~④(1.05em) 대비 하단 안내 50% 통일 */
+.slidev-layout.center.slide-icebreaker:not(.break-slide):not(.thanks-slide),
+.slidev-layout.center:has(.slide-q-list):not(.break-slide):not(.thanks-slide) {
+  --ice-q-size: 1.05em;
   padding-top: calc(var(--slide-nav-h, 5.7rem) + 0.1rem) !important;
   padding-bottom: 0.5rem !important;
 }
@@ -388,41 +388,41 @@
   margin-bottom: 0.1em !important;
 }
 
-.slidev-layout.center .slide-q-list,
-.slidev-layout.center .slide-q-list p {
+.slidev-layout.center:has(.slide-q-list) .slide-q-list,
+.slidev-layout.center:has(.slide-q-list) .slide-q-list :is(p, div, li) {
   display: inline-block;
   text-align: left;
-  font-size: 1.05em !important;
+  font-size: var(--ice-q-size) !important;
   line-height: 1.34 !important;
   max-width: 780px;
   margin: 0 auto;
 }
 
-.slidev-layout.center .slide-q-list p {
+.slidev-layout.center:has(.slide-q-list) .slide-q-list :is(p, div, li) {
   margin: 0.1em 0 !important;
 }
 
-.slidev-layout.center .slide-focus-note,
-.slidev-layout.center .slide-focus-note p {
-  font-size: 0.82em !important;
-  line-height: 1.32 !important;
-  margin-top: 0.25rem !important;
+.slidev-layout.center:has(.slide-q-list) .slide-focus-note {
+  font-size: calc(var(--ice-q-size) * 0.5) !important;
+  line-height: 1.36 !important;
+  margin-top: 0.35rem !important;
   max-width: 760px;
   text-align: center;
 }
 
-.slidev-layout.center .slide-focus-sub,
-.slidev-layout.center .slide-focus-sub p {
-  font-size: 0.76em !important;
-  line-height: 1.28 !important;
+.slidev-layout.center:has(.slide-q-list) .slide-focus-note p,
+.slidev-layout.center:has(.slide-q-list) .slide-focus-sub,
+.slidev-layout.center:has(.slide-q-list) .slide-focus-sub p {
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 
-.slidev-layout.center .slide-focus-sub.mt-3 {
+.slidev-layout.center:has(.slide-q-list) .slide-focus-sub.mt-3 {
+  margin-top: 0.25rem !important;
+}
+
+.slidev-layout.center:has(.slide-q-list) .slide-focus-sub.mt-2 {
   margin-top: 0.15rem !important;
-}
-
-.slidev-layout.center .slide-focus-sub.mt-2 {
-  margin-top: 0.1rem !important;
 }
 
 /* 7p 성공 장면 — 코드 블록 포함, 위쪽부터 배치 */
