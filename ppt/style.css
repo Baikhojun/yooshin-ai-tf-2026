@@ -634,13 +634,13 @@
   flex: 1 1 42%;
 }
 
-.slide-nav-pillar {
+.slide-nav-section {
   opacity: 0.55;
   white-space: nowrap;
   font-size: 1.02em;
 }
 
-.slide-nav-pillar.is-active {
+.slide-nav-section.is-active {
   opacity: 1;
   font-weight: 700;
   color: #1e3a5f;
@@ -688,7 +688,7 @@
   background: #4c1d95;
 }
 
-.dark .slide-nav-pillar.is-active {
+.dark .slide-nav-section.is-active {
   color: #93c5fd;
 }
 
