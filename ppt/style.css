@@ -329,22 +329,37 @@
   display: block;
 }
 
-/* 5p 사용 도구 4종 — 표·본문 축소 */
+/* 5p 사용 도구 4종 — 표 2배·하단 여백 3rem */
 [data-slidev-no="5"] .slidev-layout h1 {
   font-size: 1.4em !important;
   margin-bottom: 0.12em !important;
 }
 
+.slidev-layout .slide-tools-table table,
 [data-slidev-no="5"] .slidev-layout table {
-  font-size: 0.85em !important;
+  font-size: 1.7em !important;
+  width: 100%;
+}
+
+.slidev-layout .slide-tools-table table th,
+.slidev-layout .slide-tools-table table td,
+[data-slidev-no="5"] .slidev-layout table th,
+[data-slidev-no="5"] .slidev-layout table td {
+  padding: 0.56em 0.9em !important;
+  line-height: 1.45 !important;
+}
+
+.slidev-layout .slide-tools-footnote,
+[data-slidev-no="5"] .slidev-layout .slide-tools-footnote {
+  margin-top: 3rem !important;
 }
 
 [data-slidev-no="5"] .slidev-layout .text-lg {
-  font-size: 0.92em !important;
+  font-size: 1.05em !important;
 }
 
 [data-slidev-no="5"] .slidev-layout .text-base {
-  font-size: 0.86em !important;
+  font-size: 0.95em !important;
 }
 
 /* 2p 아이스브레이커 — center 1.35em 배율 제거, 화면 안에 전부 들어오게 */

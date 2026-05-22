@@ -155,7 +155,7 @@ class: text-center slide-icebreaker
 
 # 사용 도구 — 딱 4개 🛠
 
-<div class="mt-6">
+<div class="mt-6 slide-tools-table">
 
 | 도구 | 용도 | 비용 |
 |:---:|:---|:---:|
@@ -166,7 +166,7 @@ class: text-center slide-icebreaker
 
 </div>
 
-<div class="mt-3 text-center text-lg">
+<div class="mt-3 text-center text-lg slide-tools-footnote">
 모두 <span class="text-blue-500 font-bold">이미 갖고 계시거나 무료로 쓸 수 있는 것</span>.<br>
 <span class="opacity-70 text-base">새 프로그램 설치 없음. 카톡으로 사진 보내는 것보다 쉬워요.</span>
 </div>
