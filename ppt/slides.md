@@ -92,7 +92,7 @@ class: text-center slide-icebreaker
 
 # 큰 그림 — 9시간 뒤 뭐가 달라지나? 🎯
 
-<div class="mt-6">
+<div class="mt-6 slide-roadmap-table">
 
 | 회차 | 일자 | 주제 | 회차 끝나면 내 손에 |
 |:---:|:---:|:---|:---|
@@ -102,13 +102,13 @@ class: text-center slide-icebreaker
 
 </div>
 
-<div class="mt-3 text-center">
+<div class="slide-roadmap-outcome text-center">
 <span class="text-lg opacity-90">9시간 뒤, 교육생분 한 분 한 분의 손에<br>
 <span class="text-2xl font-bold text-blue-500">본인 업무를 대신해주는 AI 한 개</span>가 쥐어집니다.</span>
 
-<div class="mt-6 text-sm opacity-80">💡 <span class="font-bold">미리보기 — 이런 HTML 도구를 직접 만듭니다</span> (클릭하면 새 탭에서 열립니다)</div>
+<div class="slide-roadmap-preview-intro text-sm opacity-80">💡 <span class="font-bold">미리보기 — 이런 HTML 도구를 직접 만듭니다</span> (클릭하면 새 탭에서 열립니다)</div>
 
-<div class="grid grid-cols-3 gap-2 mt-2 text-xs mx-auto">
+<div class="grid grid-cols-3 gap-2 mt-2 text-xs mx-auto slide-roadmap-tools">
 <a href="./tools/01-chaksu.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">📄 착수계 자동 작성</a>
 <a href="./tools/02-bid-winner.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">🎯 낙찰자 계산기</a>
 <a href="./tools/03-collection.html" target="_blank" class="block p-2 bg-blue-50 dark:bg-blue-900 rounded hover:bg-blue-100">💰 수금액 정리</a>

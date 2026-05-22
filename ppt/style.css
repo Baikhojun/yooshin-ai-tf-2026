@@ -252,6 +252,59 @@
   opacity: 0.88;
 }
 
+/* 3p 9시간 로드맵 — 표·간격·미리보기 6칸 */
+.slidev-layout .slide-roadmap-table {
+  margin-top: 0.35rem !important;
+}
+
+.slidev-layout .slide-roadmap-table table {
+  font-size: 1.05em !important;
+  width: 100%;
+}
+
+.slidev-layout .slide-roadmap-table table th,
+.slidev-layout .slide-roadmap-table table td {
+  padding: 0.55em 0.7em !important;
+  line-height: 1.42 !important;
+}
+
+.slidev-layout .slide-roadmap-outcome {
+  margin-top: 1.15rem !important;
+}
+
+.slidev-layout .slide-roadmap-outcome .text-lg {
+  font-size: 1.1em !important;
+  line-height: 1.45 !important;
+}
+
+.slidev-layout .slide-roadmap-outcome .text-2xl {
+  font-size: 1.42em !important;
+  line-height: 1.4 !important;
+}
+
+.slidev-layout .slide-roadmap-preview-intro {
+  margin-top: 1.1rem !important;
+  font-size: 0.98em !important;
+  line-height: 1.4 !important;
+}
+
+.slidev-layout .slide-roadmap-tools {
+  gap: 0.55rem !important;
+  margin-top: 0.5rem !important;
+  max-width: 920px;
+}
+
+.slidev-layout .slide-roadmap-tools a {
+  padding: 0.9rem 0.55rem !important;
+  min-height: 3.4rem;
+  font-size: 1.02em !important;
+  line-height: 1.35 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 /* 4p 본 교육이 하지 않는 일 — 3칸 카드 높이·글자 확대 */
 .slidev-layout .slide-not-cards {
   gap: 0.75rem !important;
