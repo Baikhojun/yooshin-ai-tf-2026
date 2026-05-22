@@ -227,25 +227,47 @@
   margin-top: 0.3em !important;
 }
 
-/* statement — 두 가지 부탁 등 */
+/* statement — 9p 두 가지 부탁 */
+.slidev-layout.statement {
+  font-size: 1.15em !important;
+}
+
 .slidev-layout.statement h1 {
-  font-size: 2.5em !important;
-  margin-bottom: 0.25em !important;
+  font-size: 2.1em !important;
+  margin-bottom: 0.2em !important;
 }
 
 .slidev-layout.statement .slide-statement-block,
 .slidev-layout.statement .slide-statement-block p {
-  font-size: 1.72em !important;
-  line-height: 1.45 !important;
-  margin: 0.4em 0 !important;
+  font-size: 1.45em !important;
+  line-height: 1.42 !important;
+  margin: 0.35em 0 !important;
 }
 
 .slidev-layout.statement .slide-statement-note,
 .slidev-layout.statement .slide-statement-note p {
-  font-size: 1.28em !important;
-  line-height: 1.42 !important;
-  margin-top: 0.55em !important;
+  font-size: 1.05em !important;
+  line-height: 1.4 !important;
+  margin-top: 0.45em !important;
   opacity: 0.88;
+}
+
+/* 5p 사용 도구 4종 — 표·본문 축소 */
+[data-slidev-no="5"] .slidev-layout h1 {
+  font-size: 1.4em !important;
+  margin-bottom: 0.12em !important;
+}
+
+[data-slidev-no="5"] .slidev-layout table {
+  font-size: 0.85em !important;
+}
+
+[data-slidev-no="5"] .slidev-layout .text-lg {
+  font-size: 0.92em !important;
+}
+
+[data-slidev-no="5"] .slidev-layout .text-base {
+  font-size: 0.86em !important;
 }
 
 /* 2p 아이스브레이커 — 목록이 길어 화면에 맞게 조금 더 작게 */
