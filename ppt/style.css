@@ -337,7 +337,7 @@
 
 .slidev-layout .slide-tools-table table,
 [data-slidev-no="5"] .slidev-layout table {
-  font-size: 1.7em !important;
+  font-size: 1.275em !important;
   width: 100%;
 }
 
@@ -345,7 +345,7 @@
 .slidev-layout .slide-tools-table table td,
 [data-slidev-no="5"] .slidev-layout table th,
 [data-slidev-no="5"] .slidev-layout table td {
-  padding: 0.56em 0.9em !important;
+  padding: 0.42em 0.68em !important;
   line-height: 1.45 !important;
 }
 
