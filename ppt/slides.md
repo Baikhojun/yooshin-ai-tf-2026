@@ -1449,21 +1449,21 @@ class: text-center slide-hero
 
 # 🎬 라이브 시연 — 일상 MD 프롬프트 3종 비교
 
-<div class="slide-fill">
+<div class="slide-fill slide-daily-fill">
 
-<div class="text-base opacity-80 mb-2">
+<div class="slide-daily-intro opacity-80 mb-2">
 업무 외에도 — 일상에서 같은 MD 패턴이 똑같이 동작합니다. 다음 3개 중 하나를 골라 시연합니다.
 </div>
 
-<div class="grid grid-cols-3 gap-3 mt-1">
+<div class="grid grid-cols-3 gap-3 mt-1 slide-daily-cards">
 
-<div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border border-blue-400">
+<div class="slide-daily-card p-3 rounded-lg bg-blue-50 dark:bg-blue-900 border border-blue-400">
 
 ### 💊 약·증상 안내
 
 `증상_정리_도우미.md`
 
-<div class="text-sm mt-2 opacity-80">
+<div class="slide-daily-sub mt-2 opacity-80">
 가족이 "머리가 아파"라고 하면<br>
 → MD 붙여넣기 + 증상 메모<br>
 → 확인 질문 → 자가 케어 안내 + 병원 방문 기준
@@ -1471,13 +1471,13 @@ class: text-center slide-hero
 
 </div>
 
-<div class="p-3 rounded-lg bg-pink-50 dark:bg-pink-900 border border-pink-400">
+<div class="slide-daily-card p-3 rounded-lg bg-pink-50 dark:bg-pink-900 border border-pink-400">
 
 ### 👔 옷·코디 추천
 
 `오늘_코디_추천.md`
 
-<div class="text-sm mt-2 opacity-80">
+<div class="slide-daily-sub mt-2 opacity-80">
 "오늘 비, 미팅 3시"<br>
 → MD 붙여넣기 + 일정 메모<br>
 → 상의·하의·신발·우산 추천 표
@@ -1485,13 +1485,13 @@ class: text-center slide-hero
 
 </div>
 
-<div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900 border border-orange-400">
+<div class="slide-daily-card p-3 rounded-lg bg-orange-50 dark:bg-orange-900 border border-orange-400">
 
 ### 🍱 저녁 메뉴 추천
 
 `저녁_메뉴_추천.md`
 
-<div class="text-sm mt-2 opacity-80">
+<div class="slide-daily-sub mt-2 opacity-80">
 "냉장고에 두부, 김치, 계란"<br>
 → MD 붙여넣기 + 재료 목록<br>
 → 3가지 메뉴 + 5분 레시피
@@ -1501,7 +1501,7 @@ class: text-center slide-hero
 
 </div>
 
-<div class="mt-4 text-base">
+<div class="slide-daily-steps mt-4">
 
 ## 시연 순서 (5분)
 
@@ -1517,7 +1517,7 @@ class: text-center slide-hero
 
 </div>
 
-<div v-click class="slide-fill-bottom p-3 bg-green-50 dark:bg-green-900 border-l-4 border-green-500 rounded text-center text-lg font-bold">
+<div v-click class="slide-fill-bottom slide-daily-foot p-3 bg-green-50 dark:bg-green-900 border-l-4 border-green-500 rounded text-center font-bold">
 🚀 업무도 일상도 — MD 한 장이면 같은 품질이 매번 나옵니다
 </div>
 
