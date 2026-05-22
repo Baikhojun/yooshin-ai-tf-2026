@@ -124,7 +124,7 @@ class: text-center slide-icebreaker
 
 # 본 교육이 *하지 않는* 일 🚫
 
-<div class="grid grid-cols-1 gap-3 mt-3 text-lg">
+<div class="grid grid-cols-1 gap-3 mt-3 text-lg slide-not-cards">
 
 <v-clicks>
 
